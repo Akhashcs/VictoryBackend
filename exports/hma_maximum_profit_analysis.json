@@ -1,0 +1,3977 @@
+{
+  "55": {
+    "NSE_ADANIPORTS_EQ": {
+      "symbol": "NSE_ADANIPORTS_EQ",
+      "totalCrossovers": 36,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.350790325361924,
+        "avgMaxProfitPoints": 38.48750000000001,
+        "avgMaxProfitDays": 2.5555555555555554,
+        "maxProfitPercent": 30.63149098722692,
+        "maxProfitPoints": 277.54999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.21407967928125118,
+        "avgReversalDays": 5.416666666666667,
+        "winRate": 22.22222222222222,
+        "avgWinPercent": 5.82753145027141,
+        "avgLossPercent": -1.9402542877248687
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 22,
+        "under5Percent": 28,
+        "under10Percent": 33,
+        "over10Percent": 3
+      }
+    },
+    "NSE_APOLLOHOSP_EQ": {
+      "symbol": "NSE_APOLLOHOSP_EQ",
+      "totalCrossovers": 36,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.48079534406057,
+        "avgMaxProfitPoints": 156.04027777777787,
+        "avgMaxProfitDays": 4.388888888888889,
+        "maxProfitPercent": 15.696936887438095,
+        "maxProfitPoints": 971.3500000000004,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.12103876443615366,
+        "avgReversalDays": 6.083333333333333,
+        "winRate": 36.11111111111111,
+        "avgWinPercent": 3.147375442624647,
+        "avgLossPercent": -1.5894993580182122
+      },
+      "profitDistribution": {
+        "under1Percent": 17,
+        "under2Percent": 25,
+        "under5Percent": 29,
+        "under10Percent": 35,
+        "over10Percent": 1
+      }
+    },
+    "NSE_ASIANPAINT_EQ": {
+      "symbol": "NSE_ASIANPAINT_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.3101970830450704,
+        "avgMaxProfitPoints": 63.094444444444434,
+        "avgMaxProfitDays": 4.851851851851852,
+        "maxProfitPercent": 10.126101739675832,
+        "maxProfitPoints": 306.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.3652678253001983,
+        "avgReversalDays": 8.62962962962963,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 2.7325867208546506,
+        "avgLossPercent": -1.9141950983776228
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 16,
+        "under5Percent": 23,
+        "under10Percent": 26,
+        "over10Percent": 1
+      }
+    },
+    "NSE_AXISBANK_EQ": {
+      "symbol": "NSE_AXISBANK_EQ",
+      "totalCrossovers": 36,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.357854295098724,
+        "avgMaxProfitPoints": 25.454166666666655,
+        "avgMaxProfitDays": 3.1944444444444446,
+        "maxProfitPercent": 12.290530490827967,
+        "maxProfitPoints": 123.95000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.1879486469014656,
+        "avgReversalDays": 6.083333333333333,
+        "winRate": 27.77777777777778,
+        "avgWinPercent": 3.8650507360142776,
+        "avgLossPercent": -1.7467945634075204
+      },
+      "profitDistribution": {
+        "under1Percent": 21,
+        "under2Percent": 24,
+        "under5Percent": 28,
+        "under10Percent": 34,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BAJAJFINSV_EQ": {
+      "symbol": "NSE_BAJAJFINSV_EQ",
+      "totalCrossovers": 33,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.496706418544024,
+        "avgMaxProfitPoints": 42.32424242424243,
+        "avgMaxProfitDays": 3.757575757575758,
+        "maxProfitPercent": 18.24792459896387,
+        "maxProfitPoints": 292.35000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.07311674161079161,
+        "avgReversalDays": 6.333333333333333,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 3.157670651332707,
+        "avgLossPercent": -1.688510438082541
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 20,
+        "under5Percent": 27,
+        "under10Percent": 32,
+        "over10Percent": 1
+      }
+    },
+    "NSE_BAJAJ_AUTO_EQ": {
+      "symbol": "NSE_BAJAJ_AUTO_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.218199356552143,
+        "avgMaxProfitPoints": 356.36666666666673,
+        "avgMaxProfitDays": 4.333333333333333,
+        "maxProfitPercent": 15.27746808946326,
+        "maxProfitPoints": 1678.6499999999996,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.135760401624573,
+        "avgReversalDays": 8.296296296296296,
+        "winRate": 44.44444444444444,
+        "avgWinPercent": 5.188497198436854,
+        "avgLossPercent": -2.1064290358252524
+      },
+      "profitDistribution": {
+        "under1Percent": 11,
+        "under2Percent": 14,
+        "under5Percent": 17,
+        "under10Percent": 22,
+        "over10Percent": 5
+      }
+    },
+    "NSE_BAJFINANCE_EQ": {
+      "symbol": "NSE_BAJFINANCE_EQ",
+      "totalCrossovers": 32,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8460328427395813,
+        "avgMaxProfitPoints": 20.339062499999997,
+        "avgMaxProfitDays": 3.46875,
+        "maxProfitPercent": 15.28774522447617,
+        "maxProfitPoints": 100.75999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.05358155862845845,
+        "avgReversalDays": 6.3125,
+        "winRate": 25,
+        "avgWinPercent": 5.409789015152722,
+        "avgLossPercent": -1.7318209268796292
+      },
+      "profitDistribution": {
+        "under1Percent": 17,
+        "under2Percent": 21,
+        "under5Percent": 26,
+        "under10Percent": 29,
+        "over10Percent": 3
+      }
+    },
+    "NSE_BHARTIARTL_EQ": {
+      "symbol": "NSE_BHARTIARTL_EQ",
+      "totalCrossovers": 36,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.818341292981885,
+        "avgMaxProfitPoints": 39.90833333333333,
+        "avgMaxProfitDays": 3.5277777777777777,
+        "maxProfitPercent": 14.948802163833076,
+        "maxProfitPoints": 193.25,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.4754588451723676,
+        "avgReversalDays": 5.388888888888889,
+        "winRate": 30.555555555555557,
+        "avgWinPercent": 4.173063208527707,
+        "avgLossPercent": -1.151487074703982
+      },
+      "profitDistribution": {
+        "under1Percent": 20,
+        "under2Percent": 23,
+        "under5Percent": 26,
+        "under10Percent": 34,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BPCL_EQ": {
+      "symbol": "NSE_BPCL_EQ",
+      "totalCrossovers": 35,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.525587855867555,
+        "avgMaxProfitPoints": 11.437142857142852,
+        "avgMaxProfitDays": 4.428571428571429,
+        "maxProfitPercent": 37.81540782965882,
+        "maxProfitPoints": 90.22,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6528998557848075,
+        "avgReversalDays": 6.257142857142857,
+        "winRate": 25.71428571428571,
+        "avgWinPercent": 10.23998783958848,
+        "avgLossPercent": -2.6657075232241567
+      },
+      "profitDistribution": {
+        "under1Percent": 18,
+        "under2Percent": 21,
+        "under5Percent": 28,
+        "under10Percent": 31,
+        "over10Percent": 4
+      }
+    },
+    "NSE_BRITANNIA_EQ": {
+      "symbol": "NSE_BRITANNIA_EQ",
+      "totalCrossovers": 23,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.2010983760277476,
+        "avgMaxProfitPoints": 163.83043478260862,
+        "avgMaxProfitDays": 7.521739130434782,
+        "maxProfitPercent": 16.765123993050075,
+        "maxProfitPoints": 796.0500000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.0202836492675444,
+        "avgReversalDays": 9.652173913043478,
+        "winRate": 39.130434782608695,
+        "avgWinPercent": 4.653673824668216,
+        "avgLossPercent": -1.3154671777757445
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 12,
+        "under5Percent": 18,
+        "under10Percent": 21,
+        "over10Percent": 2
+      }
+    },
+    "NSE_CIPLA_EQ": {
+      "symbol": "NSE_CIPLA_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.338902848687205,
+        "avgMaxProfitPoints": 32.688235294117646,
+        "avgMaxProfitDays": 4.235294117647059,
+        "maxProfitPercent": 8.281882052373856,
+        "maxProfitPoints": 112.25,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.439423794383837,
+        "avgReversalDays": 6.647058823529412,
+        "winRate": 29.411764705882355,
+        "avgWinPercent": 2.6651807535200893,
+        "avgLossPercent": -1.73300902267714
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 19,
+        "under5Percent": 28,
+        "under10Percent": 34,
+        "over10Percent": 0
+      }
+    },
+    "NSE_COALINDIA_EQ": {
+      "symbol": "NSE_COALINDIA_EQ",
+      "totalCrossovers": 39,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.6205869555767927,
+        "avgMaxProfitPoints": 10.934615384615384,
+        "avgMaxProfitDays": 2.6666666666666665,
+        "maxProfitPercent": 11.58444413906829,
+        "maxProfitPoints": 46.39999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.5798083799010526,
+        "avgReversalDays": 5,
+        "winRate": 30.76923076923077,
+        "avgWinPercent": 2.7246014845711586,
+        "avgLossPercent": -2.0484349863331466
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 25,
+        "under5Percent": 28,
+        "under10Percent": 37,
+        "over10Percent": 2
+      }
+    },
+    "NSE_DIVISLAB_EQ": {
+      "symbol": "NSE_DIVISLAB_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.965318263233975,
+        "avgMaxProfitPoints": 141.0455882352941,
+        "avgMaxProfitDays": 3.6470588235294117,
+        "maxProfitPercent": 12.938965032179354,
+        "maxProfitPoints": 626.1999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.3536092950703906,
+        "avgReversalDays": 6.176470588235294,
+        "winRate": 26.47058823529412,
+        "avgWinPercent": 5.805883076781855,
+        "avgLossPercent": -1.6092092663457367
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 21,
+        "under5Percent": 27,
+        "under10Percent": 31,
+        "over10Percent": 3
+      }
+    },
+    "NSE_DRREDDY_EQ": {
+      "symbol": "NSE_DRREDDY_EQ",
+      "totalCrossovers": 24,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.5652075815804682,
+        "avgMaxProfitPoints": 42.12375000000003,
+        "avgMaxProfitDays": 6.125,
+        "maxProfitPercent": 16.66509276031697,
+        "maxProfitPoints": 194.12000000000012,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6474726536286671,
+        "avgReversalDays": 9.708333333333334,
+        "winRate": 41.66666666666667,
+        "avgWinPercent": 4.478554196628503,
+        "avgLossPercent": -2.0890141627997876
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 12,
+        "under5Percent": 18,
+        "under10Percent": 22,
+        "over10Percent": 2
+      }
+    },
+    "NSE_EICHERMOT_EQ": {
+      "symbol": "NSE_EICHERMOT_EQ",
+      "totalCrossovers": 24,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.490474153246649,
+        "avgMaxProfitPoints": 198.1583333333334,
+        "avgMaxProfitDays": 6.291666666666667,
+        "maxProfitPercent": 19.144981412639403,
+        "maxProfitPoints": 741.5999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.5272200706984258,
+        "avgReversalDays": 8.75,
+        "winRate": 50,
+        "avgWinPercent": 4.493148299171342,
+        "avgLossPercent": -1.4387081577744893
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 10,
+        "under5Percent": 15,
+        "under10Percent": 21,
+        "over10Percent": 3
+      }
+    },
+    "NSE_GRASIM_EQ": {
+      "symbol": "NSE_GRASIM_EQ",
+      "totalCrossovers": 30,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.9073159464330307,
+        "avgMaxProfitPoints": 69.22566666666668,
+        "avgMaxProfitDays": 4.8,
+        "maxProfitPercent": 16.223230341670742,
+        "maxProfitPoints": 396.9499999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.15116085788612293,
+        "avgReversalDays": 6.733333333333333,
+        "winRate": 36.666666666666664,
+        "avgWinPercent": 3.403088794774574,
+        "avgLossPercent": -1.731534263470349
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 18,
+        "under5Percent": 24,
+        "under10Percent": 26,
+        "over10Percent": 4
+      }
+    },
+    "NSE_HCLTECH_EQ": {
+      "symbol": "NSE_HCLTECH_EQ",
+      "totalCrossovers": 36,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.2293652766182834,
+        "avgMaxProfitPoints": 32.98888888888888,
+        "avgMaxProfitDays": 3.5,
+        "maxProfitPercent": 17.941585535465926,
+        "maxProfitPoints": 258,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.029612982048112024,
+        "avgReversalDays": 5.944444444444445,
+        "winRate": 36.11111111111111,
+        "avgWinPercent": 3.5214236407270465,
+        "avgLossPercent": -2.036720638399289
+      },
+      "profitDistribution": {
+        "under1Percent": 23,
+        "under2Percent": 26,
+        "under5Percent": 29,
+        "under10Percent": 33,
+        "over10Percent": 3
+      }
+    },
+    "NSE_HDFCBANK_EQ": {
+      "symbol": "NSE_HDFCBANK_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.328865898089172,
+        "avgMaxProfitPoints": 53.75185185185187,
+        "avgMaxProfitDays": 6.481481481481482,
+        "maxProfitPercent": 13.974094599819573,
+        "maxProfitPoints": 216.85000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.2325296587438839,
+        "avgReversalDays": 8.962962962962964,
+        "winRate": 40.74074074074074,
+        "avgWinPercent": 4.839961319642582,
+        "avgLossPercent": -1.2475796081239712
+      },
+      "profitDistribution": {
+        "under1Percent": 12,
+        "under2Percent": 15,
+        "under5Percent": 19,
+        "under10Percent": 25,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HDFCLIFE_EQ": {
+      "symbol": "NSE_HDFCLIFE_EQ",
+      "totalCrossovers": 30,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.7679907161205923,
+        "avgMaxProfitPoints": 17.383333333333344,
+        "avgMaxProfitDays": 4.233333333333333,
+        "maxProfitPercent": 11.708579283577258,
+        "maxProfitPoints": 72.39999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.2886823234972899,
+        "avgReversalDays": 7.533333333333333,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 4.30516160725797,
+        "avgLossPercent": -1.7195573183830508
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 18,
+        "under5Percent": 24,
+        "under10Percent": 27,
+        "over10Percent": 3
+      }
+    },
+    "NSE_HEROMOTOCO_EQ": {
+      "symbol": "NSE_HEROMOTOCO_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.969123388800139,
+        "avgMaxProfitPoints": 166.06935483870967,
+        "avgMaxProfitDays": 4.451612903225806,
+        "maxProfitPercent": 20.17716380571771,
+        "maxProfitPoints": 1001.6500000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9961242663644425,
+        "avgReversalDays": 7.225806451612903,
+        "winRate": 32.25806451612903,
+        "avgWinPercent": 7.899558752286796,
+        "avgLossPercent": -2.291225488836678
+      },
+      "profitDistribution": {
+        "under1Percent": 18,
+        "under2Percent": 19,
+        "under5Percent": 21,
+        "under10Percent": 26,
+        "over10Percent": 5
+      }
+    },
+    "NSE_HINDALCO_EQ": {
+      "symbol": "NSE_HINDALCO_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.076201640446628,
+        "avgMaxProfitPoints": 23.718965517241372,
+        "avgMaxProfitDays": 5.724137931034483,
+        "maxProfitPercent": 20.892199674629673,
+        "maxProfitPoints": 122,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.8964074005731483,
+        "avgReversalDays": 7.413793103448276,
+        "winRate": 31.03448275862069,
+        "avgWinPercent": 7.880870522753337,
+        "avgLossPercent": -2.246601004407937
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 16,
+        "under5Percent": 20,
+        "under10Percent": 24,
+        "over10Percent": 5
+      }
+    },
+    "NSE_HINDUNILVR_EQ": {
+      "symbol": "NSE_HINDUNILVR_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.3925421985198265,
+        "avgMaxProfitPoints": 58.60689655172415,
+        "avgMaxProfitDays": 4.689655172413793,
+        "maxProfitPercent": 9.231843890128232,
+        "maxProfitPoints": 219.3499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.128244414412865,
+        "avgReversalDays": 7.379310344827586,
+        "winRate": 37.93103448275862,
+        "avgWinPercent": 2.0788772327051577,
+        "avgLossPercent": -1.4770409765405457
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 17,
+        "under5Percent": 25,
+        "under10Percent": 29,
+        "over10Percent": 0
+      }
+    },
+    "NSE_ICICIBANK_EQ": {
+      "symbol": "NSE_ICICIBANK_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.1934949048670203,
+        "avgMaxProfitPoints": 36.50925925925929,
+        "avgMaxProfitDays": 4.2592592592592595,
+        "maxProfitPercent": 11.620400258231129,
+        "maxProfitPoints": 125.40000000000009,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.8007011407020407,
+        "avgReversalDays": 7.481481481481482,
+        "winRate": 44.44444444444444,
+        "avgWinPercent": 3.8339751651344702,
+        "avgLossPercent": -1.6259180788439027
+      },
+      "profitDistribution": {
+        "under1Percent": 11,
+        "under2Percent": 13,
+        "under5Percent": 20,
+        "under10Percent": 25,
+        "over10Percent": 2
+      }
+    },
+    "NSE_INDUSINDBK_EQ": {
+      "symbol": "NSE_INDUSINDBK_EQ",
+      "totalCrossovers": 30,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.3183996387003494,
+        "avgMaxProfitPoints": 37.0833333333333,
+        "avgMaxProfitDays": 4.2,
+        "maxProfitPercent": 26.642417044020494,
+        "maxProfitPoints": 179.45000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.19266654045297446,
+        "avgReversalDays": 7.8,
+        "winRate": 30,
+        "avgWinPercent": 4.798102183998818,
+        "avgLossPercent": -1.781091592495244
+      },
+      "profitDistribution": {
+        "under1Percent": 12,
+        "under2Percent": 17,
+        "under5Percent": 24,
+        "under10Percent": 28,
+        "over10Percent": 2
+      }
+    },
+    "NSE_INFY_EQ": {
+      "symbol": "NSE_INFY_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.956272832292003,
+        "avgMaxProfitPoints": 45.511290322580685,
+        "avgMaxProfitDays": 4.774193548387097,
+        "maxProfitPercent": 31.382420809733603,
+        "maxProfitPoints": 448.8000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6745168334493309,
+        "avgReversalDays": 7.032258064516129,
+        "winRate": 32.25806451612903,
+        "avgWinPercent": 5.697132822065236,
+        "avgLossPercent": -1.7172050658915765
+      },
+      "profitDistribution": {
+        "under1Percent": 17,
+        "under2Percent": 19,
+        "under5Percent": 26,
+        "under10Percent": 29,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ITC_EQ": {
+      "symbol": "NSE_ITC_EQ",
+      "totalCrossovers": 30,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 1.8724750166298283,
+        "avgMaxProfitPoints": 8.088333333333335,
+        "avgMaxProfitDays": 4.733333333333333,
+        "maxProfitPercent": 17.99812030075187,
+        "maxProfitPoints": 76.59999999999997,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.264858561616152,
+        "avgReversalDays": 7.3,
+        "winRate": 20,
+        "avgWinPercent": 4.455013407784053,
+        "avgLossPercent": -1.4448265539662035
+      },
+      "profitDistribution": {
+        "under1Percent": 21,
+        "under2Percent": 22,
+        "under5Percent": 25,
+        "under10Percent": 29,
+        "over10Percent": 1
+      }
+    },
+    "NSE_JSWSTEEL_EQ": {
+      "symbol": "NSE_JSWSTEEL_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.572051906489267,
+        "avgMaxProfitPoints": 22.919117647058833,
+        "avgMaxProfitDays": 4.617647058823529,
+        "maxProfitPercent": 16.238857985389732,
+        "maxProfitPoints": 121.15000000000009,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.19222413676015468,
+        "avgReversalDays": 7.088235294117647,
+        "winRate": 32.35294117647059,
+        "avgWinPercent": 3.2419824423927923,
+        "avgLossPercent": -1.834670761572434
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 22,
+        "under5Percent": 28,
+        "under10Percent": 33,
+        "over10Percent": 1
+      }
+    },
+    "NSE_KOTAKBANK_EQ": {
+      "symbol": "NSE_KOTAKBANK_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.1581181606060267,
+        "avgMaxProfitPoints": 39.936764705882354,
+        "avgMaxProfitDays": 4.147058823529412,
+        "maxProfitPercent": 9.765201382058466,
+        "maxProfitPoints": 193.60000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.16972824489213212,
+        "avgReversalDays": 6.852941176470588,
+        "winRate": 41.17647058823529,
+        "avgWinPercent": 1.717532659477172,
+        "avgLossPercent": -1.4908108779506448
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 20,
+        "under5Percent": 31,
+        "under10Percent": 34,
+        "over10Percent": 0
+      }
+    },
+    "NSE_LT_EQ": {
+      "symbol": "NSE_LT_EQ",
+      "totalCrossovers": 33,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.9748896168300916,
+        "avgMaxProfitPoints": 99.93787878787876,
+        "avgMaxProfitDays": 4.333333333333333,
+        "maxProfitPercent": 16.769844315773668,
+        "maxProfitPoints": 502.5,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.38360210323732097,
+        "avgReversalDays": 6.393939393939394,
+        "winRate": 30.303030303030305,
+        "avgWinPercent": 4.9911197239375396,
+        "avgLossPercent": -1.6196664275019044
+      },
+      "profitDistribution": {
+        "under1Percent": 18,
+        "under2Percent": 21,
+        "under5Percent": 26,
+        "under10Percent": 30,
+        "over10Percent": 3
+      }
+    },
+    "NSE_MARUTI_EQ": {
+      "symbol": "NSE_MARUTI_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8015224647931887,
+        "avgMaxProfitPoints": 320.2796296296297,
+        "avgMaxProfitDays": 4.2592592592592595,
+        "maxProfitPercent": 16.678343375302756,
+        "maxProfitPoints": 1666.3999999999996,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5204448088990014,
+        "avgReversalDays": 8.185185185185185,
+        "winRate": 25.925925925925924,
+        "avgWinPercent": 5.817666441221435,
+        "avgLossPercent": -1.3335827624138505
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 21,
+        "under10Percent": 25,
+        "over10Percent": 2
+      }
+    },
+    "NSE_M_M_EQ": {
+      "symbol": "NSE_M_M_EQ",
+      "totalCrossovers": 35,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.212857585553226,
+        "avgMaxProfitPoints": 100.90428571428572,
+        "avgMaxProfitDays": 4,
+        "maxProfitPercent": 19.063999275821498,
+        "maxProfitPoints": 498.3000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.3055239578748292,
+        "avgReversalDays": 6.514285714285714,
+        "winRate": 40,
+        "avgWinPercent": 5.746670045880307,
+        "avgLossPercent": -1.6552401007954896
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 17,
+        "under5Percent": 26,
+        "under10Percent": 31,
+        "over10Percent": 4
+      }
+    },
+    "NSE_NESTLEIND_EQ": {
+      "symbol": "NSE_NESTLEIND_EQ",
+      "totalCrossovers": 38,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 1.7604102647647373,
+        "avgMaxProfitPoints": 42.11894736842104,
+        "avgMaxProfitDays": 2.710526315789474,
+        "maxProfitPercent": 9.486440846329591,
+        "maxProfitPoints": 238.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.41424326821370616,
+        "avgReversalDays": 5.868421052631579,
+        "winRate": 31.57894736842105,
+        "avgWinPercent": 2.1093847203039044,
+        "avgLossPercent": -1.5789946475295265
+      },
+      "profitDistribution": {
+        "under1Percent": 20,
+        "under2Percent": 27,
+        "under5Percent": 33,
+        "under10Percent": 38,
+        "over10Percent": 0
+      }
+    },
+    "NSE_NTPC_EQ": {
+      "symbol": "NSE_NTPC_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.1628699762366725,
+        "avgMaxProfitPoints": 10.010294117647057,
+        "avgMaxProfitDays": 3.264705882352941,
+        "maxProfitPercent": 30.132380752258875,
+        "maxProfitPoints": 71.69999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.051292211431987304,
+        "avgReversalDays": 5.705882352941177,
+        "winRate": 23.52941176470588,
+        "avgWinPercent": 7.622172642148671,
+        "avgLossPercent": -2.2782094595577616
+      },
+      "profitDistribution": {
+        "under1Percent": 18,
+        "under2Percent": 24,
+        "under5Percent": 27,
+        "under10Percent": 31,
+        "over10Percent": 3
+      }
+    },
+    "NSE_ONGC_EQ": {
+      "symbol": "NSE_ONGC_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.4396293007827135,
+        "avgMaxProfitPoints": 8.364482758620689,
+        "avgMaxProfitDays": 4.482758620689655,
+        "maxProfitPercent": 24.931456772070916,
+        "maxProfitPoints": 68.19999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.5027773375855258,
+        "avgReversalDays": 7.758620689655173,
+        "winRate": 31.03448275862069,
+        "avgWinPercent": 4.416450664441891,
+        "avgLossPercent": -2.716429938497863
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 18,
+        "under5Percent": 21,
+        "under10Percent": 26,
+        "over10Percent": 3
+      }
+    },
+    "NSE_POWERGRID_EQ": {
+      "symbol": "NSE_POWERGRID_EQ",
+      "totalCrossovers": 38,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.347691218081013,
+        "avgMaxProfitPoints": 9.26578947368421,
+        "avgMaxProfitDays": 3.1842105263157894,
+        "maxProfitPercent": 18.455445544554465,
+        "maxProfitPoints": 46.60000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.03991060597421284,
+        "avgReversalDays": 5.2894736842105265,
+        "winRate": 28.947368421052634,
+        "avgWinPercent": 5.424340502303812,
+        "avgLossPercent": -2.2660869834208155
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 20,
+        "under5Percent": 30,
+        "under10Percent": 34,
+        "over10Percent": 4
+      }
+    },
+    "NSE_RELIANCE_EQ": {
+      "symbol": "NSE_RELIANCE_EQ",
+      "totalCrossovers": 37,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.16390736555005,
+        "avgMaxProfitPoints": 28.306216216216228,
+        "avgMaxProfitDays": 3.7027027027027026,
+        "maxProfitPercent": 12.302863868183596,
+        "maxProfitPoints": 156.79999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.17644073316200795,
+        "avgReversalDays": 6.027027027027027,
+        "winRate": 24.324324324324326,
+        "avgWinPercent": 3.5272076653268436,
+        "avgLossPercent": -1.366899146961996
+      },
+      "profitDistribution": {
+        "under1Percent": 21,
+        "under2Percent": 24,
+        "under5Percent": 30,
+        "under10Percent": 36,
+        "over10Percent": 1
+      }
+    },
+    "NSE_SBILIFE_EQ": {
+      "symbol": "NSE_SBILIFE_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.6457392393333636,
+        "avgMaxProfitPoints": 39.36617647058826,
+        "avgMaxProfitDays": 4.529411764705882,
+        "maxProfitPercent": 15.03621305055966,
+        "maxProfitPoints": 216.95000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.12706820770269617,
+        "avgReversalDays": 6.705882352941177,
+        "winRate": 29.411764705882355,
+        "avgWinPercent": 4.902010976108215,
+        "avgLossPercent": -1.8624912791329367
+      },
+      "profitDistribution": {
+        "under1Percent": 20,
+        "under2Percent": 23,
+        "under5Percent": 27,
+        "under10Percent": 32,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SBIN_EQ": {
+      "symbol": "NSE_SBIN_EQ",
+      "totalCrossovers": 34,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.462979330519949,
+        "avgMaxProfitPoints": 17.28235294117647,
+        "avgMaxProfitDays": 3.4705882352941178,
+        "maxProfitPercent": 20.452771272443403,
+        "maxProfitPoints": 131,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.2838878879618534,
+        "avgReversalDays": 6,
+        "winRate": 20.588235294117645,
+        "avgWinPercent": 5.521826535185474,
+        "avgLossPercent": -1.7890731087778267
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 25,
+        "under5Percent": 30,
+        "under10Percent": 32,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SHREECEM_EQ": {
+      "symbol": "NSE_SHREECEM_EQ",
+      "totalCrossovers": 24,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.046776856561462,
+        "avgMaxProfitPoints": 1071.3854166666667,
+        "avgMaxProfitDays": 5.666666666666667,
+        "maxProfitPercent": 14.347593744643527,
+        "maxProfitPoints": 3557.4500000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.1986197533770044,
+        "avgReversalDays": 8.166666666666666,
+        "winRate": 45.83333333333333,
+        "avgWinPercent": 4.246560141746046,
+        "avgLossPercent": -1.3804067290891073
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 11,
+        "under5Percent": 15,
+        "under10Percent": 21,
+        "over10Percent": 3
+      }
+    },
+    "NSE_SUNPHARMA_EQ": {
+      "symbol": "NSE_SUNPHARMA_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.4329901486533494,
+        "avgMaxProfitPoints": 37.14354838709678,
+        "avgMaxProfitDays": 3.967741935483871,
+        "maxProfitPercent": 10.582403965303591,
+        "maxProfitPoints": 170.79999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.49784821492006126,
+        "avgReversalDays": 6.225806451612903,
+        "winRate": 35.483870967741936,
+        "avgWinPercent": 3.614864007372239,
+        "avgLossPercent": -1.216510470928637
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 24,
+        "under10Percent": 30,
+        "over10Percent": 1
+      }
+    },
+    "NSE_TATACONSUM_EQ": {
+      "symbol": "NSE_TATACONSUM_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.419758225968803,
+        "avgMaxProfitPoints": 34.349354838709644,
+        "avgMaxProfitDays": 4,
+        "maxProfitPercent": 21.022933167676147,
+        "maxProfitPoints": 203.05000000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.7266762657905581,
+        "avgReversalDays": 6.741935483870968,
+        "winRate": 25.806451612903224,
+        "avgWinPercent": 6.784315673825521,
+        "avgLossPercent": -1.3803287456998639
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 24,
+        "under10Percent": 28,
+        "over10Percent": 3
+      }
+    },
+    "NSE_TATAMOTORS_EQ": {
+      "symbol": "NSE_TATAMOTORS_EQ",
+      "totalCrossovers": 39,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.860400422688992,
+        "avgMaxProfitPoints": 22.51794871794872,
+        "avgMaxProfitDays": 3.3333333333333335,
+        "maxProfitPercent": 15.974922625188492,
+        "maxProfitPoints": 134.14999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.262946897385222,
+        "avgReversalDays": 5.538461538461538,
+        "winRate": 25.64102564102564,
+        "avgWinPercent": 5.628936362267783,
+        "avgLossPercent": -2.294630780024189
+      },
+      "profitDistribution": {
+        "under1Percent": 24,
+        "under2Percent": 27,
+        "under5Percent": 29,
+        "under10Percent": 33,
+        "over10Percent": 6
+      }
+    },
+    "NSE_TATASTEEL_EQ": {
+      "symbol": "NSE_TATASTEEL_EQ",
+      "totalCrossovers": 24,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.54029645758165,
+        "avgMaxProfitPoints": 6.468750000000001,
+        "avgMaxProfitDays": 6.5,
+        "maxProfitPercent": 22.075529628492472,
+        "maxProfitPoints": 28.75999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9019942092322771,
+        "avgReversalDays": 9.125,
+        "winRate": 29.166666666666668,
+        "avgWinPercent": 8.465751353803302,
+        "avgLossPercent": -2.212494026767556
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 12,
+        "under5Percent": 17,
+        "under10Percent": 20,
+        "over10Percent": 4
+      }
+    },
+    "NSE_TCS_EQ": {
+      "symbol": "NSE_TCS_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.2631492755770912,
+        "avgMaxProfitPoints": 85.3387096774193,
+        "avgMaxProfitDays": 4.387096774193548,
+        "maxProfitPercent": 15.003127513180228,
+        "maxProfitPoints": 503.6999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.1898741847876341,
+        "avgReversalDays": 7.096774193548387,
+        "winRate": 29.03225806451613,
+        "avgWinPercent": 4.275730925436863,
+        "avgLossPercent": -1.4816126636597773
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 22,
+        "under5Percent": 26,
+        "under10Percent": 29,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TECHM_EQ": {
+      "symbol": "NSE_TECHM_EQ",
+      "totalCrossovers": 32,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.974305347702227,
+        "avgMaxProfitPoints": 41.612499999999976,
+        "avgMaxProfitDays": 4.15625,
+        "maxProfitPercent": 25.15172466774217,
+        "maxProfitPoints": 327.39999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5878263841595452,
+        "avgReversalDays": 6.40625,
+        "winRate": 34.375,
+        "avgWinPercent": 4.964188534723816,
+        "avgLossPercent": -1.7045537899455492
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 27,
+        "under10Percent": 30,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TITAN_EQ": {
+      "symbol": "NSE_TITAN_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.909649561949772,
+        "avgMaxProfitPoints": 96.66206896551725,
+        "avgMaxProfitDays": 4.448275862068965,
+        "maxProfitPercent": 11.332771792939363,
+        "maxProfitPoints": 383.4499999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.20202004844589144,
+        "avgReversalDays": 6.793103448275862,
+        "winRate": 27.586206896551722,
+        "avgWinPercent": 5.175417639943414,
+        "avgLossPercent": -1.692607605457927
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 17,
+        "under5Percent": 21,
+        "under10Percent": 25,
+        "over10Percent": 4
+      }
+    },
+    "NSE_ULTRACEMCO_EQ": {
+      "symbol": "NSE_ULTRACEMCO_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.3032782070726876,
+        "avgMaxProfitPoints": 340.87413793103445,
+        "avgMaxProfitDays": 5.482758620689655,
+        "maxProfitPercent": 16.022413744062344,
+        "maxProfitPoints": 1689.8999999999996,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5862557644499126,
+        "avgReversalDays": 7.103448275862069,
+        "winRate": 31.03448275862069,
+        "avgWinPercent": 5.679248257522636,
+        "avgLossPercent": -1.7055908574328136
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 17,
+        "under5Percent": 21,
+        "under10Percent": 26,
+        "over10Percent": 3
+      }
+    },
+    "NSE_UPL_EQ": {
+      "symbol": "NSE_UPL_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.131031381895818,
+        "avgMaxProfitPoints": 21.786206896551743,
+        "avgMaxProfitDays": 5.206896551724138,
+        "maxProfitPercent": 16.696799855360698,
+        "maxProfitPoints": 92.35000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.32271912128657293,
+        "avgReversalDays": 7.310344827586207,
+        "winRate": 37.93103448275862,
+        "avgWinPercent": 4.710301962574946,
+        "avgLossPercent": -2.35858150394521
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 14,
+        "under5Percent": 20,
+        "under10Percent": 25,
+        "over10Percent": 4
+      }
+    },
+    "NSE_WIPRO_EQ": {
+      "symbol": "NSE_WIPRO_EQ",
+      "totalCrossovers": 28,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.4300861661589943,
+        "avgMaxProfitPoints": 8.401428571428578,
+        "avgMaxProfitDays": 5.535714285714286,
+        "maxProfitPercent": 19.867109634551504,
+        "maxProfitPoints": 44.85000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5099506361119419,
+        "avgReversalDays": 8.535714285714286,
+        "winRate": 32.142857142857146,
+        "avgWinPercent": 5.958287820745678,
+        "avgLossPercent": -2.0708406618724604
+      },
+      "profitDistribution": {
+        "under1Percent": 12,
+        "under2Percent": 15,
+        "under5Percent": 21,
+        "under10Percent": 26,
+        "over10Percent": 2
+      }
+    }
+  },
+  "100": {
+    "NSE_ADANIPORTS_EQ": {
+      "symbol": "NSE_ADANIPORTS_EQ",
+      "totalCrossovers": 21,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.242526834220247,
+        "avgMaxProfitPoints": 51.66666666666668,
+        "avgMaxProfitDays": 4.619047619047619,
+        "maxProfitPercent": 26.555321798119447,
+        "maxProfitPoints": 309.25,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.5339260162594848,
+        "avgReversalDays": 7.714285714285714,
+        "winRate": 14.285714285714285,
+        "avgWinPercent": 12.276854605546609,
+        "avgLossPercent": -2.669056119893834
+      },
+      "profitDistribution": {
+        "under1Percent": 11,
+        "under2Percent": 12,
+        "under5Percent": 16,
+        "under10Percent": 18,
+        "over10Percent": 3
+      }
+    },
+    "NSE_APOLLOHOSP_EQ": {
+      "symbol": "NSE_APOLLOHOSP_EQ",
+      "totalCrossovers": 27,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.36918197504421,
+        "avgMaxProfitPoints": 149.32592592592604,
+        "avgMaxProfitDays": 5.111111111111111,
+        "maxProfitPercent": 16.288890874095497,
+        "maxProfitPoints": 1002.8500000000004,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.43545683898104587,
+        "avgReversalDays": 6.7407407407407405,
+        "winRate": 29.629629629629626,
+        "avgWinPercent": 4.026017140212099,
+        "avgLossPercent": -1.076358024695187
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 19,
+        "under5Percent": 21,
+        "under10Percent": 25,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ASIANPAINT_EQ": {
+      "symbol": "NSE_ASIANPAINT_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.056796744185472,
+        "avgMaxProfitPoints": 81.78333333333333,
+        "avgMaxProfitDays": 9.466666666666667,
+        "maxProfitPercent": 10.993553466856943,
+        "maxProfitPoints": 335.0999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.32662714799656967,
+        "avgReversalDays": 13.8,
+        "winRate": 26.666666666666668,
+        "avgWinPercent": 4.66712761040747,
+        "avgLossPercent": -2.142537969234402
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 8,
+        "under5Percent": 10,
+        "under10Percent": 14,
+        "over10Percent": 1
+      }
+    },
+    "NSE_AXISBANK_EQ": {
+      "symbol": "NSE_AXISBANK_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.74570420449518,
+        "avgMaxProfitPoints": 41.00789473684209,
+        "avgMaxProfitDays": 6.368421052631579,
+        "maxProfitPercent": 15.927066066777181,
+        "maxProfitPoints": 168.1500000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6991657661237566,
+        "avgReversalDays": 9.31578947368421,
+        "winRate": 26.31578947368421,
+        "avgWinPercent": 5.7468072309873905,
+        "avgLossPercent": -1.1035633284703985
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 11,
+        "under5Percent": 14,
+        "under10Percent": 15,
+        "over10Percent": 4
+      }
+    },
+    "NSE_BAJAJFINSV_EQ": {
+      "symbol": "NSE_BAJAJFINSV_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.775418152068077,
+        "avgMaxProfitPoints": 78.40882352941179,
+        "avgMaxProfitDays": 7.882352941176471,
+        "maxProfitPercent": 25.50402596591974,
+        "maxProfitPoints": 408.60000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.0556431757789533,
+        "avgReversalDays": 10.352941176470589,
+        "winRate": 29.411764705882355,
+        "avgWinPercent": 7.824421682202289,
+        "avgLossPercent": -1.7646812018974363
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 9,
+        "under5Percent": 13,
+        "under10Percent": 15,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BAJAJ_AUTO_EQ": {
+      "symbol": "NSE_BAJAJ_AUTO_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.0933682655216455,
+        "avgMaxProfitPoints": 515.0633333333334,
+        "avgMaxProfitDays": 8.533333333333333,
+        "maxProfitPercent": 29.9171248051202,
+        "maxProfitPoints": 2916.7999999999993,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.3022304680572288,
+        "avgReversalDays": 13.333333333333334,
+        "winRate": 60,
+        "avgWinPercent": 5.289472627960202,
+        "avgLossPercent": -2.1786327717972305
+      },
+      "profitDistribution": {
+        "under1Percent": 4,
+        "under2Percent": 6,
+        "under5Percent": 9,
+        "under10Percent": 12,
+        "over10Percent": 3
+      }
+    },
+    "NSE_BAJFINANCE_EQ": {
+      "symbol": "NSE_BAJFINANCE_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.218937720805639,
+        "avgMaxProfitPoints": 29.46736842105263,
+        "avgMaxProfitDays": 6.368421052631579,
+        "maxProfitPercent": 27.4735974833346,
+        "maxProfitPoints": 183.4000000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.0608737985738648,
+        "avgReversalDays": 9.894736842105264,
+        "winRate": 31.57894736842105,
+        "avgWinPercent": 7.521825980336779,
+        "avgLossPercent": -1.921104131470557
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 11,
+        "under5Percent": 14,
+        "under10Percent": 16,
+        "over10Percent": 3
+      }
+    },
+    "NSE_BHARTIARTL_EQ": {
+      "symbol": "NSE_BHARTIARTL_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8746179751737087,
+        "avgMaxProfitPoints": 41.186206896551695,
+        "avgMaxProfitDays": 4.724137931034483,
+        "maxProfitPercent": 17.54438360710137,
+        "maxProfitPoints": 264.3499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.18087083192200773,
+        "avgReversalDays": 6.482758620689655,
+        "winRate": 20.689655172413794,
+        "avgWinPercent": 5.1586641817706385,
+        "avgLossPercent": -1.573793009407046
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 18,
+        "under5Percent": 25,
+        "under10Percent": 26,
+        "over10Percent": 3
+      }
+    },
+    "NSE_BPCL_EQ": {
+      "symbol": "NSE_BPCL_EQ",
+      "totalCrossovers": 26,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.026003759357997,
+        "avgMaxProfitPoints": 11.01346153846154,
+        "avgMaxProfitDays": 3.8076923076923075,
+        "maxProfitPercent": 33.479478748020945,
+        "maxProfitPoints": 82.47,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.09925987908675456,
+        "avgReversalDays": 6.6923076923076925,
+        "winRate": 26.923076923076923,
+        "avgWinPercent": 7.900246061474165,
+        "avgLossPercent": -3.046446278240778
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 17,
+        "under5Percent": 22,
+        "under10Percent": 23,
+        "over10Percent": 3
+      }
+    },
+    "NSE_BRITANNIA_EQ": {
+      "symbol": "NSE_BRITANNIA_EQ",
+      "totalCrossovers": 14,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.9151190096286004,
+        "avgMaxProfitPoints": 199.44642857142858,
+        "avgMaxProfitDays": 9.5,
+        "maxProfitPercent": 16.091573347684786,
+        "maxProfitPoints": 777.3999999999996,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.5446417261000607,
+        "avgReversalDays": 12.642857142857142,
+        "winRate": 28.57142857142857,
+        "avgWinPercent": 8.341804004741967,
+        "avgLossPercent": -1.1742231853567016
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 9,
+        "under5Percent": 9,
+        "under10Percent": 12,
+        "over10Percent": 2
+      }
+    },
+    "NSE_CIPLA_EQ": {
+      "symbol": "NSE_CIPLA_EQ",
+      "totalCrossovers": 32,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.251974598155551,
+        "avgMaxProfitPoints": 31.728125,
+        "avgMaxProfitDays": 4.0625,
+        "maxProfitPercent": 14.709452897377792,
+        "maxProfitPoints": 181.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.4721336527280977,
+        "avgReversalDays": 6.5,
+        "winRate": 21.875,
+        "avgWinPercent": 3.808091753411119,
+        "avgLossPercent": -1.6705967664470784
+      },
+      "profitDistribution": {
+        "under1Percent": 17,
+        "under2Percent": 22,
+        "under5Percent": 28,
+        "under10Percent": 29,
+        "over10Percent": 3
+      }
+    },
+    "NSE_COALINDIA_EQ": {
+      "symbol": "NSE_COALINDIA_EQ",
+      "totalCrossovers": 26,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8097688508582306,
+        "avgMaxProfitPoints": 11.86923076923077,
+        "avgMaxProfitDays": 3.8846153846153846,
+        "maxProfitPercent": 16.279069767441857,
+        "maxProfitPoints": 67.19999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.6077903629209833,
+        "avgReversalDays": 6.8076923076923075,
+        "winRate": 19.230769230769234,
+        "avgWinPercent": 2.868399207684958,
+        "avgLossPercent": -2.673549784493827
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 15,
+        "under5Percent": 21,
+        "under10Percent": 24,
+        "over10Percent": 2
+      }
+    },
+    "NSE_DIVISLAB_EQ": {
+      "symbol": "NSE_DIVISLAB_EQ",
+      "totalCrossovers": 22,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.271465127480528,
+        "avgMaxProfitPoints": 204.18636363636367,
+        "avgMaxProfitDays": 5.136363636363637,
+        "maxProfitPercent": 17.48190775132967,
+        "maxProfitPoints": 1002.5,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.4366557956694128,
+        "avgReversalDays": 8.454545454545455,
+        "winRate": 36.36363636363637,
+        "avgWinPercent": 6.982340208433996,
+        "avgLossPercent": -1.7323067259103497
+      },
+      "profitDistribution": {
+        "under1Percent": 12,
+        "under2Percent": 13,
+        "under5Percent": 16,
+        "under10Percent": 18,
+        "over10Percent": 4
+      }
+    },
+    "NSE_DRREDDY_EQ": {
+      "symbol": "NSE_DRREDDY_EQ",
+      "totalCrossovers": 18,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.25166663759199,
+        "avgMaxProfitPoints": 49.49000000000002,
+        "avgMaxProfitDays": 7.888888888888889,
+        "maxProfitPercent": 22.82109058134295,
+        "maxProfitPoints": 253.20000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.6487833850965075,
+        "avgReversalDays": 10.88888888888889,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 8.036287320650422,
+        "avgLossPercent": -1.5449685826804487
+      },
+      "profitDistribution": {
+        "under1Percent": 11,
+        "under2Percent": 11,
+        "under5Percent": 12,
+        "under10Percent": 15,
+        "over10Percent": 3
+      }
+    },
+    "NSE_EICHERMOT_EQ": {
+      "symbol": "NSE_EICHERMOT_EQ",
+      "totalCrossovers": 31,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.3972274441795354,
+        "avgMaxProfitPoints": 112.29193548387099,
+        "avgMaxProfitDays": 2.967741935483871,
+        "maxProfitPercent": 22.122831474597284,
+        "maxProfitPoints": 856.9500000000003,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.66817097443535,
+        "avgReversalDays": 5.290322580645161,
+        "winRate": 12.903225806451612,
+        "avgWinPercent": 6.493696502569052,
+        "avgLossPercent": -1.7291883784360023
+      },
+      "profitDistribution": {
+        "under1Percent": 19,
+        "under2Percent": 23,
+        "under5Percent": 26,
+        "under10Percent": 29,
+        "over10Percent": 2
+      }
+    },
+    "NSE_GRASIM_EQ": {
+      "symbol": "NSE_GRASIM_EQ",
+      "totalCrossovers": 26,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.2871841422263466,
+        "avgMaxProfitPoints": 56.36115384615384,
+        "avgMaxProfitDays": 3.3846153846153846,
+        "maxProfitPercent": 15.060328839060574,
+        "maxProfitPoints": 361.3499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.361791565697049,
+        "avgReversalDays": 6.846153846153846,
+        "winRate": 15.384615384615385,
+        "avgWinPercent": 6.235090047736819,
+        "avgLossPercent": -1.5612245863213887
+      },
+      "profitDistribution": {
+        "under1Percent": 16,
+        "under2Percent": 19,
+        "under5Percent": 23,
+        "under10Percent": 24,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HCLTECH_EQ": {
+      "symbol": "NSE_HCLTECH_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.7537726828842835,
+        "avgMaxProfitPoints": 56.16315789473685,
+        "avgMaxProfitDays": 7.105263157894737,
+        "maxProfitPercent": 22.30371170097911,
+        "maxProfitPoints": 301.9000000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.7958429512191612,
+        "avgReversalDays": 9.368421052631579,
+        "winRate": 47.368421052631575,
+        "avgWinPercent": 4.711117966028598,
+        "avgLossPercent": -2.7279045621093316
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 12,
+        "under5Percent": 15,
+        "under10Percent": 17,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HDFCBANK_EQ": {
+      "symbol": "NSE_HDFCBANK_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.137298857054259,
+        "avgMaxProfitPoints": 66.91538461538462,
+        "avgMaxProfitDays": 10.153846153846153,
+        "maxProfitPercent": 13.992678249753032,
+        "maxProfitPoints": 240.79999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9359024407017511,
+        "avgReversalDays": 14.307692307692308,
+        "winRate": 38.46153846153847,
+        "avgWinPercent": 4.646918687460224,
+        "avgLossPercent": -1.3834827135222947
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 7,
+        "under5Percent": 9,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HDFCLIFE_EQ": {
+      "symbol": "NSE_HDFCLIFE_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.043854925989572,
+        "avgMaxProfitPoints": 30.996666666666663,
+        "avgMaxProfitDays": 8.4,
+        "maxProfitPercent": 28.860873480414227,
+        "maxProfitPoints": 160.25,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.102991981678307,
+        "avgReversalDays": 13.2,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 11.215674740566783,
+        "avgLossPercent": -2.453349397765932
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 10,
+        "under5Percent": 10,
+        "under10Percent": 13,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HEROMOTOCO_EQ": {
+      "symbol": "NSE_HEROMOTOCO_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.630039837695526,
+        "avgMaxProfitPoints": 244.19705882352937,
+        "avgMaxProfitDays": 7.0588235294117645,
+        "maxProfitPercent": 26.053880664947233,
+        "maxProfitPoints": 1202.1000000000004,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.434996963095651,
+        "avgReversalDays": 10.647058823529411,
+        "winRate": 41.17647058823529,
+        "avgWinPercent": 7.80931048312719,
+        "avgLossPercent": -3.0270225009264267
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 9,
+        "under5Percent": 10,
+        "under10Percent": 14,
+        "over10Percent": 3
+      }
+    },
+    "NSE_HINDALCO_EQ": {
+      "symbol": "NSE_HINDALCO_EQ",
+      "totalCrossovers": 16,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.84599677029563,
+        "avgMaxProfitPoints": 35.334374999999994,
+        "avgMaxProfitDays": 7,
+        "maxProfitPercent": 22.06365599474228,
+        "maxProfitPoints": 122,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.2822294014467748,
+        "avgReversalDays": 10.8125,
+        "winRate": 25,
+        "avgWinPercent": 10.059156954278968,
+        "avgLossPercent": -1.6434131161639562
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 9,
+        "under5Percent": 10,
+        "under10Percent": 12,
+        "over10Percent": 4
+      }
+    },
+    "NSE_HINDUNILVR_EQ": {
+      "symbol": "NSE_HINDUNILVR_EQ",
+      "totalCrossovers": 21,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.354886253285402,
+        "avgMaxProfitPoints": 56.31904761904761,
+        "avgMaxProfitDays": 5.904761904761905,
+        "maxProfitPercent": 16.63156479655853,
+        "maxProfitPoints": 371.1500000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.2218491370903904,
+        "avgReversalDays": 9.857142857142858,
+        "winRate": 23.809523809523807,
+        "avgWinPercent": 4.356076504407264,
+        "avgLossPercent": -1.6524509000584076
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 16,
+        "under5Percent": 17,
+        "under10Percent": 20,
+        "over10Percent": 1
+      }
+    },
+    "NSE_ICICIBANK_EQ": {
+      "symbol": "NSE_ICICIBANK_EQ",
+      "totalCrossovers": 22,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.4369243525924014,
+        "avgMaxProfitPoints": 29.804545454545465,
+        "avgMaxProfitDays": 4.363636363636363,
+        "maxProfitPercent": 10.431571659358404,
+        "maxProfitPoints": 135.5999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.040341666157290894,
+        "avgReversalDays": 7.590909090909091,
+        "winRate": 27.27272727272727,
+        "avgWinPercent": 4.204246782434454,
+        "avgLossPercent": -1.6320623343791953
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 15,
+        "under5Percent": 17,
+        "under10Percent": 21,
+        "over10Percent": 1
+      }
+    },
+    "NSE_INDUSINDBK_EQ": {
+      "symbol": "NSE_INDUSINDBK_EQ",
+      "totalCrossovers": 12,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.167151336003397,
+        "avgMaxProfitPoints": 61.229166666666636,
+        "avgMaxProfitDays": 12.333333333333334,
+        "maxProfitPercent": 15.912488109797529,
+        "maxProfitPoints": 181.94999999999982,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.2710797728933927,
+        "avgReversalDays": 18.083333333333332,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 4.876425070299583,
+        "avgLossPercent": -2.031592875809703
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 4,
+        "under5Percent": 7,
+        "under10Percent": 10,
+        "over10Percent": 2
+      }
+    },
+    "NSE_INFY_EQ": {
+      "symbol": "NSE_INFY_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.359977165310782,
+        "avgMaxProfitPoints": 66.02692307692308,
+        "avgMaxProfitDays": 10.923076923076923,
+        "maxProfitPercent": 31.769408794445614,
+        "maxProfitPoints": 453,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.2326482425266083,
+        "avgReversalDays": 9.615384615384615,
+        "winRate": 30.76923076923077,
+        "avgWinPercent": 6.688473740492112,
+        "avgLossPercent": -1.1921630899025037
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 9,
+        "under5Percent": 9,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ITC_EQ": {
+      "symbol": "NSE_ITC_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.684984843223061,
+        "avgMaxProfitPoints": 11.623333333333335,
+        "avgMaxProfitDays": 8.733333333333333,
+        "maxProfitPercent": 16.637841577308897,
+        "maxProfitPoints": 72.15000000000003,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.10029056822486414,
+        "avgReversalDays": 11.333333333333334,
+        "winRate": 20,
+        "avgWinPercent": 7.087633434581366,
+        "avgLossPercent": -1.8972715689264217
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 10,
+        "under5Percent": 13,
+        "under10Percent": 14,
+        "over10Percent": 1
+      }
+    },
+    "NSE_JSWSTEEL_EQ": {
+      "symbol": "NSE_JSWSTEEL_EQ",
+      "totalCrossovers": 23,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.524287111566888,
+        "avgMaxProfitPoints": 22.87173913043479,
+        "avgMaxProfitDays": 5.826086956521739,
+        "maxProfitPercent": 15.66579634464752,
+        "maxProfitPoints": 144,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.4633863551984576,
+        "avgReversalDays": 7.869565217391305,
+        "winRate": 21.73913043478261,
+        "avgWinPercent": 5.213129459105783,
+        "avgLossPercent": -2.040196303616302
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 17,
+        "under5Percent": 19,
+        "under10Percent": 20,
+        "over10Percent": 3
+      }
+    },
+    "NSE_KOTAKBANK_EQ": {
+      "symbol": "NSE_KOTAKBANK_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.956993543222768,
+        "avgMaxProfitPoints": 55.78823529411772,
+        "avgMaxProfitDays": 7.882352941176471,
+        "maxProfitPercent": 9.765201382058466,
+        "maxProfitPoints": 193.60000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.8746991502311434,
+        "avgReversalDays": 11.705882352941176,
+        "winRate": 23.52941176470588,
+        "avgWinPercent": 1.6612236454524598,
+        "avgLossPercent": -1.65498308736456
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 14,
+        "under10Percent": 17,
+        "over10Percent": 0
+      }
+    },
+    "NSE_LT_EQ": {
+      "symbol": "NSE_LT_EQ",
+      "totalCrossovers": 26,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.1131546995523696,
+        "avgMaxProfitPoints": 106.10769230769232,
+        "avgMaxProfitDays": 4.769230769230769,
+        "maxProfitPercent": 13.984304644281496,
+        "maxProfitPoints": 434.8000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.29436290145288413,
+        "avgReversalDays": 7.6923076923076925,
+        "winRate": 26.923076923076923,
+        "avgWinPercent": 4.052645720588899,
+        "avgLossPercent": -1.8958923937840677
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 17,
+        "under5Percent": 20,
+        "under10Percent": 24,
+        "over10Percent": 2
+      }
+    },
+    "NSE_MARUTI_EQ": {
+      "symbol": "NSE_MARUTI_EQ",
+      "totalCrossovers": 18,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.14785462680917,
+        "avgMaxProfitPoints": 475.375,
+        "avgMaxProfitDays": 7.277777777777778,
+        "maxProfitPercent": 18.65371765003341,
+        "maxProfitPoints": 2065.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.3288750315534221,
+        "avgReversalDays": 10.444444444444445,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 6.462344670758564,
+        "avgLossPercent": -1.2378597880491486
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 12,
+        "under5Percent": 13,
+        "under10Percent": 14,
+        "over10Percent": 4
+      }
+    },
+    "NSE_M_M_EQ": {
+      "symbol": "NSE_M_M_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.124932211972128,
+        "avgMaxProfitPoints": 146.29210526315794,
+        "avgMaxProfitDays": 6,
+        "maxProfitPercent": 37.357108076147206,
+        "maxProfitPoints": 805.5500000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.987772759544758,
+        "avgReversalDays": 9.68421052631579,
+        "winRate": 26.31578947368421,
+        "avgWinPercent": 12.215888569943141,
+        "avgLossPercent": -1.6651257441689513
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 10,
+        "under5Percent": 12,
+        "under10Percent": 15,
+        "over10Percent": 4
+      }
+    },
+    "NSE_NESTLEIND_EQ": {
+      "symbol": "NSE_NESTLEIND_EQ",
+      "totalCrossovers": 29,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 1.7226164049341426,
+        "avgMaxProfitPoints": 41.70068965517242,
+        "avgMaxProfitDays": 4.551724137931035,
+        "maxProfitPercent": 9.486440846329591,
+        "maxProfitPoints": 238.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.6743829065992428,
+        "avgReversalDays": 6.9655172413793105,
+        "winRate": 17.24137931034483,
+        "avgWinPercent": 2.195789357038628,
+        "avgLossPercent": -1.2723354615237994
+      },
+      "profitDistribution": {
+        "under1Percent": 17,
+        "under2Percent": 20,
+        "under5Percent": 26,
+        "under10Percent": 29,
+        "over10Percent": 0
+      }
+    },
+    "NSE_NTPC_EQ": {
+      "symbol": "NSE_NTPC_EQ",
+      "totalCrossovers": 22,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.2000786696252863,
+        "avgMaxProfitPoints": 7.872727272727275,
+        "avgMaxProfitDays": 4.045454545454546,
+        "maxProfitPercent": 14.190135366422894,
+        "maxProfitPoints": 45.599999999999966,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.847764223080413,
+        "avgReversalDays": 6.7727272727272725,
+        "winRate": 22.727272727272727,
+        "avgWinPercent": 3.8414957882009637,
+        "avgLossPercent": -2.2269583440455234
+      },
+      "profitDistribution": {
+        "under1Percent": 13,
+        "under2Percent": 15,
+        "under5Percent": 19,
+        "under10Percent": 20,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ONGC_EQ": {
+      "symbol": "NSE_ONGC_EQ",
+      "totalCrossovers": 28,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.184001415684781,
+        "avgMaxProfitPoints": 9.948571428571428,
+        "avgMaxProfitDays": 4.107142857142857,
+        "maxProfitPercent": 38.44233649525711,
+        "maxProfitPoints": 77,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.10269175924397649,
+        "avgReversalDays": 7.107142857142857,
+        "winRate": 17.857142857142858,
+        "avgWinPercent": 10.8586104190214,
+        "avgLossPercent": -2.2355514276641593
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 23,
+        "under10Percent": 25,
+        "over10Percent": 3
+      }
+    },
+    "NSE_POWERGRID_EQ": {
+      "symbol": "NSE_POWERGRID_EQ",
+      "totalCrossovers": 21,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.9923506843261825,
+        "avgMaxProfitPoints": 10.978571428571431,
+        "avgMaxProfitDays": 5.190476190476191,
+        "maxProfitPercent": 21.02874432677762,
+        "maxProfitPoints": 55.60000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.4306570582744433,
+        "avgReversalDays": 8.380952380952381,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 6.584277307202518,
+        "avgLossPercent": -2.6461530661895942
+      },
+      "profitDistribution": {
+        "under1Percent": 12,
+        "under2Percent": 12,
+        "under5Percent": 15,
+        "under10Percent": 17,
+        "over10Percent": 4
+      }
+    },
+    "NSE_RELIANCE_EQ": {
+      "symbol": "NSE_RELIANCE_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.673220186439882,
+        "avgMaxProfitPoints": 35.35842105263159,
+        "avgMaxProfitDays": 4.473684210526316,
+        "maxProfitPercent": 17.442141762761086,
+        "maxProfitPoints": 216.30000000000018,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.21466819037476031,
+        "avgReversalDays": 8.368421052631579,
+        "winRate": 26.31578947368421,
+        "avgWinPercent": 3.9900059562633095,
+        "avgLossPercent": -1.7163375284597853
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 12,
+        "under5Percent": 16,
+        "under10Percent": 17,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SBILIFE_EQ": {
+      "symbol": "NSE_SBILIFE_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.720000348397075,
+        "avgMaxProfitPoints": 86.43846153846154,
+        "avgMaxProfitDays": 10.23076923076923,
+        "maxProfitPercent": 22.483279620196146,
+        "maxProfitPoints": 324.4000000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.0823862345479114,
+        "avgReversalDays": 14.692307692307692,
+        "winRate": 38.46153846153847,
+        "avgWinPercent": 8.549443733749547,
+        "avgLossPercent": -1.9595247024531117
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 6,
+        "under5Percent": 8,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SBIN_EQ": {
+      "symbol": "NSE_SBIN_EQ",
+      "totalCrossovers": 25,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.9964747830975025,
+        "avgMaxProfitPoints": 21.32,
+        "avgMaxProfitDays": 4.68,
+        "maxProfitPercent": 16.704924102184368,
+        "maxProfitPoints": 112.79999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.05438966940842768,
+        "avgReversalDays": 7.44,
+        "winRate": 20,
+        "avgWinPercent": 7.320055729655965,
+        "avgLossPercent": -1.762026845653456
+      },
+      "profitDistribution": {
+        "under1Percent": 15,
+        "under2Percent": 18,
+        "under5Percent": 20,
+        "under10Percent": 22,
+        "over10Percent": 3
+      }
+    },
+    "NSE_SHREECEM_EQ": {
+      "symbol": "NSE_SHREECEM_EQ",
+      "totalCrossovers": 21,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.8701081117153713,
+        "avgMaxProfitPoints": 1018.1547619047623,
+        "avgMaxProfitDays": 5.904761904761905,
+        "maxProfitPercent": 14.347593744643527,
+        "maxProfitPoints": 3557.4500000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.33544667573225206,
+        "avgReversalDays": 9.476190476190476,
+        "winRate": 28.57142857142857,
+        "avgWinPercent": 4.889768630216126,
+        "avgLossPercent": -1.4862821060612974
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 10,
+        "under5Percent": 13,
+        "under10Percent": 19,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SUNPHARMA_EQ": {
+      "symbol": "NSE_SUNPHARMA_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.560892661697529,
+        "avgMaxProfitPoints": 83.3653846153846,
+        "avgMaxProfitDays": 10.461538461538462,
+        "maxProfitPercent": 22.639678822348603,
+        "maxProfitPoints": 338.3499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.952869125852117,
+        "avgReversalDays": 13.615384615384615,
+        "winRate": 30.76923076923077,
+        "avgWinPercent": 11.664895809637349,
+        "avgLossPercent": -0.919142733607986
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 7,
+        "under5Percent": 8,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TATACONSUM_EQ": {
+      "symbol": "NSE_TATACONSUM_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.288812436195924,
+        "avgMaxProfitPoints": 43.279999999999994,
+        "avgMaxProfitDays": 6.411764705882353,
+        "maxProfitPercent": 20.240178562072337,
+        "maxProfitPoints": 193.1500000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.3752763715558307,
+        "avgReversalDays": 10.058823529411764,
+        "winRate": 29.411764705882355,
+        "avgWinPercent": 8.699278156865915,
+        "avgLossPercent": -1.6763910389900378
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 11,
+        "under5Percent": 12,
+        "under10Percent": 13,
+        "over10Percent": 4
+      }
+    },
+    "NSE_TATAMOTORS_EQ": {
+      "symbol": "NSE_TATAMOTORS_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.392565441738485,
+        "avgMaxProfitPoints": 42.86764705882353,
+        "avgMaxProfitDays": 7.117647058823529,
+        "maxProfitPercent": 19.519596749305617,
+        "maxProfitPoints": 189.7499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.3978006399474561,
+        "avgReversalDays": 11.176470588235293,
+        "winRate": 23.52941176470588,
+        "avgWinPercent": 9.302386050319091,
+        "avgLossPercent": -3.3824734677217787
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 8,
+        "under5Percent": 10,
+        "under10Percent": 12,
+        "over10Percent": 5
+      }
+    },
+    "NSE_TATASTEEL_EQ": {
+      "symbol": "NSE_TATASTEEL_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.5946069854899485,
+        "avgMaxProfitPoints": 5.220526315789477,
+        "avgMaxProfitDays": 5.947368421052632,
+        "maxProfitPercent": 21.59021406727827,
+        "maxProfitPoints": 28.23999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.12465440281503853,
+        "avgReversalDays": 9.421052631578947,
+        "winRate": 26.31578947368421,
+        "avgWinPercent": 3.5774945718546087,
+        "avgLossPercent": -1.4468504651970555
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 11,
+        "under5Percent": 15,
+        "under10Percent": 17,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TCS_EQ": {
+      "symbol": "NSE_TCS_EQ",
+      "totalCrossovers": 20,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8571074659287854,
+        "avgMaxProfitPoints": 109.18749999999997,
+        "avgMaxProfitDays": 5.55,
+        "maxProfitPercent": 14.794799498746874,
+        "maxProfitPoints": 566.7000000000003,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.04147085411807813,
+        "avgReversalDays": 8.6,
+        "winRate": 30,
+        "avgWinPercent": 3.4893747849025503,
+        "avgLossPercent": -1.5546904136983477
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 13,
+        "under5Percent": 16,
+        "under10Percent": 18,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TECHM_EQ": {
+      "symbol": "NSE_TECHM_EQ",
+      "totalCrossovers": 18,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.9479477907051637,
+        "avgMaxProfitPoints": 55.77499999999999,
+        "avgMaxProfitDays": 7.388888888888889,
+        "maxProfitPercent": 25.125591554423,
+        "maxProfitPoints": 345.0999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.199978190951815,
+        "avgReversalDays": 9.777777777777779,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 7.020779949562353,
+        "avgLossPercent": -1.7104226883534546
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 9,
+        "under5Percent": 15,
+        "under10Percent": 16,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TITAN_EQ": {
+      "symbol": "NSE_TITAN_EQ",
+      "totalCrossovers": 20,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.961970598077296,
+        "avgMaxProfitPoints": 98.84750000000004,
+        "avgMaxProfitDays": 5.2,
+        "maxProfitPercent": 16.478237196938153,
+        "maxProfitPoints": 514.5,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.7938900276626061,
+        "avgReversalDays": 8.85,
+        "winRate": 10,
+        "avgWinPercent": 12.255422093386642,
+        "avgLossPercent": -2.243813596668078
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 13,
+        "under5Percent": 16,
+        "under10Percent": 18,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ULTRACEMCO_EQ": {
+      "symbol": "NSE_ULTRACEMCO_EQ",
+      "totalCrossovers": 16,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.690832115352317,
+        "avgMaxProfitPoints": 389.17812500000014,
+        "avgMaxProfitDays": 6.5,
+        "maxProfitPercent": 23.22825068706557,
+        "maxProfitPoints": 2244,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.2610817166059714,
+        "avgReversalDays": 9.75,
+        "winRate": 18.75,
+        "avgWinPercent": 9.160611848503576,
+        "avgLossPercent": -1.79265600613963
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 10,
+        "under5Percent": 12,
+        "under10Percent": 14,
+        "over10Percent": 2
+      }
+    },
+    "NSE_UPL_EQ": {
+      "symbol": "NSE_UPL_EQ",
+      "totalCrossovers": 18,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.359215644183951,
+        "avgMaxProfitPoints": 23.06666666666668,
+        "avgMaxProfitDays": 6.722222222222222,
+        "maxProfitPercent": 22.755169483523748,
+        "maxProfitPoints": 120.5,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6501719674463174,
+        "avgReversalDays": 9.944444444444445,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 6.144255317518762,
+        "avgLossPercent": -2.0968697075899043
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 11,
+        "under5Percent": 11,
+        "under10Percent": 16,
+        "over10Percent": 2
+      }
+    },
+    "NSE_WIPRO_EQ": {
+      "symbol": "NSE_WIPRO_EQ",
+      "totalCrossovers": 21,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.731188279129946,
+        "avgMaxProfitPoints": 9.282857142857146,
+        "avgMaxProfitDays": 5.857142857142857,
+        "maxProfitPercent": 26.954595791805104,
+        "maxProfitPoints": 60.85000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.16670374032104696,
+        "avgReversalDays": 6.571428571428571,
+        "winRate": 23.809523809523807,
+        "avgWinPercent": 4.610679528662873,
+        "avgLossPercent": -1.6596360118785223
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 13,
+        "under5Percent": 16,
+        "under10Percent": 19,
+        "over10Percent": 2
+      }
+    }
+  },
+  "200": {
+    "NSE_ADANIPORTS_EQ": {
+      "symbol": "NSE_ADANIPORTS_EQ",
+      "totalCrossovers": 12,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.1307887613362055,
+        "avgMaxProfitPoints": 47.979166666666664,
+        "avgMaxProfitDays": 7.25,
+        "maxProfitPercent": 36.09751592944869,
+        "maxProfitPoints": 390.89999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.1548452866085572,
+        "avgReversalDays": 9.166666666666666,
+        "winRate": 16.666666666666664,
+        "avgWinPercent": 12.018712911391138,
+        "avgLossPercent": -3.7895569262084963
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 11,
+        "under10Percent": 11,
+        "over10Percent": 1
+      }
+    },
+    "NSE_APOLLOHOSP_EQ": {
+      "symbol": "NSE_APOLLOHOSP_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.7253874569255947,
+        "avgMaxProfitPoints": 176.2384615384615,
+        "avgMaxProfitDays": 10.153846153846153,
+        "maxProfitPercent": 16.81495954914658,
+        "maxProfitPoints": 1041.3000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.38306826383635423,
+        "avgReversalDays": 6.538461538461538,
+        "winRate": 15.384615384615385,
+        "avgWinPercent": 5.76536436078809,
+        "avgLossPercent": -1.5009651046771622
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 11,
+        "under5Percent": 11,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ASIANPAINT_EQ": {
+      "symbol": "NSE_ASIANPAINT_EQ",
+      "totalCrossovers": 3,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 11.510098877499402,
+        "avgMaxProfitPoints": 296.05,
+        "avgMaxProfitDays": 49.333333333333336,
+        "maxProfitPercent": 17.504558478770512,
+        "maxProfitPoints": 504,
+        "minMaxProfitPercent": 7.333980925468028,
+        "minMaxProfitPoints": 166.0999999999999
+      },
+      "reversalStats": {
+        "avgReversalPercent": 3.11379943635848,
+        "avgReversalDays": 60.666666666666664,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 9.379178605539645,
+        "avgLossPercent": -0.018890148232102343
+      },
+      "profitDistribution": {
+        "under1Percent": 0,
+        "under2Percent": 0,
+        "under5Percent": 0,
+        "under10Percent": 2,
+        "over10Percent": 1
+      }
+    },
+    "NSE_AXISBANK_EQ": {
+      "symbol": "NSE_AXISBANK_EQ",
+      "totalCrossovers": 3,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 8.306754120755487,
+        "avgMaxProfitPoints": 86.26666666666661,
+        "avgMaxProfitDays": 30,
+        "maxProfitPercent": 21.965689425025953,
+        "maxProfitPoints": 222.14999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 5.370316868503559,
+        "avgReversalDays": 31.666666666666668,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 18.57418302269244,
+        "avgLossPercent": -1.2316162085908822
+      },
+      "profitDistribution": {
+        "under1Percent": 1,
+        "under2Percent": 1,
+        "under5Percent": 2,
+        "under10Percent": 2,
+        "over10Percent": 1
+      }
+    },
+    "NSE_BAJAJFINSV_EQ": {
+      "symbol": "NSE_BAJAJFINSV_EQ",
+      "totalCrossovers": 14,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.1144570154617535,
+        "avgMaxProfitPoints": 68.06428571428572,
+        "avgMaxProfitDays": 7.428571428571429,
+        "maxProfitPercent": 25.50402596591974,
+        "maxProfitPoints": 408.60000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9282784416617672,
+        "avgReversalDays": 11.357142857142858,
+        "winRate": 14.285714285714285,
+        "avgWinPercent": 13.435162136924426,
+        "avgLossPercent": -1.1562021742153423
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 10,
+        "under5Percent": 12,
+        "under10Percent": 12,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BAJAJ_AUTO_EQ": {
+      "symbol": "NSE_BAJAJ_AUTO_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 8.438994840386599,
+        "avgMaxProfitPoints": 757.1333333333329,
+        "avgMaxProfitDays": 10.666666666666666,
+        "maxProfitPercent": 21.716819856915652,
+        "maxProfitPoints": 2259.949999999999,
+        "minMaxProfitPercent": 0.3257245050997381,
+        "minMaxProfitPoints": 31.599999999998545
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.0511677523059704,
+        "avgReversalDays": 12.5,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 5.5203568832836885,
+        "avgLossPercent": -4.3369300701008004
+      },
+      "profitDistribution": {
+        "under1Percent": 1,
+        "under2Percent": 2,
+        "under5Percent": 3,
+        "under10Percent": 4,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BAJFINANCE_EQ": {
+      "symbol": "NSE_BAJFINANCE_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.564088772952437,
+        "avgMaxProfitPoints": 33.081538461538464,
+        "avgMaxProfitDays": 8.538461538461538,
+        "maxProfitPercent": 23.018730038434477,
+        "maxProfitPoints": 170.09000000000003,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.3537564690486473,
+        "avgReversalDays": 12.692307692307692,
+        "winRate": 23.076923076923077,
+        "avgWinPercent": 7.560648164011501,
+        "avgLossPercent": -1.808311039440209
+      },
+      "profitDistribution": {
+        "under1Percent": 4,
+        "under2Percent": 7,
+        "under5Percent": 9,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BHARTIARTL_EQ": {
+      "symbol": "NSE_BHARTIARTL_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.351300011592759,
+        "avgMaxProfitPoints": 53.4794117647059,
+        "avgMaxProfitDays": 4.9411764705882355,
+        "maxProfitPercent": 12.247678803435056,
+        "maxProfitPoints": 195.75,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.10841050532223881,
+        "avgReversalDays": 7.9411764705882355,
+        "winRate": 29.411764705882355,
+        "avgWinPercent": 2.9594186741790542,
+        "avgLossPercent": -1.3866726634477777
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 8,
+        "under5Percent": 13,
+        "under10Percent": 15,
+        "over10Percent": 2
+      }
+    },
+    "NSE_BPCL_EQ": {
+      "symbol": "NSE_BPCL_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 8.641591671964377,
+        "avgMaxProfitPoints": 24.185,
+        "avgMaxProfitDays": 16.666666666666668,
+        "maxProfitPercent": 35.318949343339575,
+        "maxProfitPoints": 90.35999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.2434164863686377,
+        "avgReversalDays": 6,
+        "winRate": 16.666666666666664,
+        "avgWinPercent": 2.330827067669173,
+        "avgLossPercent": -1.9582651971761997
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 3,
+        "under10Percent": 5,
+        "over10Percent": 1
+      }
+    },
+    "NSE_BRITANNIA_EQ": {
+      "symbol": "NSE_BRITANNIA_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 9.734697387429806,
+        "avgMaxProfitPoints": 493.1583333333335,
+        "avgMaxProfitDays": 26.666666666666668,
+        "maxProfitPercent": 23.905424435903146,
+        "maxProfitPoints": 1128.8500000000004,
+        "minMaxProfitPercent": 1.2177106015968606,
+        "minMaxProfitPoints": 71.30000000000018
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.4454649029942581,
+        "avgReversalDays": 20.333333333333332,
+        "winRate": 50,
+        "avgWinPercent": 5.017129594925204,
+        "avgLossPercent": -2.1261997889366873
+      },
+      "profitDistribution": {
+        "under1Percent": 0,
+        "under2Percent": 2,
+        "under5Percent": 2,
+        "under10Percent": 4,
+        "over10Percent": 2
+      }
+    },
+    "NSE_CIPLA_EQ": {
+      "symbol": "NSE_CIPLA_EQ",
+      "totalCrossovers": 20,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 1.5018401141925526,
+        "avgMaxProfitPoints": 22.454999999999984,
+        "avgMaxProfitDays": 4,
+        "maxProfitPercent": 9.13244989881845,
+        "maxProfitPoints": 139.89999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.1915977748205164,
+        "avgReversalDays": 7.3,
+        "winRate": 10,
+        "avgWinPercent": 3.173035718997894,
+        "avgLossPercent": -1.676557051911451
+      },
+      "profitDistribution": {
+        "under1Percent": 14,
+        "under2Percent": 15,
+        "under5Percent": 17,
+        "under10Percent": 20,
+        "over10Percent": 0
+      }
+    },
+    "NSE_COALINDIA_EQ": {
+      "symbol": "NSE_COALINDIA_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.6326014843229424,
+        "avgMaxProfitPoints": 11.307692307692303,
+        "avgMaxProfitDays": 5.769230769230769,
+        "maxProfitPercent": 13.329630658150512,
+        "maxProfitPoints": 48,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -2.0410303140682706,
+        "avgReversalDays": 10.23076923076923,
+        "winRate": 15.384615384615385,
+        "avgWinPercent": 3.6358022622494186,
+        "avgLossPercent": -3.0731816915805776
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 7,
+        "under5Percent": 11,
+        "under10Percent": 12,
+        "over10Percent": 1
+      }
+    },
+    "NSE_DIVISLAB_EQ": {
+      "symbol": "NSE_DIVISLAB_EQ",
+      "totalCrossovers": 10,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.052918329773009,
+        "avgMaxProfitPoints": 226.795,
+        "avgMaxProfitDays": 7.6,
+        "maxProfitPercent": 17.228210133242808,
+        "maxProfitPoints": 1015,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5429017943235716,
+        "avgReversalDays": 5.3,
+        "winRate": 20,
+        "avgWinPercent": 5.341139508034837,
+        "avgLossPercent": -0.6566576341042449
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 7,
+        "under5Percent": 7,
+        "under10Percent": 8,
+        "over10Percent": 2
+      }
+    },
+    "NSE_DRREDDY_EQ": {
+      "symbol": "NSE_DRREDDY_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.335007321262782,
+        "avgMaxProfitPoints": 76.67666666666666,
+        "avgMaxProfitDays": 14,
+        "maxProfitPercent": 17.99289981816607,
+        "maxProfitPoints": 207.79999999999995,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.44999924914357253,
+        "avgReversalDays": 12.5,
+        "winRate": 16.666666666666664,
+        "avgWinPercent": 8.840744720088518,
+        "avgLossPercent": -1.2281498450454162
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 3,
+        "under5Percent": 4,
+        "under10Percent": 4,
+        "over10Percent": 2
+      }
+    },
+    "NSE_EICHERMOT_EQ": {
+      "symbol": "NSE_EICHERMOT_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8420961086581333,
+        "avgMaxProfitPoints": 142.90000000000006,
+        "avgMaxProfitDays": 3.7333333333333334,
+        "maxProfitPercent": 12.280719710150857,
+        "maxProfitPoints": 599.9499999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.6423823308539968,
+        "avgReversalDays": 6.133333333333334,
+        "winRate": 20,
+        "avgWinPercent": 2.920511686692814,
+        "avgLossPercent": -1.5331058352406994
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 10,
+        "under5Percent": 11,
+        "under10Percent": 13,
+        "over10Percent": 2
+      }
+    },
+    "NSE_GRASIM_EQ": {
+      "symbol": "NSE_GRASIM_EQ",
+      "totalCrossovers": 11,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.7645448292121118,
+        "avgMaxProfitPoints": 93.5909090909091,
+        "avgMaxProfitDays": 6.909090909090909,
+        "maxProfitPercent": 17.731885719048922,
+        "maxProfitPoints": 425.4500000000003,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.5829777503806227,
+        "avgReversalDays": 9.636363636363637,
+        "winRate": 27.27272727272727,
+        "avgWinPercent": 5.764269476050423,
+        "avgLossPercent": -1.360006646745552
+      },
+      "profitDistribution": {
+        "under1Percent": 7,
+        "under2Percent": 8,
+        "under5Percent": 8,
+        "under10Percent": 9,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HCLTECH_EQ": {
+      "symbol": "NSE_HCLTECH_EQ",
+      "totalCrossovers": 5,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 7.7219589975184935,
+        "avgMaxProfitPoints": 114.36000000000004,
+        "avgMaxProfitDays": 26.2,
+        "maxProfitPercent": 29.456720959988942,
+        "maxProfitPoints": 425.9000000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 5.0507133491752985,
+        "avgReversalDays": 19,
+        "winRate": 20,
+        "avgWinPercent": 27.17778469412457,
+        "avgLossPercent": -0.4810544870620187
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 3,
+        "under10Percent": 4,
+        "over10Percent": 1
+      }
+    },
+    "NSE_HDFCBANK_EQ": {
+      "symbol": "NSE_HDFCBANK_EQ",
+      "totalCrossovers": 13,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.2245634694676495,
+        "avgMaxProfitPoints": 68.9615384615385,
+        "avgMaxProfitDays": 9.615384615384615,
+        "maxProfitPercent": 21.11967128916282,
+        "maxProfitPoints": 308.4000000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9414657929691702,
+        "avgReversalDays": 12.153846153846153,
+        "winRate": 23.076923076923077,
+        "avgWinPercent": 7.764941018265226,
+        "avgLossPercent": -1.105576774619647
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 9,
+        "under10Percent": 11,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HDFCLIFE_EQ": {
+      "symbol": "NSE_HDFCLIFE_EQ",
+      "totalCrossovers": 8,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 8.215910776144785,
+        "avgMaxProfitPoints": 49.443749999999994,
+        "avgMaxProfitDays": 19.125,
+        "maxProfitPercent": 33.30990864371045,
+        "maxProfitPoints": 189.5999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.4866178162676882,
+        "avgReversalDays": 9.75,
+        "winRate": 25,
+        "avgWinPercent": 11.991606863872173,
+        "avgLossPercent": -2.0150451996004737
+      },
+      "profitDistribution": {
+        "under1Percent": 5,
+        "under2Percent": 5,
+        "under5Percent": 6,
+        "under10Percent": 6,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HEROMOTOCO_EQ": {
+      "symbol": "NSE_HEROMOTOCO_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 7.293133040873209,
+        "avgMaxProfitPoints": 322.7142857142858,
+        "avgMaxProfitDays": 12.571428571428571,
+        "maxProfitPercent": 22.605395938451274,
+        "maxProfitPoints": 813.1500000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.42046231199159856,
+        "avgReversalDays": 11,
+        "winRate": 14.285714285714285,
+        "avgWinPercent": 9.09595614113355,
+        "avgLossPercent": -2.006532054179123
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 3,
+        "under5Percent": 3,
+        "under10Percent": 5,
+        "over10Percent": 2
+      }
+    },
+    "NSE_HINDALCO_EQ": {
+      "symbol": "NSE_HINDALCO_EQ",
+      "totalCrossovers": 11,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.13597925040157,
+        "avgMaxProfitPoints": 26.354545454545462,
+        "avgMaxProfitDays": 6.636363636363637,
+        "maxProfitPercent": 17.874436466855915,
+        "maxProfitPoints": 107.05000000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.261400784393094,
+        "avgReversalDays": 9.545454545454545,
+        "winRate": 36.36363636363637,
+        "avgWinPercent": 1.0013850843673313,
+        "avgLossPercent": -0.9829927093990515
+      },
+      "profitDistribution": {
+        "under1Percent": 4,
+        "under2Percent": 5,
+        "under5Percent": 7,
+        "under10Percent": 10,
+        "over10Percent": 1
+      }
+    },
+    "NSE_HINDUNILVR_EQ": {
+      "symbol": "NSE_HINDUNILVR_EQ",
+      "totalCrossovers": 9,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.956198515335694,
+        "avgMaxProfitPoints": 115.74444444444453,
+        "avgMaxProfitDays": 14,
+        "maxProfitPercent": 27.282087921324706,
+        "maxProfitPoints": 649.1500000000001,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 1.3888608853892224,
+        "avgReversalDays": 21.11111111111111,
+        "winRate": 22.22222222222222,
+        "avgWinPercent": 12.907741208401692,
+        "avgLossPercent": -1.902247778328626
+      },
+      "profitDistribution": {
+        "under1Percent": 5,
+        "under2Percent": 6,
+        "under5Percent": 6,
+        "under10Percent": 7,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ICICIBANK_EQ": {
+      "symbol": "NSE_ICICIBANK_EQ",
+      "totalCrossovers": 14,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.686147679692289,
+        "avgMaxProfitPoints": 33.442857142857115,
+        "avgMaxProfitDays": 6,
+        "maxProfitPercent": 15.09850275807722,
+        "maxProfitPoints": 191.5999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.1676402619035024,
+        "avgReversalDays": 9.071428571428571,
+        "winRate": 28.57142857142857,
+        "avgWinPercent": 4.563777455410438,
+        "avgLossPercent": -1.5908146154992722
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 9,
+        "under5Percent": 11,
+        "under10Percent": 13,
+        "over10Percent": 1
+      }
+    },
+    "NSE_INDUSINDBK_EQ": {
+      "symbol": "NSE_INDUSINDBK_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.780877008370924,
+        "avgMaxProfitPoints": 47.29285714285712,
+        "avgMaxProfitDays": 14,
+        "maxProfitPercent": 14.590633959859813,
+        "maxProfitPoints": 137.39999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -7.2692632014432785,
+        "avgReversalDays": 12.857142857142858,
+        "winRate": 0,
+        "avgWinPercent": 0,
+        "avgLossPercent": -7.2692632014432785
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 4,
+        "under5Percent": 5,
+        "under10Percent": 5,
+        "over10Percent": 2
+      }
+    },
+    "NSE_INFY_EQ": {
+      "symbol": "NSE_INFY_EQ",
+      "totalCrossovers": 3,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 9.861560304888124,
+        "avgMaxProfitPoints": 152.4666666666667,
+        "avgMaxProfitDays": 32.666666666666664,
+        "maxProfitPercent": 28.097287428273347,
+        "maxProfitPoints": 430.9000000000001,
+        "minMaxProfitPercent": 0.639154504277808,
+        "minMaxProfitPoints": 12.700000000000045
+      },
+      "reversalStats": {
+        "avgReversalPercent": 7.758935515208094,
+        "avgReversalDays": 25.666666666666668,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 23.80020865936359,
+        "avgLossPercent": -0.261701056869655
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 2,
+        "under5Percent": 2,
+        "under10Percent": 2,
+        "over10Percent": 1
+      }
+    },
+    "NSE_ITC_EQ": {
+      "symbol": "NSE_ITC_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.556410573974357,
+        "avgMaxProfitPoints": 23.383333333333326,
+        "avgMaxProfitDays": 18,
+        "maxProfitPercent": 23.493975903614455,
+        "maxProfitPoints": 99.44999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.301808412242362,
+        "avgReversalDays": 14,
+        "winRate": 16.666666666666664,
+        "avgWinPercent": 21.131585164186152,
+        "avgLossPercent": -1.464146938146396
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 4,
+        "under10Percent": 5,
+        "over10Percent": 1
+      }
+    },
+    "NSE_JSWSTEEL_EQ": {
+      "symbol": "NSE_JSWSTEEL_EQ",
+      "totalCrossovers": 18,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.730331043126947,
+        "avgMaxProfitPoints": 25.78611111111113,
+        "avgMaxProfitDays": 4.944444444444445,
+        "maxProfitPercent": 11.927571323297197,
+        "maxProfitPoints": 113.30000000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.9290559268022012,
+        "avgReversalDays": 7.944444444444445,
+        "winRate": 11.11111111111111,
+        "avgWinPercent": 2.152551815697586,
+        "avgLossPercent": -1.3142568946146747
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 11,
+        "under5Percent": 13,
+        "under10Percent": 17,
+        "over10Percent": 1
+      }
+    },
+    "NSE_KOTAKBANK_EQ": {
+      "symbol": "NSE_KOTAKBANK_EQ",
+      "totalCrossovers": 15,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.719705771233407,
+        "avgMaxProfitPoints": 50.0666666666667,
+        "avgMaxProfitDays": 6.933333333333334,
+        "maxProfitPercent": 18.135902108825835,
+        "maxProfitPoints": 348.3000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.44344282672157387,
+        "avgReversalDays": 11.066666666666666,
+        "winRate": 13.333333333333334,
+        "avgWinPercent": 5.2681453924698225,
+        "avgLossPercent": -1.322148706597173
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 10,
+        "under5Percent": 12,
+        "under10Percent": 14,
+        "over10Percent": 1
+      }
+    },
+    "NSE_LT_EQ": {
+      "symbol": "NSE_LT_EQ",
+      "totalCrossovers": 16,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.633576199824711,
+        "avgMaxProfitPoints": 92.321875,
+        "avgMaxProfitDays": 4.25,
+        "maxProfitPercent": 12.324340801707063,
+        "maxProfitPoints": 404.3000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.697401450446307,
+        "avgReversalDays": 4.5625,
+        "winRate": 12.5,
+        "avgWinPercent": 0.5471991220525811,
+        "avgLossPercent": -2.0180586750890055
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 10,
+        "under5Percent": 13,
+        "under10Percent": 15,
+        "over10Percent": 1
+      }
+    },
+    "NSE_MARUTI_EQ": {
+      "symbol": "NSE_MARUTI_EQ",
+      "totalCrossovers": 10,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.9986620570327873,
+        "avgMaxProfitPoints": 478.7600000000004,
+        "avgMaxProfitDays": 5.7,
+        "maxProfitPercent": 17.234103298448485,
+        "maxProfitPoints": 1931.6500000000015,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.10976781745063242,
+        "avgReversalDays": 10.3,
+        "winRate": 30,
+        "avgWinPercent": 1.9425585651811412,
+        "avgLossPercent": -0.9893362671499639
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 5,
+        "under5Percent": 7,
+        "under10Percent": 9,
+        "over10Percent": 1
+      }
+    },
+    "NSE_M_M_EQ": {
+      "symbol": "NSE_M_M_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.315574702647811,
+        "avgMaxProfitPoints": 125.45000000000002,
+        "avgMaxProfitDays": 9.428571428571429,
+        "maxProfitPercent": 16.345875542691758,
+        "maxProfitPoints": 451.8000000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.8138802193210706,
+        "avgReversalDays": 5.571428571428571,
+        "winRate": 0,
+        "avgWinPercent": 0,
+        "avgLossPercent": -1.8138802193210706
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 6,
+        "under10Percent": 6,
+        "over10Percent": 1
+      }
+    },
+    "NSE_NESTLEIND_EQ": {
+      "symbol": "NSE_NESTLEIND_EQ",
+      "totalCrossovers": 12,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.4877564714029345,
+        "avgMaxProfitPoints": 59.32083333333336,
+        "avgMaxProfitDays": 9.916666666666666,
+        "maxProfitPercent": 10.991340429370391,
+        "maxProfitPoints": 243.70000000000027,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.45080518610272496,
+        "avgReversalDays": 14.25,
+        "winRate": 16.666666666666664,
+        "avgWinPercent": 4.355395135423733,
+        "avgLossPercent": -1.4120452504080165
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 10,
+        "under10Percent": 11,
+        "over10Percent": 1
+      }
+    },
+    "NSE_NTPC_EQ": {
+      "symbol": "NSE_NTPC_EQ",
+      "totalCrossovers": 12,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.8859913008621585,
+        "avgMaxProfitPoints": 10.366666666666651,
+        "avgMaxProfitDays": 3.6666666666666665,
+        "maxProfitPercent": 16.56607369758576,
+        "maxProfitPoints": 52.14999999999998,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.346460538243058,
+        "avgReversalDays": 9.333333333333334,
+        "winRate": 25,
+        "avgWinPercent": 2.6808149609616074,
+        "avgLossPercent": -2.6888857046446133
+      },
+      "profitDistribution": {
+        "under1Percent": 8,
+        "under2Percent": 9,
+        "under5Percent": 9,
+        "under10Percent": 11,
+        "over10Percent": 1
+      }
+    },
+    "NSE_ONGC_EQ": {
+      "symbol": "NSE_ONGC_EQ",
+      "totalCrossovers": 8,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.272341612588697,
+        "avgMaxProfitPoints": 16.537499999999994,
+        "avgMaxProfitDays": 10.5,
+        "maxProfitPercent": 18.58084663428175,
+        "maxProfitPoints": 53.55000000000001,
+        "minMaxProfitPercent": 0.12467755803954945,
+        "minMaxProfitPoints": 0.28999999999999204
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.7050725007153664,
+        "avgReversalDays": 10.5,
+        "winRate": 12.5,
+        "avgWinPercent": 6.210964607911185,
+        "avgLossPercent": -2.835934944804874
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 3,
+        "under5Percent": 5,
+        "under10Percent": 6,
+        "over10Percent": 2
+      }
+    },
+    "NSE_POWERGRID_EQ": {
+      "symbol": "NSE_POWERGRID_EQ",
+      "totalCrossovers": 17,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.5318220783536627,
+        "avgMaxProfitPoints": 7.529411764705879,
+        "avgMaxProfitDays": 2.9411764705882355,
+        "maxProfitPercent": 18.16838995568685,
+        "maxProfitPoints": 49.19999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.460146546211982,
+        "avgReversalDays": 6.882352941176471,
+        "winRate": 17.647058823529413,
+        "avgWinPercent": 2.8679443811035497,
+        "avgLossPercent": -2.3875946020653096
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 11,
+        "under5Percent": 15,
+        "under10Percent": 16,
+        "over10Percent": 1
+      }
+    },
+    "NSE_RELIANCE_EQ": {
+      "symbol": "NSE_RELIANCE_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.282505006524444,
+        "avgMaxProfitPoints": 79.06000000000004,
+        "avgMaxProfitDays": 11.714285714285714,
+        "maxProfitPercent": 25.386603224086308,
+        "maxProfitPoints": 309.45000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -2.4019768179911725,
+        "avgReversalDays": 11.285714285714286,
+        "winRate": 0,
+        "avgWinPercent": 0,
+        "avgLossPercent": -2.4019768179911725
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 3,
+        "under10Percent": 6,
+        "over10Percent": 1
+      }
+    },
+    "NSE_SBILIFE_EQ": {
+      "symbol": "NSE_SBILIFE_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 8.757619718344497,
+        "avgMaxProfitPoints": 128.19285714285712,
+        "avgMaxProfitDays": 21.571428571428573,
+        "maxProfitPercent": 31.787898459120573,
+        "maxProfitPoints": 465.20000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 5.759774937184852,
+        "avgReversalDays": 25.857142857142858,
+        "winRate": 28.57142857142857,
+        "avgWinPercent": 24.621944819531098,
+        "avgLossPercent": -1.7850930157536467
+      },
+      "profitDistribution": {
+        "under1Percent": 4,
+        "under2Percent": 5,
+        "under5Percent": 5,
+        "under10Percent": 5,
+        "over10Percent": 2
+      }
+    },
+    "NSE_SBIN_EQ": {
+      "symbol": "NSE_SBIN_EQ",
+      "totalCrossovers": 11,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.1744626834404346,
+        "avgMaxProfitPoints": 17.031818181818164,
+        "avgMaxProfitDays": 4,
+        "maxProfitPercent": 11.632957784715614,
+        "maxProfitPoints": 85.69999999999993,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -2.1220395495715314,
+        "avgReversalDays": 4.090909090909091,
+        "winRate": 0,
+        "avgWinPercent": 0,
+        "avgLossPercent": -2.1220395495715314
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 9,
+        "under10Percent": 10,
+        "over10Percent": 1
+      }
+    },
+    "NSE_SHREECEM_EQ": {
+      "symbol": "NSE_SHREECEM_EQ",
+      "totalCrossovers": 14,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.055728631195421,
+        "avgMaxProfitPoints": 1069.1285714285716,
+        "avgMaxProfitDays": 6.071428571428571,
+        "maxProfitPercent": 14.347593744643527,
+        "maxProfitPoints": 3557.4500000000007,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.619654271939954,
+        "avgReversalDays": 12.142857142857142,
+        "winRate": 35.714285714285715,
+        "avgWinPercent": 4.425747544200577,
+        "avgLossPercent": -1.4948419904270591
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 8,
+        "under5Percent": 10,
+        "under10Percent": 10,
+        "over10Percent": 4
+      }
+    },
+    "NSE_SUNPHARMA_EQ": {
+      "symbol": "NSE_SUNPHARMA_EQ",
+      "totalCrossovers": 10,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.9444374967939275,
+        "avgMaxProfitPoints": 64.31499999999998,
+        "avgMaxProfitDays": 6.5,
+        "maxProfitPercent": 22.764355687151554,
+        "maxProfitPoints": 361.35000000000014,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.8844540697652523,
+        "avgReversalDays": 11.8,
+        "winRate": 10,
+        "avgWinPercent": 19.038019340410123,
+        "avgLossPercent": -1.1326087380841778
+      },
+      "profitDistribution": {
+        "under1Percent": 6,
+        "under2Percent": 7,
+        "under5Percent": 8,
+        "under10Percent": 9,
+        "over10Percent": 1
+      }
+    },
+    "NSE_TATACONSUM_EQ": {
+      "symbol": "NSE_TATACONSUM_EQ",
+      "totalCrossovers": 6,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 6.166608356133319,
+        "avgMaxProfitPoints": 62.22333333333336,
+        "avgMaxProfitDays": 15.833333333333334,
+        "maxProfitPercent": 24.423865027409658,
+        "maxProfitPoints": 229.45000000000005,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 2.9407888385867245,
+        "avgReversalDays": 26.833333333333332,
+        "winRate": 33.33333333333333,
+        "avgWinPercent": 10.71587254702444,
+        "avgLossPercent": -0.9467530156321333
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 4,
+        "under10Percent": 5,
+        "over10Percent": 1
+      }
+    },
+    "NSE_TATAMOTORS_EQ": {
+      "symbol": "NSE_TATAMOTORS_EQ",
+      "totalCrossovers": 9,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.5957115513752065,
+        "avgMaxProfitPoints": 42.06666666666667,
+        "avgMaxProfitDays": 8.666666666666666,
+        "maxProfitPercent": 18.354226936676298,
+        "maxProfitPoints": 114.19999999999993,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -3.968992235373621,
+        "avgReversalDays": 8.88888888888889,
+        "winRate": 11.11111111111111,
+        "avgWinPercent": 0.09830540211592378,
+        "avgLossPercent": -4.477404440059814
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 3,
+        "under5Percent": 5,
+        "under10Percent": 7,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TATASTEEL_EQ": {
+      "symbol": "NSE_TATASTEEL_EQ",
+      "totalCrossovers": 12,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 5.278097154860248,
+        "avgMaxProfitPoints": 7.670833333333337,
+        "avgMaxProfitDays": 7.25,
+        "maxProfitPercent": 20.229815542788018,
+        "maxProfitPoints": 26.75999999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.2084893135712245,
+        "avgReversalDays": 11,
+        "winRate": 8.333333333333332,
+        "avgWinPercent": 7.771323321054123,
+        "avgLossPercent": -2.024835916718983
+      },
+      "profitDistribution": {
+        "under1Percent": 4,
+        "under2Percent": 4,
+        "under5Percent": 8,
+        "under10Percent": 10,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TCS_EQ": {
+      "symbol": "NSE_TCS_EQ",
+      "totalCrossovers": 7,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.833858219846069,
+        "avgMaxProfitPoints": 150.70000000000002,
+        "avgMaxProfitDays": 7.857142857142857,
+        "maxProfitPercent": 16.057547722812657,
+        "maxProfitPoints": 630.0500000000002,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.6475977770463689,
+        "avgReversalDays": 10.571428571428571,
+        "winRate": 14.285714285714285,
+        "avgWinPercent": 10.766623340214588,
+        "avgLossPercent": -1.0389064834816677
+      },
+      "profitDistribution": {
+        "under1Percent": 3,
+        "under2Percent": 4,
+        "under5Percent": 6,
+        "under10Percent": 6,
+        "over10Percent": 1
+      }
+    },
+    "NSE_TECHM_EQ": {
+      "symbol": "NSE_TECHM_EQ",
+      "totalCrossovers": 14,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 3.4469970575829927,
+        "avgMaxProfitPoints": 47.9642857142857,
+        "avgMaxProfitDays": 7.285714285714286,
+        "maxProfitPercent": 25.040798512277497,
+        "maxProfitPoints": 329.89999999999986,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.3509445147000095,
+        "avgReversalDays": 6.785714285714286,
+        "winRate": 7.142857142857142,
+        "avgWinPercent": 19.867926676534214,
+        "avgLossPercent": -1.1503618054410831
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 10,
+        "under5Percent": 12,
+        "under10Percent": 12,
+        "over10Percent": 2
+      }
+    },
+    "NSE_TITAN_EQ": {
+      "symbol": "NSE_TITAN_EQ",
+      "totalCrossovers": 9,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.882933093276062,
+        "avgMaxProfitPoints": 162.59999999999997,
+        "avgMaxProfitDays": 13.88888888888889,
+        "maxProfitPercent": 16.818675865979866,
+        "maxProfitPoints": 533.8499999999999,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -1.0348875845883438,
+        "avgReversalDays": 10.222222222222221,
+        "winRate": 11.11111111111111,
+        "avgWinPercent": 0.7643826528404748,
+        "avgLossPercent": -1.2597963642669463
+      },
+      "profitDistribution": {
+        "under1Percent": 2,
+        "under2Percent": 4,
+        "under5Percent": 6,
+        "under10Percent": 7,
+        "over10Percent": 2
+      }
+    },
+    "NSE_ULTRACEMCO_EQ": {
+      "symbol": "NSE_ULTRACEMCO_EQ",
+      "totalCrossovers": 16,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.903997476819127,
+        "avgMaxProfitPoints": 312.4687500000001,
+        "avgMaxProfitDays": 5.125,
+        "maxProfitPercent": 19.39012362897361,
+        "maxProfitPoints": 1946.3999999999996,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.5998754193921442,
+        "avgReversalDays": 8,
+        "winRate": 12.5,
+        "avgWinPercent": 8.435167237504539,
+        "avgLossPercent": -1.8905957989488134
+      },
+      "profitDistribution": {
+        "under1Percent": 10,
+        "under2Percent": 11,
+        "under5Percent": 13,
+        "under10Percent": 14,
+        "over10Percent": 2
+      }
+    },
+    "NSE_UPL_EQ": {
+      "symbol": "NSE_UPL_EQ",
+      "totalCrossovers": 11,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 4.587905420525055,
+        "avgMaxProfitPoints": 25.514545454545463,
+        "avgMaxProfitDays": 8.090909090909092,
+        "maxProfitPercent": 21.59269170434622,
+        "maxProfitPoints": 117,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": 0.9975001782345806,
+        "avgReversalDays": 10.636363636363637,
+        "winRate": 27.27272727272727,
+        "avgWinPercent": 7.420889035580395,
+        "avgLossPercent": -1.4112706432700999
+      },
+      "profitDistribution": {
+        "under1Percent": 5,
+        "under2Percent": 7,
+        "under5Percent": 7,
+        "under10Percent": 9,
+        "over10Percent": 2
+      }
+    },
+    "NSE_WIPRO_EQ": {
+      "symbol": "NSE_WIPRO_EQ",
+      "totalCrossovers": 19,
+      "maxProfitStats": {
+        "avgMaxProfitPercent": 2.92373687107314,
+        "avgMaxProfitPoints": 7.709473684210527,
+        "avgMaxProfitDays": 4.526315789473684,
+        "maxProfitPercent": 16.53722603993007,
+        "maxProfitPoints": 40.670000000000016,
+        "minMaxProfitPercent": 0,
+        "minMaxProfitPoints": 0
+      },
+      "reversalStats": {
+        "avgReversalPercent": -0.9441836683903648,
+        "avgReversalDays": 6.578947368421052,
+        "winRate": 15.789473684210526,
+        "avgWinPercent": 2.2846285024998463,
+        "avgLossPercent": -1.549585950432279
+      },
+      "profitDistribution": {
+        "under1Percent": 9,
+        "under2Percent": 12,
+        "under5Percent": 16,
+        "under10Percent": 18,
+        "over10Percent": 1
+      }
+    }
+  }
+}
