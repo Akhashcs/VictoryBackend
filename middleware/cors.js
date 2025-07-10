@@ -8,11 +8,12 @@ const corsMiddleware = cors({
       return callback(null, true);
     }
     
-    // Allow all origins in development
+    // Allow all origins in development and your deployed frontend
     const allowedOrigins = [
       'http://localhost:3000',
       'http://127.0.0.1:3000',
-      'https://victor-client.vercel.app'
+      'https://victor-client.vercel.app',
+      'https://victory-client-lac.vercel.app' // <-- your Vercel frontend
     ];
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       // Only log occasionally to reduce noise (every 100th request)
