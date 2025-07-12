@@ -23,12 +23,51 @@ class MonitoringScheduler {
     console.log('🚀 Starting backend monitoring scheduler...');
     this.isRunning = true;
 
+    // Add daily reset logic at market open (9:15 AM)
+    const resetDailyCounters = async () => {
+      const now = new Date();
+      const currentTime = now.getHours() * 100 + now.getMinutes();
+      
+      // Reset at 9:15 AM (market open)
+      if (currentTime === 915) {
+        try {
+          const User = require('../models/User');
+          const users = await User.find({ 'fyers.connected': true });
+          
+          for (const user of users) {
+            await MonitoringService.resetDailyTradeCounters(user._id);
+          }
+          
+          console.log(`🔄 Daily trade counters reset for ${users.length} users at market open`);
+        } catch (error) {
+          console.error('Error resetting daily trade counters:', error);
+        }
+      }
+    };
+
     // Run monitoring cycle every 5 seconds for all users (increased from 2 seconds to reduce race conditions)
     this.monitoringTimer = setInterval(async () => {
       try {
-        await this.runMonitoringCycleForAllUsers();
+        // Check for daily reset
+        await resetDailyCounters();
+        
+        // Get all users with active monitoring
+        const states = await TradingState.find({ 'tradeExecutionState.isMonitoring': true });
+        
+        for (const state of states) {
+          const userId = state.userId;
+          
+          // Update HMA values for monitored symbols
+          await MonitoringService.updateHMAValues(userId);
+          
+          // Execute monitoring cycle
+          await MonitoringService.executeMonitoringCycle(userId);
+          
+          // Update active positions
+          await MonitoringService.updateActivePositions(userId);
+        }
       } catch (error) {
-        console.error('❌ Error in monitoring scheduler:', error);
+        console.error('Error in monitoring cycle:', error);
       }
     }, 5000); // 5 seconds - increased from 2 seconds to reduce race conditions
 

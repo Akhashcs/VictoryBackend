@@ -32,6 +32,7 @@ const notificationRoutes = require('./routes/notifications');
 const monitoringRoutes = require('./routes/monitoring');
 const signalTableRoutes = require('./routes/signalTable');
 const backtestRoutes = require('./routes/backtest');
+const { router: symbolConfigRoutes } = require('./routes/symbolConfig');
 const { fyersWebSocketService } = require('./services/fyersWebSocketService');
 const { WebSocketService } = require('./services/websocketService');
 const { MarketService } = require('./services/marketService');
@@ -128,6 +129,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/signal-table', signalTableRoutes);
 app.use('/api/backtest', backtestRoutes);
+app.use('/api/market', symbolConfigRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

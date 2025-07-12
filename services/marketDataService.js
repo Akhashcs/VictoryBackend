@@ -85,8 +85,8 @@ class MarketDataService {
         cont_flag: "1"
       };
       
-      // Make request to Fyers API
-      const response = await axios.get(`https://api.fyers.in/data/v2/history`, {
+      // Make request to Fyers API v3
+      const response = await axios.get(`https://api-t1.fyers.in/api/v3/data/history`, {
         params: requestData,
         headers: {
           'Content-Type': 'application/json',

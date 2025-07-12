@@ -128,7 +128,7 @@ class HistoricalDataDownloader {
         cont_flag: "1"
       };
 
-      const response = await axios.get('https://api.fyers.in/data/v2/history', {
+      const response = await axios.get('https://api-t1.fyers.in/api/v3/data/history', {
         params: requestData,
         headers: {
           'Content-Type': 'application/json',

@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const { getMarketDepth, getFyersAppId } = require('../fyersService');
 const TradingState = require('../models/TradingState');
 const LoggerService = require('./loggerService');
+const SymbolConfig = require('../models/SymbolConfig');
 
 // Define a schema for market data subscriptions
 const MarketSubscriptionSchema = new mongoose.Schema({
@@ -34,12 +35,8 @@ try {
   MarketSubscription = mongoose.model('MarketSubscription', MarketSubscriptionSchema);
 }
 
-// Valid index symbols
-const VALID_INDEX_SYMBOLS = [
-  'NSE:NIFTY50-INDEX',
-  'NSE:NIFTYBANK-INDEX',
-  'BSE:SENSEX-INDEX'
-];
+// Import the complete symbol list from liveMarketDataService
+// We'll use our own dynamic symbols instead of importing from liveMarketDataService
 
 // Removed FUTURES_SYMBOLS as we no longer need to fetch futures data
 
@@ -265,7 +262,8 @@ class MarketService {
       }
       
       // Get quotes from Fyers API
-      const response = await this.fetchQuotesFromFyers(VALID_INDEX_SYMBOLS, user);
+      const allSymbols = await this.getAllMarketSymbols();
+      const response = await this.fetchQuotesFromFyers(allSymbols, user);
       
       // Cache the result
       this.marketDataCache.indices.set('indices', {
@@ -575,20 +573,65 @@ class MarketService {
   }
 
   /**
+   * Generate current commodity symbols with correct expiry
+   * @returns {Array<string>} Array of commodity symbols
+   */
+  static generateCurrentCommoditySymbols() {
+    const { SymbolService } = require('./symbolService');
+    const commodities = ['CRUDEOIL', 'GOLD', 'COPPER', 'SILVER', 'NICKEL'];
+    const symbols = [];
+    
+    commodities.forEach(commodity => {
+      try {
+        // Generate only the currently active contract symbol
+        const currentSymbol = SymbolService.convertRawUnderlyingToFyersSymbol(commodity, 0);
+        symbols.push(currentSymbol);
+        
+        console.log(`[MarketService] Generated commodity symbol for ${commodity}: ${currentSymbol}`);
+      } catch (error) {
+        console.error(`[MarketService] Error generating symbol for ${commodity}:`, error);
+      }
+    });
+    
+    console.log(`[MarketService] All generated commodity symbols:`, symbols);
+    
+    return symbols;
+  }
+
+  /**
+   * Get all current market symbols from MongoDB symbol configuration
+   * @returns {Promise<Array<string>>} Array of all symbols
+   */
+  static async getAllMarketSymbols() {
+    try {
+      const symbolConfigs = await SymbolConfig.find({});
+      if (symbolConfigs.length > 0) {
+        const symbols = symbolConfigs.map(config => config.symbolInput);
+        console.log(`[MarketService] Using ${symbols.length} symbols from MongoDB configuration`);
+        return symbols;
+      }
+    } catch (error) {
+      console.error('[MarketService] Error getting symbols from MongoDB config:', error);
+    }
+    // Fallback: return empty array if nothing in DB
+    return [];
+  }
+
+  /**
    * Start market data polling with separate intervals for indices and monitored symbols
    */
   static startMarketDataPolling() {
     // Stop any existing polling
     this.stopMarketDataPolling();
     
-    // Start index data polling (every 5 seconds) - ONLY fetch index symbols
+    // Start market data polling (every 5 seconds) - fetch all symbols (indices, stocks, commodities)
     this.pollingTimers.indices = setInterval(async () => {
       try {
-        // Only fetch index symbols for index polling
-        const indexSymbols = [...VALID_INDEX_SYMBOLS];
+        // Fetch all symbols (indices, stocks, commodities) with dynamic commodity symbols
+        const allSymbols = await this.getAllMarketSymbols();
         
-        // If no index symbols, skip
-        if (indexSymbols.length === 0) {
+        // If no symbols, skip
+        if (allSymbols.length === 0) {
           return;
         }
         
@@ -605,12 +648,12 @@ class MarketService {
         }
         
         // Fetch quotes using the user's Fyers token
-        const quotes = await this.fetchQuotesFromFyers(indexSymbols, userWithFyers);
+        const quotes = await this.fetchQuotesFromFyers(allSymbols, userWithFyers);
         
         // Send all data to clients at once
         await this.sendBulkMarketDataToClients(quotes);
         
-        LoggerService.batchMarketData('Index', quotes.length);
+        LoggerService.batchMarketData('All market data', quotes.length);
       } catch (error) {
         console.error('[MarketService] Error in index data polling:', error);
       }
@@ -697,7 +740,7 @@ class MarketService {
       indices: {
         active: this.pollingTimers.indices !== null,
         interval: this.POLLING_INTERVALS.indices,
-        description: 'Index symbols (NIFTY50, BANKNIFTY, SENSEX)'
+        description: 'All market symbols (3 indices + 20 stocks + 5 commodities)'
       },
       // Removed futures status
       monitored: {
@@ -709,4 +752,4 @@ class MarketService {
   }
 }
 
-module.exports = { MarketService, VALID_INDEX_SYMBOLS };
+module.exports = { MarketService, getAllMarketSymbols: MarketService.getAllMarketSymbols };

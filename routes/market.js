@@ -11,6 +11,7 @@ const { getMultipleLiveMarketData, VALID_INDEX_SYMBOLS } = require('../liveMarke
 const { SymbolService: OldSymbolService } = require('../services/symbolService');
 const { MarketDataService: OldMarketDataService } = require('../services/marketDataService');
 const LoggerService = require('../services/loggerService');
+const axios = require('axios'); // Added axios for proxy-website route
 
 // Simple in-memory cache for market data
 const marketDataCache = {
@@ -323,11 +324,69 @@ router.get('/symbols/:index', auth, async (req, res) => {
       });
     }
     
-    const symbols = SymbolService.generateStrikeSymbols(index, parseFloat(spotPrice));
+    console.log('[MarketRoute] Generating symbols for index:', index, 'with spotPrice:', spotPrice);
+    
+    // Step 1: Search MongoDB for symbolName to get configuration
+    const SymbolConfig = require('../models/SymbolConfig');
+    const symbolConfig = await SymbolConfig.findOne({ symbolName: index });
+    
+    if (!symbolConfig) {
+      console.log('[MarketRoute] Symbol configuration not found for:', index);
+      return res.status(404).json({ 
+        success: false, 
+        message: `Symbol configuration not found for ${index}` 
+      });
+    }
+    
+    console.log('[MarketRoute] Found symbol config:', {
+      symbolName: symbolConfig.symbolName,
+      symbolInput: symbolConfig.symbolInput,
+      optionSymbolFormat: symbolConfig.optionSymbolFormat,
+      nextExpiry: symbolConfig.nextExpiry,
+      strikeInterval: symbolConfig.strikeInterval,
+      nearExpiryDate: symbolConfig.nearExpiryDate
+    });
+    
+    // Step 2: Create configuration object from database
+    const config = {
+      symbolName: symbolConfig.symbolName,
+      symbolInput: symbolConfig.symbolInput,
+      optionSymbolFormat: symbolConfig.optionSymbolFormat,
+      nextExpiry: symbolConfig.nextExpiry,
+      strikeInterval: symbolConfig.strikeInterval,
+      expiryDate: symbolConfig.expiryDate || null,
+      nearExpiryDate: symbolConfig.nearExpiryDate || null,
+      lotSize: symbolConfig.lotSize || 1
+    };
+    
+    // Step 3: Use the configuration to generate symbols
+    // The SymbolService will:
+    // - Convert LTP to nearest value based on strikeInterval
+    // - Identify current year & month
+    // - Use optionSymbolFormat to craft symbols
+    // - Generate 5 OTM and 5 ITM strikes for both CE & PE
+    const symbols = SymbolService.generateStrikeSymbolsWithConfig(index, parseFloat(spotPrice), config);
+    
+    console.log('[MarketRoute] Generated symbols:', {
+      ceCount: symbols.ce?.length || 0,
+      peCount: symbols.pe?.length || 0,
+      atmStrike: symbols.atmStrike
+    });
     
     return res.json({
       success: true,
-      data: symbols
+      data: {
+        ...symbols,
+        lotSize: symbolConfig.lotSize || 1,
+        symbolConfig: {
+          symbolName: symbolConfig.symbolName,
+          symbolInput: symbolConfig.symbolInput,
+          optionSymbolFormat: symbolConfig.optionSymbolFormat,
+          nextExpiry: symbolConfig.nextExpiry,
+          strikeInterval: symbolConfig.strikeInterval,
+          lotSize: symbolConfig.lotSize || 1
+        }
+      }
     });
   } catch (error) {
     LoggerService.error('MarketRoute', 'Error generating option symbols:', error);
@@ -480,6 +539,116 @@ router.get('/test-symbols/:index', async (req, res) => {
       success: false, 
       message: 'Server error testing symbol generation',
       error: error.message
+    });
+  }
+});
+
+/**
+ * @route   POST /api/market/test-conversion
+ * @desc    Test symbol conversion for debugging
+ * @access  Public
+ */
+router.post('/test-conversion', async (req, res) => {
+  try {
+    const { symbols } = req.body;
+    
+    if (!symbols || !Array.isArray(symbols)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Valid symbols array is required' 
+      });
+    }
+    
+    const results = [];
+    
+    for (const symbol of symbols) {
+      try {
+        // Use a default spot price for testing
+        let spotPrice = 25500; // Default for NIFTY
+        if (symbol.includes('BANKNIFTY')) {
+          spotPrice = 48000;
+        } else if (symbol.includes('SENSEX')) {
+          spotPrice = 72000;
+        } else if (symbol.includes('GOLD')) {
+          spotPrice = 65000;
+        } else if (symbol.includes('CRUDEOIL')) {
+          spotPrice = 8000;
+        } else if (symbol.includes('COPPER')) {
+          spotPrice = 800;
+        } else if (symbol.includes('SILVER')) {
+          spotPrice = 75000;
+        }
+        
+        const fyersSymbol = SymbolService.convertToFyersSymbol(symbol, spotPrice);
+        results.push({
+          original: symbol,
+          converted: fyersSymbol,
+          success: true
+        });
+      } catch (error) {
+        results.push({
+          original: symbol,
+          converted: null,
+          success: false,
+          error: error.message
+        });
+      }
+    }
+    
+    return res.json({
+      success: true,
+      data: results
+    });
+  } catch (error) {
+    LoggerService.error('MarketRoute', 'Error testing symbol conversion:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error testing symbol conversion',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * @route   GET /api/market/proxy-website
+ * @desc    Proxy external website to bypass iframe restrictions
+ * @access  Private
+ */
+router.get('/proxy-website', auth, async (req, res) => {
+  try {
+    const { url } = req.query;
+    
+    if (!url) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'URL parameter is required' 
+      });
+    }
+
+    // Fetch the website content
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Accept-Encoding': 'gzip, deflate',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
+      },
+      timeout: 10000
+    });
+
+    // Set appropriate headers
+    res.setHeader('Content-Type', response.headers['content-type'] || 'text/html');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    
+    // Send the content
+    res.send(response.data);
+  } catch (error) {
+    console.error('Error proxying website:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Failed to load external website' 
     });
   }
 });

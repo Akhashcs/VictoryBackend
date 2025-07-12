@@ -288,7 +288,8 @@ class FyersWebSocketService {
     this.shouldReconnect = false; // Disable reconnection
     if (this.fyersOrderSocket) {
       try {
-        this.fyersOrderSocket.disconnect();
+        // Fyers API v3 WebSocket doesn't have a disconnect method
+        // Just close the connection by setting it to null
         this.fyersOrderSocket = null;
         this.isConnected = false;
         this.reconnectAttempts = 0;
@@ -703,7 +704,7 @@ class FyersWebSocketService {
       const appId = process.env.FYERS_APP_ID || 'XJFL311ATX-100';
       const formattedToken = accessToken.includes(':') ? accessToken : `${appId}:${accessToken}`;
       
-      const response = await axios.get('https://api.fyers.in/api/v2/positions', {
+      const response = await axios.get('https://api-t1.fyers.in/api/v3/positions', {
         headers: {
           'Authorization': formattedToken
         }

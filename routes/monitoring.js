@@ -435,4 +435,31 @@ router.post('/place-limit-order', auth, async (req, res) => {
   }
 });
 
+/**
+ * @route   POST /api/monitoring/reset-symbol-opportunity
+ * @desc    Reset opportunity state for a specific symbol
+ * @access  Private
+ */
+router.post('/reset-symbol-opportunity', auth, async (req, res) => {
+  try {
+    const { symbolId } = req.body;
+    const userId = req.user.id;
+
+    if (!symbolId) {
+      return res.status(400).json({ success: false, message: 'Symbol ID is required' });
+    }
+
+    const success = await MonitoringService.resetSymbolOpportunity(userId, symbolId);
+    
+    if (success) {
+      res.json({ success: true, message: 'Symbol opportunity state reset successfully' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to reset symbol opportunity state' });
+    }
+  } catch (error) {
+    console.error('Error resetting symbol opportunity:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
 module.exports = router; 

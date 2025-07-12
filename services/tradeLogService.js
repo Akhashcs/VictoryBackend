@@ -74,6 +74,7 @@ class TradeLogService {
         status: 'PENDING',
         reason,
         orderId,
+        remarks: `Order placed: ${side} ${quantity} ${symbol} @ ₹${price}`,
         details: {
           ...details,
           source: source
@@ -88,7 +89,10 @@ class TradeLogService {
         const WebSocketService = require('./websocketService');
         const wsService = WebSocketService.getInstance();
         if (wsService) {
+          console.log(`📤 [TradeLogService] Sending trade log update via WebSocket for user ${userId}:`, tradeLog.action);
           wsService.sendTradeLogUpdate(userId, tradeLog);
+        } else {
+          console.log(`⚠️ [TradeLogService] WebSocket service not available for user ${userId}`);
         }
       } catch (wsError) {
         LoggerService.error('TradeLogService', 'Error sending WebSocket update:', wsError);
@@ -194,6 +198,7 @@ class TradeLogService {
         status: 'FILLED',
         reason,
         orderId,
+        remarks: `Order filled: ${side} ${filledQuantity} ${symbol} @ ₹${filledPrice}`,
         details: {
           ...details,
           filledAt: new Date(),
@@ -306,6 +311,8 @@ class TradeLogService {
         status: 'REJECTED',
         reason,
         orderId,
+        remarks: errorMessage, // Store error message in remarks field
+        fyersRemarks: errorMessage, // Also store in fyersRemarks for Fyers-specific errors
         details: {
           ...details,
           errorMessage,
@@ -316,6 +323,20 @@ class TradeLogService {
 
       await tradeLog.save();
       LoggerService.info('TradeLogService', `Order rejected log created for ${symbol}: ${errorMessage} [Source: ${source}]`);
+      
+      // Send real-time update via WebSocket
+      try {
+        const WebSocketService = require('./websocketService');
+        const wsService = WebSocketService.getInstance();
+        if (wsService) {
+          console.log(`📤 [TradeLogService] Sending order rejected update via WebSocket for user ${userId}:`, tradeLog.action);
+          wsService.sendTradeLogUpdate(userId, tradeLog);
+        } else {
+          console.log(`⚠️ [TradeLogService] WebSocket service not available for user ${userId}`);
+        }
+      } catch (wsError) {
+        LoggerService.error('TradeLogService', 'Error sending WebSocket update:', wsError);
+      }
       
       // Create notification for the order rejection
       try {
@@ -409,6 +430,7 @@ class TradeLogService {
         reason: 'STOP_LOSS',
         orderId,
         pnl,
+        remarks: `Stop loss hit: ${symbol} @ ₹${exitPrice}, PnL: ₹${pnl}`,
         details: {
           ...details,
           entryPrice,
@@ -515,6 +537,7 @@ class TradeLogService {
         reason: 'TARGET',
         orderId,
         pnl,
+        remarks: `Target hit: ${symbol} @ ₹${exitPrice}, PnL: ₹${pnl}`,
         details: {
           ...details,
           entryPrice,
@@ -592,6 +615,7 @@ class TradeLogService {
         reason: 'MANUAL',
         orderId,
         pnl,
+        remarks: `Manual exit: ${symbol} @ ₹${exitPrice}, PnL: ₹${pnl}`,
         details: {
           ...details,
           entryPrice,
