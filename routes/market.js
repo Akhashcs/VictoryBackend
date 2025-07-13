@@ -494,11 +494,37 @@ router.post('/data/batch', auth, async (req, res) => {
       data
     });
   } catch (error) {
-    LoggerService.error('MarketRoute', 'Error getting batch market data:', error);
+    console.error('❌ Batch market data error:', error.message);
     return res.status(500).json({ 
       success: false, 
       message: 'Server error getting batch market data' 
     });
+  }
+});
+
+/**
+ * @route   GET /api/market/data/all
+ * @desc    Get all market data (for frontend polling)
+ * @access  Private
+ */
+router.get('/data/all', auth, async (req, res) => {
+  try {
+    // Fetch user with Fyers data since auth middleware might not include it
+    const User = require('../models/User');
+    const userWithFyers = await User.findById(req.user._id);
+    
+    // Get all symbols from config
+    const symbols = await MarketService.getAllMarketSymbols();
+    
+    if (symbols.length === 0) {
+      return res.json({ success: true, data: [] });
+    }
+    
+    const quotes = await MarketService.getQuotes(symbols, userWithFyers);
+    res.json({ success: true, data: quotes });
+  } catch (error) {
+    console.error('❌ All market data error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch market data' });
   }
 });
 

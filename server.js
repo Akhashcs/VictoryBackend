@@ -110,11 +110,17 @@ const connectDB = async () => {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
+  const now = new Date();
+  const istTime = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+  
   res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
+    status: 'healthy',
+    timestamp: istTime.toISOString(),
+    istTime: istTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
     environment: process.env.NODE_ENV || 'development',
-    dbConnected: mongoose.connection.readyState === 1
+    dbConnected: mongoose.connection.readyState === 1,
+    uptime: process.uptime(),
+    memory: process.memoryUsage()
   });
 });
 
@@ -168,8 +174,11 @@ const startServer = async () => {
 
   // Start socket.io server
   server.listen(PORT, () => {
-    LoggerService.success('Server', `Victory Trading API server running on port ${PORT}`);
-    LoggerService.info('Server', `Environment: ${process.env.NODE_ENV || 'development'}`);
+      LoggerService.success('Server', `Victory Trading API server running on port ${PORT}`);
+  LoggerService.info('Server', `Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log('✅ Server started successfully');
+  console.log('📊 Market polling: 1 second intervals');
+  console.log('🔌 WebSocket: Order updates only');
   });
 
   // Fyers WebSocket will be managed by monitoring service

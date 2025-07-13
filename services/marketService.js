@@ -55,9 +55,8 @@ class MarketService {
 
   // Polling intervals
   static POLLING_INTERVALS = {
-    indices: 5000,   // 5 seconds for index data
-    // Removed futures polling interval
-    monitored: 2000  // 2 seconds for monitored strike quotes (high frequency for trading opportunities)
+    indices: 1000,   // 1 second for all market data
+    monitored: 1000  // 1 second for monitored strike quotes
   };
 
   // Polling timers
@@ -624,7 +623,7 @@ class MarketService {
     // Stop any existing polling
     this.stopMarketDataPolling();
     
-    // Start market data polling (every 5 seconds) - fetch all symbols (indices, stocks, commodities)
+    // Start market data polling (every 1 second) - fetch all symbols (indices, stocks, commodities)
     this.pollingTimers.indices = setInterval(async () => {
       try {
         // Fetch all symbols (indices, stocks, commodities) with dynamic commodity symbols
@@ -643,7 +642,7 @@ class MarketService {
         });
         
         if (!userWithFyers) {
-          console.log('[MarketService] No user with valid Fyers token found for background polling');
+          console.log('📊 Market: No Fyers token available for polling');
           return;
         }
         
@@ -653,15 +652,17 @@ class MarketService {
         // Send all data to clients at once
         await this.sendBulkMarketDataToClients(quotes);
         
-        LoggerService.batchMarketData('All market data', quotes.length);
+        // Simple, clean logging
+        console.log(`📊 Market: ${quotes.length} symbols updated`);
       } catch (error) {
-        console.error('[MarketService] Error in index data polling:', error);
+        console.error('❌ Market polling error:', error.message);
+        console.error('Details:', error.stack);
       }
     }, this.POLLING_INTERVALS.indices);
     
     // Removed futures data polling interval
         
-    // Start monitored symbols polling (every 2 seconds) - HIGH FREQUENCY for trading opportunities
+    // Start monitored symbols polling (every 1 second) - HIGH FREQUENCY for trading opportunities
     this.pollingTimers.monitored = setInterval(async () => {
       try {
         // Get all users' monitored symbols from TradingState
@@ -692,7 +693,7 @@ class MarketService {
         });
         
         if (!userWithFyers) {
-          console.log('[MarketService] No user with valid Fyers token found for background polling');
+          console.log('📊 Market: No Fyers token available for monitored symbols');
           return;
         }
         
@@ -703,13 +704,15 @@ class MarketService {
         // Send all data to clients at once
         await this.sendBulkMarketDataToClients(quotes);
         
-        LoggerService.batchMarketData('Monitored symbols', quotes.length);
+        // Simple, clean logging
+        console.log(`📊 Monitoring: ${quotes.length} monitored symbols updated`);
       } catch (error) {
-        console.error('[MarketService] Error in monitored symbols polling:', error);
+        console.error('❌ Monitored symbols polling error:', error.message);
+        console.error('Details:', error.stack);
       }
     }, this.POLLING_INTERVALS.monitored);
     
-    console.log(`[MarketService] Market data polling started - Indices: ${this.POLLING_INTERVALS.indices}ms, Monitored: ${this.POLLING_INTERVALS.monitored}ms`);
+    console.log(`✅ Market polling started - All symbols: 1s, Monitored: 1s`);
   }
 
   /**
