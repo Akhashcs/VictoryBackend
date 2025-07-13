@@ -12,9 +12,11 @@ const corsMiddleware = cors({
     const allowedOrigins = [
       'http://localhost:3000',
       'http://127.0.0.1:3000',
+      process.env.CLIENT_APP_URL, // Use environment variable
       'https://victor-client.vercel.app',
-      'https://victory-client-lac.vercel.app' // <-- your Vercel frontend
-    ];
+      'https://victory-client-lac.vercel.app',
+      'https://victory-frontend-sage.vercel.app' // <-- your new Vercel frontend
+    ].filter(Boolean); // Remove any undefined values
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       // Only log occasionally to reduce noise (every 100th request)
       if (Math.random() < 0.01) {
