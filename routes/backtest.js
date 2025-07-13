@@ -426,6 +426,44 @@ router.get('/saved/:id', auth, async (req, res) => {
 });
 
 /**
+ * @route   DELETE /api/backtest/saved/:id
+ * @desc    Delete specific saved backtest
+ * @access  Private
+ */
+router.delete('/saved/:id', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const backtestId = req.params.id;
+
+    const backtest = await Backtest.findOne({ _id: backtestId, userId });
+    
+    if (!backtest) {
+      return res.status(404).json({
+        success: false,
+        message: 'Backtest not found'
+      });
+    }
+
+    await Backtest.findByIdAndDelete(backtestId);
+
+    console.log(`🗑️ Backtest deleted: ${backtest.name} for user ${userId}`);
+
+    return res.json({
+      success: true,
+      message: 'Backtest deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('❌ Backtest: Error deleting backtest:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to delete backtest',
+      error: error.message
+    });
+  }
+});
+
+/**
  * Execute enhanced backtest strategy with percentage support
  * @param {Array} data - Historical data with HMA values
  * @param {Object} params - Strategy parameters
