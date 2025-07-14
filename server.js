@@ -124,6 +124,21 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Ping endpoint to wake up inactive server
+app.get('/api/ping', (req, res) => {
+  const now = new Date();
+  const istTime = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+  
+  LoggerService.info('Server', `Ping request received at ${istTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+  
+  res.json({
+    status: 'pong',
+    timestamp: istTime.toISOString(),
+    istTime: istTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    message: 'Server is awake and responding'
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);

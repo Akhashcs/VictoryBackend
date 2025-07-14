@@ -23,4 +23,23 @@ router.get('/', (req, res) => {
   });
 });
 
+/**
+ * @route   GET /api/ping
+ * @desc    Ping endpoint to wake up inactive server
+ * @access  Public
+ */
+router.get('/ping', (req, res) => {
+  const now = new Date();
+  const istTime = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+  
+  console.log(`[Health] Ping request received at ${istTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+  
+  res.json({
+    status: 'pong',
+    timestamp: istTime.toISOString(),
+    istTime: istTime.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    message: 'Server is awake and responding'
+  });
+});
+
 module.exports = router; 
