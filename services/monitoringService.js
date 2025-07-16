@@ -226,7 +226,13 @@ class MonitoringService {
       const TradingState = require('../models/TradingState');
       const state = await TradingState.findOne({ userId });
       if (!state || !state.monitoredSymbols || state.monitoredSymbols.length === 0) {
-        console.log(`📊 No trading state or monitored symbols found for user ${userId}`);
+        // Only log this once per minute per user to reduce spam
+        const now = Date.now();
+        if (!this.lastNoStateLogs || !this.lastNoStateLogs[userId] || (now - this.lastNoStateLogs[userId]) > 60000) {
+          console.log(`📊 No trading state or monitored symbols found for user ${userId}`);
+          if (!this.lastNoStateLogs) this.lastNoStateLogs = {};
+          this.lastNoStateLogs[userId] = now;
+        }
         return state;
       }
       

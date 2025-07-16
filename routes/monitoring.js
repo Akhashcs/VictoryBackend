@@ -124,10 +124,14 @@ router.post('/symbols/add', auth, async (req, res) => {
     
     const state = await MonitoringService.addSymbolToMonitoring(req.user.id, symbolData);
     
+    // Clear monitored symbols cache to ensure fresh data
+    const { MarketService } = require('../services/marketService');
+    MarketService.clearMonitoredSymbolsCache();
+    
     return res.json({
       success: true,
       data: state,
-      message: `Added ${symbol} to monitoring`
+      message: 'Symbol added to monitoring successfully'
     });
   } catch (error) {
     console.error('Error adding symbol to monitoring:', error);

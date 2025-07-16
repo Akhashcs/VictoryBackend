@@ -510,11 +510,38 @@ class WebSocketService {
    * @param {Object} message - Message to broadcast
    */
   broadcast(message) {
+    let clientCount = 0;
     this.wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         this.safeSend(client, message);
+        clientCount++;
       }
     });
+    console.log(`[WebSocketService] Broadcasted message to ${clientCount} connected clients`);
+  }
+  
+  /**
+   * Broadcast market data to all connected clients (including unauthenticated)
+   * @param {Array<Object>} marketData - Array of market data objects
+   */
+  broadcastMarketData(marketData) {
+    let clientCount = 0;
+    this.wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        this.safeSend(client, {
+          type: 'marketData',
+          data: marketData
+        });
+        clientCount++;
+      }
+    });
+    
+    // Only log every 30 seconds to reduce verbosity
+    const now = Date.now();
+    if (!this.lastBroadcastLog || (now - this.lastBroadcastLog) > 30000) {
+      console.log(`[WebSocketService] Broadcasted market data to ${clientCount} connected clients`);
+      this.lastBroadcastLog = now;
+    }
   }
   
   /**

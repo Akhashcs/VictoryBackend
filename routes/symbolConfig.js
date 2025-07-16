@@ -49,6 +49,10 @@ router.post('/config', async (req, res) => {
 
     const savedSymbol = await newSymbol.save();
 
+    // Clear symbol configuration cache to ensure fresh data
+    const { MarketService } = require('../services/marketService');
+    MarketService.clearSymbolConfigCache();
+
     res.json({
       success: true,
       data: savedSymbol,
@@ -118,6 +122,11 @@ router.post('/config/bulk', async (req, res) => {
     // Remove all existing and insert new
     await SymbolConfig.deleteMany({});
     await SymbolConfig.insertMany(symbols);
+    
+    // Clear symbol configuration cache to ensure fresh data
+    const { MarketService } = require('../services/marketService');
+    MarketService.clearSymbolConfigCache();
+    
     res.json({ success: true, message: 'All symbols saved successfully' });
   } catch (error) {
     console.error('Error in bulk save:', error);

@@ -55,15 +55,34 @@ class MarketService {
 
   // Polling intervals
   static POLLING_INTERVALS = {
-    indices: 1000,   // 1 second for all market data
-    monitored: 1000  // 1 second for monitored strike quotes
+    combined: 5000   // 5 seconds for all market data (combined indices + monitored) - increased from 1s to prevent rate limits
   };
 
   // Polling timers
   static pollingTimers = {
-    indices: null,
-    // Removed futures timer
-    monitored: null
+    combined: null
+  };
+
+  // Cache for symbol configurations from MongoDB
+  static symbolConfigCache = {
+    symbols: [],
+    lastUpdated: 0,
+    cacheTTL: 30000  // 30 seconds cache TTL
+  };
+
+  // Cache for monitored symbols
+  static monitoredSymbolsCache = {
+    symbols: new Set(),
+    lastUpdated: 0,
+    cacheTTL: 5000   // 5 seconds cache TTL for monitored symbols
+  };
+
+  // Rate limit tracking
+  static rateLimitStats = {
+    requestsThisMinute: 0,
+    requestsThisSecond: 0,
+    lastMinuteReset: Date.now(),
+    lastSecondReset: Date.now()
   };
 
   /**
@@ -356,6 +375,33 @@ class MarketService {
    */
   static async fetchQuotesFromFyers(symbols, user = null) {
     try {
+      // Track rate limits
+      const now = Date.now();
+      
+      // Reset counters if needed
+      if (now - this.rateLimitStats.lastSecondReset >= 1000) {
+        this.rateLimitStats.requestsThisSecond = 0;
+        this.rateLimitStats.lastSecondReset = now;
+      }
+      
+      if (now - this.rateLimitStats.lastMinuteReset >= 60000) {
+        this.rateLimitStats.requestsThisMinute = 0;
+        this.rateLimitStats.lastMinuteReset = now;
+      }
+      
+      // Check rate limits
+      if (this.rateLimitStats.requestsThisSecond >= 10) {
+        throw new Error('Fyers rate limit exceeded: 10 requests per second');
+      }
+      
+      if (this.rateLimitStats.requestsThisMinute >= 200) {
+        throw new Error('Fyers rate limit exceeded: 200 requests per minute');
+      }
+      
+      // Increment counters
+      this.rateLimitStats.requestsThisSecond++;
+      this.rateLimitStats.requestsThisMinute++;
+      
       // Get access token from user's Fyers connection ONLY
       let accessToken = null;
       if (user && user.fyers && user.fyers.accessToken && user.fyers.connected) {
@@ -540,11 +586,28 @@ class MarketService {
       const wsService = WebSocketService.getInstance();
       
       if (wsService && marketData.length > 0) {
-        // Send all data to all connected clients
-        wsService.broadcast({
-          type: 'marketData',
-          data: marketData
-        });
+        // Only log every 30 seconds to reduce verbosity
+        const now = Date.now();
+        if (!this.lastSendLog || (now - this.lastSendLog) > 30000) {
+          console.log(`[MarketService] Sending ${marketData.length} market data items to WebSocket clients`);
+          this.lastSendLog = now;
+        }
+        
+        // Send all data to all connected clients (including unauthenticated for testing)
+        wsService.broadcastMarketData(marketData);
+        
+        // Only log completion every 30 seconds to reduce verbosity
+        if (!this.lastCompleteLog || (now - this.lastCompleteLog) > 30000) {
+          console.log(`[MarketService] Market data broadcast completed`);
+          this.lastCompleteLog = now;
+        }
+      } else {
+        // Only log this once per minute to reduce spam
+        const now = Date.now();
+        if (!this.lastNoDataLog || (now - this.lastNoDataLog) > 60000) {
+          console.log(`[MarketService] No WebSocket service or no market data to send`);
+          this.lastNoDataLog = now;
+        }
       }
     } catch (error) {
       console.error('[MarketService] Error sending bulk market data to clients:', error);
@@ -586,13 +649,23 @@ class MarketService {
         const currentSymbol = SymbolService.convertRawUnderlyingToFyersSymbol(commodity, 0);
         symbols.push(currentSymbol);
         
-        console.log(`[MarketService] Generated commodity symbol for ${commodity}: ${currentSymbol}`);
+        // Only log symbol generation once per hour to reduce verbosity
+        const now = Date.now();
+        if (!this.lastSymbolGenLog || (now - this.lastSymbolGenLog) > 3600000) {
+          console.log(`[MarketService] Generated commodity symbol for ${commodity}: ${currentSymbol}`);
+          this.lastSymbolGenLog = now;
+        }
       } catch (error) {
         console.error(`[MarketService] Error generating symbol for ${commodity}:`, error);
       }
     });
     
-    console.log(`[MarketService] All generated commodity symbols:`, symbols);
+    // Only log all symbols once per hour to reduce verbosity
+    const now = Date.now();
+    if (!this.lastAllSymbolsLog || (now - this.lastAllSymbolsLog) > 3600000) {
+      console.log(`[MarketService] All generated commodity symbols:`, symbols);
+      this.lastAllSymbolsLog = now;
+    }
     
     return symbols;
   }
@@ -603,34 +676,145 @@ class MarketService {
    */
   static async getAllMarketSymbols() {
     try {
+      // Check cache first
+      const now = Date.now();
+      if (this.symbolConfigCache.symbols.length > 0 && 
+          (now - this.symbolConfigCache.lastUpdated) < this.symbolConfigCache.cacheTTL) {
+        // Only log cache hits every 5 minutes to reduce verbosity
+        if (!this.lastCacheLog || (now - this.lastCacheLog) > 300000) {
+          console.log(`[MarketService] Using ${this.symbolConfigCache.symbols.length} symbols from cache`);
+          this.lastCacheLog = now;
+        }
+        return this.symbolConfigCache.symbols;
+      }
+
+      // Fetch from MongoDB if cache is expired or empty
       const symbolConfigs = await SymbolConfig.find({});
       if (symbolConfigs.length > 0) {
         const symbols = symbolConfigs.map(config => config.symbolInput);
-        console.log(`[MarketService] Using ${symbols.length} symbols from MongoDB configuration`);
-        return symbols;
+        
+              // Update cache
+      this.symbolConfigCache.symbols = symbols;
+      this.symbolConfigCache.lastUpdated = now;
+      
+      // Only log cache updates every 5 minutes to reduce verbosity
+      if (!this.lastCacheUpdateLog || (now - this.lastCacheUpdateLog) > 300000) {
+        console.log(`[MarketService] Fetched ${symbols.length} symbols from MongoDB and updated cache`);
+        this.lastCacheUpdateLog = now;
+      }
+      return symbols;
       }
     } catch (error) {
       console.error('[MarketService] Error getting symbols from MongoDB config:', error);
     }
-    // Fallback: return empty array if nothing in DB
+    
+    // Fallback: return cached symbols if available, otherwise empty array
+    if (this.symbolConfigCache.symbols.length > 0) {
+      // Only log fallback cache usage once per minute to reduce spam
+      const now = Date.now();
+      if (!this.lastFallbackLog || (now - this.lastFallbackLog) > 60000) {
+        console.log(`[MarketService] Using ${this.symbolConfigCache.symbols.length} symbols from fallback cache`);
+        this.lastFallbackLog = now;
+      }
+      return this.symbolConfigCache.symbols;
+    }
+    
+    // Only log no symbols available once per minute to reduce spam
+    const now = Date.now();
+    if (!this.lastNoSymbolsLog || (now - this.lastNoSymbolsLog) > 60000) {
+      console.log('[MarketService] No symbols available in cache or database');
+      this.lastNoSymbolsLog = now;
+    }
     return [];
   }
 
   /**
-   * Start market data polling with separate intervals for indices and monitored symbols
+   * Clear symbol configuration cache
+   */
+  static clearSymbolConfigCache() {
+    this.symbolConfigCache.symbols = [];
+    this.symbolConfigCache.lastUpdated = 0;
+    console.log('[MarketService] Symbol configuration cache cleared');
+  }
+
+  /**
+   * Clear monitored symbols cache
+   */
+  static clearMonitoredSymbolsCache() {
+    this.monitoredSymbolsCache.symbols.clear();
+    this.monitoredSymbolsCache.lastUpdated = 0;
+    console.log('[MarketService] Monitored symbols cache cleared');
+  }
+
+  /**
+   * Clear all caches
+   */
+  static clearAllCaches() {
+    this.clearSymbolConfigCache();
+    this.clearMonitoredSymbolsCache();
+    console.log('[MarketService] All caches cleared');
+  }
+
+  /**
+   * Get cache status for debugging
+   */
+  static getCacheStatus() {
+    const now = Date.now();
+    const cacheAge = now - this.symbolConfigCache.lastUpdated;
+    const isExpired = cacheAge > this.symbolConfigCache.cacheTTL;
+    
+    return {
+      symbolsCount: this.symbolConfigCache.symbols.length,
+      lastUpdated: this.symbolConfigCache.lastUpdated,
+      cacheAge: cacheAge,
+      isExpired: isExpired,
+      cacheTTL: this.symbolConfigCache.cacheTTL
+    };
+  }
+
+  /**
+   * Get rate limit statistics
+   */
+  static getRateLimitStats() {
+    return {
+      ...this.rateLimitStats,
+      requestsPerSecond: this.rateLimitStats.requestsThisSecond,
+      requestsPerMinute: this.rateLimitStats.requestsThisMinute,
+      secondLimit: 10,
+      minuteLimit: 200,
+      secondUsage: `${this.rateLimitStats.requestsThisSecond}/10`,
+      minuteUsage: `${this.rateLimitStats.requestsThisMinute}/200`
+    };
+  }
+
+  /**
+   * Start market data polling with combined request for all symbols
    */
   static startMarketDataPolling() {
+    // Don't start if already running
+    if (this.pollingTimers.combined) {
+      console.log('[MarketService] Market polling already running, skipping start');
+      return;
+    }
+    
     // Stop any existing polling
     this.stopMarketDataPolling();
     
-    // Start market data polling (every 1 second) - fetch all symbols (indices, stocks, commodities)
-    this.pollingTimers.indices = setInterval(async () => {
+    // Start combined market data polling (every 1 second) - fetch ALL symbols in ONE request
+    this.pollingTimers.combined = setInterval(async () => {
       try {
-        // Fetch all symbols (indices, stocks, commodities) with dynamic commodity symbols
+        // Get all market symbols (indices, stocks, commodities)
         const allSymbols = await this.getAllMarketSymbols();
         
+        // Get all monitored symbols
+        const allMonitoredSymbols = await this.getAllMonitoredSymbols();
+        
+        // Combine all symbols into a single array (remove duplicates)
+        const combinedSymbols = new Set([...allSymbols, ...allMonitoredSymbols]);
+        const symbolsArray = Array.from(combinedSymbols);
+        
         // If no symbols, skip
-        if (allSymbols.length === 0) {
+        if (symbolsArray.length === 0) {
           return;
         }
         
@@ -642,93 +826,58 @@ class MarketService {
         });
         
         if (!userWithFyers) {
-          console.log('📊 Market: No Fyers token available for polling');
-          return;
-        }
-        
-        // Fetch quotes using the user's Fyers token
-        const quotes = await this.fetchQuotesFromFyers(allSymbols, userWithFyers);
-        
-        // Send all data to clients at once
-        await this.sendBulkMarketDataToClients(quotes);
-        
-        // Simple, clean logging
-        console.log(`📊 Market: ${quotes.length} symbols updated`);
-      } catch (error) {
-        console.error('❌ Market polling error:', error.message);
-        console.error('Details:', error.stack);
-      }
-    }, this.POLLING_INTERVALS.indices);
-    
-    // Removed futures data polling interval
-        
-    // Start monitored symbols polling (every 1 second) - HIGH FREQUENCY for trading opportunities
-    this.pollingTimers.monitored = setInterval(async () => {
-      try {
-        // Get all users' monitored symbols from TradingState
-        const allTradingStates = await TradingState.find({});
-        
-        const allMonitoredSymbols = new Set();
-        
-        allTradingStates.forEach(state => {
-          if (state.monitoredSymbols && state.monitoredSymbols.length > 0) {
-            state.monitoredSymbols.forEach(symbol => {
-              if (symbol.symbol) {
-                allMonitoredSymbols.add(symbol.symbol);
-              }
-            });
+          // Only log this once per minute to reduce spam
+          const now = Date.now();
+          if (!this.lastNoTokenLog || (now - this.lastNoTokenLog) > 60000) {
+            console.log('📊 Market: No Fyers token available for polling');
+            this.lastNoTokenLog = now;
           }
-        });
-        
-        // If no monitored symbols, skip
-        if (allMonitoredSymbols.size === 0) {
           return;
         }
         
-        // Get a user with valid Fyers token for background polling
-        const User = require('../models/User');
-        const userWithFyers = await User.findOne({
-          'fyers.connected': true,
-          'fyers.accessToken': { $exists: true, $ne: null }
-        });
-        
-        if (!userWithFyers) {
-          console.log('📊 Market: No Fyers token available for monitored symbols');
-          return;
-        }
-        
-        // Fetch quotes for monitored symbols using the user's Fyers token
-        const symbols = Array.from(allMonitoredSymbols);
-        const quotes = await this.fetchQuotesFromFyers(symbols, userWithFyers);
+        // Fetch ALL quotes in a SINGLE request to Fyers
+        const quotes = await this.fetchQuotesFromFyers(symbolsArray, userWithFyers);
         
         // Send all data to clients at once
         await this.sendBulkMarketDataToClients(quotes);
         
-        // Simple, clean logging
-        console.log(`📊 Monitoring: ${quotes.length} monitored symbols updated`);
+        // Only log every 30 seconds to reduce verbosity
+        const now = Date.now();
+        if (!this.lastMarketLog || (now - this.lastMarketLog) > 30000) {
+          console.log(`📊 Market: ${quotes.length} symbols updated (${allSymbols.length} market + ${allMonitoredSymbols.size} monitored)`);
+          this.lastMarketLog = now;
+        }
       } catch (error) {
-        console.error('❌ Monitored symbols polling error:', error.message);
-        console.error('Details:', error.stack);
+        // Handle rate limit errors gracefully
+        if (error.message && error.message.includes('request limit reached')) {
+          const now = Date.now();
+          if (!this.lastRateLimitLog || (now - this.lastRateLimitLog) > 60000) {
+            console.error('❌ Market polling: Fyers rate limit reached - pausing for 30 seconds');
+            this.lastRateLimitLog = now;
+          }
+          
+          // Pause polling for 30 seconds when rate limit is hit
+          this.stopMarketDataPolling();
+          setTimeout(() => {
+            console.log('🔄 Resuming market polling after rate limit cooldown');
+            this.startMarketDataPolling();
+          }, 30000);
+        } else {
+          console.error('❌ Market polling error:', error.message);
+        }
       }
-    }, this.POLLING_INTERVALS.monitored);
+    }, this.POLLING_INTERVALS.combined);
     
-    console.log(`✅ Market polling started - All symbols: 1s, Monitored: 1s`);
+    console.log(`✅ Market polling started - Combined request: 1s (${this.POLLING_INTERVALS.combined}ms)`);
   }
 
   /**
    * Stop market data polling
    */
   static stopMarketDataPolling() {
-    if (this.pollingTimers.indices) {
-      clearInterval(this.pollingTimers.indices);
-      this.pollingTimers.indices = null;
-    }
-    
-    // Removed futures timer clearing
-    
-    if (this.pollingTimers.monitored) {
-      clearInterval(this.pollingTimers.monitored);
-      this.pollingTimers.monitored = null;
+    if (this.pollingTimers.combined) {
+      clearInterval(this.pollingTimers.combined);
+      this.pollingTimers.combined = null;
     }
     
     console.log('[MarketService] Market data polling stopped');
@@ -740,18 +889,61 @@ class MarketService {
    */
   static getPollingStatus() {
     return {
-      indices: {
-        active: this.pollingTimers.indices !== null,
-        interval: this.POLLING_INTERVALS.indices,
-        description: 'All market symbols (3 indices + 20 stocks + 5 commodities)'
-      },
-      // Removed futures status
-      monitored: {
-        active: this.pollingTimers.monitored !== null,
-        interval: this.POLLING_INTERVALS.monitored,
-        description: 'Monitored strike quotes (high frequency for trading opportunities)'
+      combined: {
+        active: this.pollingTimers.combined !== null,
+        interval: this.POLLING_INTERVALS.combined,
+        description: 'All symbols (market + monitored) in single request - optimized for Fyers rate limits'
       }
     };
+  }
+
+  /**
+   * Get all monitored symbols from all users with caching
+   * @returns {Promise<Set<string>>} Set of monitored symbols
+   */
+  static async getAllMonitoredSymbols() {
+    try {
+      // Check cache first
+      const now = Date.now();
+      if (this.monitoredSymbolsCache.symbols.size > 0 && 
+          (now - this.monitoredSymbolsCache.lastUpdated) < this.monitoredSymbolsCache.cacheTTL) {
+        // Only log cache hits every 5 minutes to reduce verbosity
+        if (!this.lastMonitoredCacheLog || (now - this.lastMonitoredCacheLog) > 300000) {
+          console.log(`[MarketService] Using ${this.monitoredSymbolsCache.symbols.size} monitored symbols from cache`);
+          this.lastMonitoredCacheLog = now;
+        }
+        return this.monitoredSymbolsCache.symbols;
+      }
+
+      // Fetch from MongoDB if cache is expired or empty
+      const allTradingStates = await TradingState.find({});
+      
+      const allMonitoredSymbols = new Set();
+      
+      allTradingStates.forEach(state => {
+        if (state.monitoredSymbols && state.monitoredSymbols.length > 0) {
+          state.monitoredSymbols.forEach(symbol => {
+            if (symbol.symbol) {
+              allMonitoredSymbols.add(symbol.symbol);
+            }
+          });
+        }
+      });
+      
+      // Update cache
+      this.monitoredSymbolsCache.symbols = allMonitoredSymbols;
+      this.monitoredSymbolsCache.lastUpdated = now;
+      
+      // Only log cache updates every 5 minutes to reduce verbosity
+      if (!this.lastMonitoredCacheUpdateLog || (now - this.lastMonitoredCacheUpdateLog) > 300000) {
+        console.log(`[MarketService] Fetched ${allMonitoredSymbols.size} monitored symbols from MongoDB and updated cache`);
+        this.lastMonitoredCacheUpdateLog = now;
+      }
+      return allMonitoredSymbols;
+    } catch (error) {
+      console.error('[MarketService] Error getting monitored symbols:', error);
+      return new Set();
+    }
   }
 }
 

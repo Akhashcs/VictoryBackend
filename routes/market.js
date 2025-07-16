@@ -679,4 +679,51 @@ router.get('/proxy-website', auth, async (req, res) => {
   }
 });
 
+/**
+ * @route   GET /api/market/cache-status
+ * @desc    Get cache status for debugging
+ * @access  Private
+ */
+router.get('/cache-status', auth, async (req, res) => {
+  try {
+    const cacheStatus = MarketService.getCacheStatus();
+    res.json({
+      success: true,
+      data: cacheStatus
+    });
+  } catch (error) {
+    console.error('Error getting cache status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get cache status'
+    });
+  }
+});
+
+/**
+ * @route   GET /api/market/rate-limit-status
+ * @desc    Get Fyers rate limit status for debugging
+ * @access  Private
+ */
+router.get('/rate-limit-status', auth, async (req, res) => {
+  try {
+    const rateLimitStats = MarketService.getRateLimitStats();
+    const pollingStatus = MarketService.getPollingStatus();
+    
+    res.json({
+      success: true,
+      data: {
+        rateLimit: rateLimitStats,
+        polling: pollingStatus
+      }
+    });
+  } catch (error) {
+    console.error('Error getting rate limit status:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get rate limit status'
+    });
+  }
+});
+
 module.exports = router; 
