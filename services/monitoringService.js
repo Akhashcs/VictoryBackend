@@ -490,6 +490,13 @@ class MonitoringService {
       if (symbolsToFetch.length === 0) return results;
       const User = require('../models/User');
       const user = await User.findById(userId);
+      
+      // Check if user has valid Fyers connection
+      if (!user || !user.fyers || !user.fyers.connected) {
+        console.warn(`[MonitoringService] User ${userId} has no valid Fyers connection - skipping monitoring cycle`);
+        return results;
+      }
+      
       const liveData = await MarketService.getQuotes(symbolsToFetch, user);
       const now = new Date();
       // Process each monitored symbol

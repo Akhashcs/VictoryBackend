@@ -151,6 +151,7 @@ app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/signal-table', signalTableRoutes);
 app.use('/api/backtest', backtestRoutes);
 app.use('/api/market', symbolConfigRoutes);
+app.use('/api/token-validation', require('./routes/tokenValidation'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -175,11 +176,18 @@ WebSocketService.initialize(server);
 // Initialize Fyers WebSocket service
 fyersWebSocketService.initialize(io);
 
-// Start market data polling
+// Start market data polling with graceful error handling
 MarketService.startMarketDataPolling();
+console.log('✅ Market data polling started with graceful error handling');
 
-// Start monitoring scheduler
+// Start monitoring scheduler with graceful error handling
 MonitoringScheduler.start();
+console.log('✅ Monitoring scheduler started with graceful error handling');
+
+// Start token validation service
+const TokenValidationService = require('./services/tokenValidationService');
+TokenValidationService.startPeriodicValidation(30); // Validate every 30 minutes
+console.log('✅ Token validation service started (30-minute intervals)');
 
 // Temporary manual fix for monitoring state
 setTimeout(async () => {
@@ -235,6 +243,12 @@ const gracefulShutdown = () => {
   const { MonitoringScheduler } = require('./services/monitoringScheduler');
   if (MonitoringScheduler) {
     MonitoringScheduler.stop();
+  }
+
+  // Stop token validation service
+  const { TokenValidationService } = require('./services/tokenValidationService');
+  if (TokenValidationService) {
+    TokenValidationService.stopPeriodicValidation();
   }
   
   // Close MongoDB connection

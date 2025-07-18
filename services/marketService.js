@@ -409,7 +409,9 @@ class MarketService {
         const appId = getFyersAppId();
         accessToken = `${appId}:${user.fyers.accessToken}`;
       } else {
-        throw new Error('Fyers access token missing or expired. Please relogin to Fyers.');
+        // Gracefully handle missing token - don't crash the server
+        console.warn(`[MarketService] User ${user?._id || 'unknown'} has no valid Fyers token - skipping market data fetch`);
+        return []; // Return empty array instead of throwing error
       }
       
       // Convert symbols to Fyers format if they're not already
@@ -476,8 +478,33 @@ class MarketService {
       }
     } catch (error) {
       console.error('[MarketService] Error fetching quotes from Fyers:', error);
-      // Re-throw the error instead of returning mock data
-      throw error;
+      
+      // Check if it's a token expiration error
+      const errorMessage = error.message || '';
+      const isTokenExpired = 
+        errorMessage.includes('Could not authenticate') ||
+        errorMessage.includes('token expired') ||
+        errorMessage.includes('invalid token') ||
+        errorMessage.includes('unauthorized') ||
+        errorMessage.includes('access denied') ||
+        errorMessage.includes('code: -16');
+      
+      if (isTokenExpired && user) {
+        // Mark user as disconnected in database
+        try {
+          const User = require('../models/User');
+          await User.findByIdAndUpdate(user._id, {
+            'fyers.connected': false
+          });
+          console.log(`[MarketService] Marked user ${user._id} as disconnected due to expired token`);
+        } catch (dbError) {
+          console.error('[MarketService] Error updating user status:', dbError);
+        }
+      }
+      
+      // Return empty array instead of throwing error to prevent server crash
+      console.warn('[MarketService] Returning empty market data due to Fyers error');
+      return [];
     }
   }
 

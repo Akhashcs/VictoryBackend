@@ -445,14 +445,24 @@ class HMAService {
       
       // Get access token from user's Fyers connection ONLY
       let accessToken = null;
-      if (user && user.fyers && user.fyers.accessToken) {
+      if (user && user.fyers && user.fyers.accessToken && user.fyers.connected) {
         const { getFyersAppId } = require('../fyersService');
         const appId = getFyersAppId();
         accessToken = `${appId}:${user.fyers.accessToken}`;
         LoggerService.debug('HMAService', 'Using Fyers access token from user.fyers (formatted with appId)');
       } else {
-        LoggerService.error('HMAService', 'No Fyers access token available for user. User must relogin to Fyers.');
-        throw new Error('Fyers access token missing or expired. Please relogin to Fyers.');
+        // Gracefully handle missing token - don't crash the server
+        LoggerService.warn('HMAService', `User ${user?._id || 'unknown'} has no valid Fyers token - skipping HMA calculation`);
+        return {
+          symbol: originalSymbol,
+          currentHMA: null,
+          period: 55,
+          data: [],
+          lastUpdate: new Date(),
+          status: 'DISCONNECTED',
+          resolution: '5min',
+          error: 'Fyers token missing or expired'
+        };
       }
       
       // Fetch 5-minute historical data from Fyers using the converted symbol
@@ -652,7 +662,23 @@ class HMAService {
       return candles;
     } catch (error) {
       LoggerService.error('HMAService', 'Error fetching historical data:', error);
-      throw error;
+      
+      // Check if it's a token expiration error
+      const errorMessage = error.message || '';
+      const isTokenExpired = 
+        errorMessage.includes('Could not authenticate') ||
+        errorMessage.includes('token expired') ||
+        errorMessage.includes('invalid token') ||
+        errorMessage.includes('unauthorized') ||
+        errorMessage.includes('access denied') ||
+        errorMessage.includes('code: -16');
+      
+      if (isTokenExpired) {
+        LoggerService.warn('HMAService', 'Token expired - returning empty data instead of crashing');
+        return []; // Return empty array instead of throwing error
+      }
+      
+      throw error; // Re-throw other errors
     }
   }
 
