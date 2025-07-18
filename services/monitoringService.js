@@ -109,14 +109,74 @@ class MonitoringService {
         state = new TradingState({ userId });
       }
       
+      // Fetch current LTP and HMA values to determine initial status
+      let initialStatus = 'WAITING_FOR_REVERSAL'; // Default fallback
+      let orderModificationReason = 'Initial status - waiting for data';
+      let pendingSignal = null;
+      
+      try {
+        const User = require('../models/User');
+        const user = await User.findById(userId);
+        if (user) {
+          // Fetch HMA value
+          const hmaData = await HMAService.fetchAndCalculateHMA(symbolData.symbol, user);
+          const hmaValue = hmaData.currentHMA || hmaData.hmaValue;
+          
+          // Fetch current LTP
+          const liveQuote = await this.getLiveQuote(symbolData.symbol, userId);
+          const ltp = liveQuote?.ltp;
+          
+          if (hmaValue && ltp) {
+            console.log(`🔍 ${symbolData.symbol}: LTP=${ltp}, HMA=${hmaValue}`);
+            
+            if (ltp > hmaValue) {
+              // LTP > HMA: Waiting for Reversal
+              initialStatus = 'WAITING_FOR_REVERSAL';
+              orderModificationReason = 'LTP above HMA - waiting for reversal crossover';
+              pendingSignal = {
+                direction: 'REVERSAL',
+                triggeredAt: new Date(),
+                hmaAtTrigger: hmaValue,
+                ltpAtTrigger: ltp,
+                state: 'WAITING',
+                reversalDetected: false,
+                confirmationTimer: null
+              };
+            } else {
+              // LTP ≤ HMA: Waiting for Entry
+              initialStatus = 'WAITING_FOR_ENTRY';
+              orderModificationReason = 'LTP below HMA - ready for bullish crossover entry';
+              pendingSignal = {
+                direction: 'ENTRY',
+                triggeredAt: new Date(),
+                hmaAtTrigger: hmaValue,
+                ltpAtTrigger: ltp,
+                state: 'WAITING',
+                reversalConfirmed: true,
+                entryReadyAt: new Date()
+              };
+            }
+            
+            console.log(`✅ ${symbolData.symbol}: Categorized as ${initialStatus}`);
+          } else {
+            console.log(`⚠️ ${symbolData.symbol}: Could not fetch LTP or HMA, using default status`);
+          }
+        } else {
+          console.error(`User not found for userId: ${userId}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching initial data for ${symbolData.symbol}:`, error);
+      }
+      
       const newSymbol = {
         id: `${symbolData.symbol}-${Date.now()}`,
         ...symbolData,
         useTrailingStoploss: symbolData.useTrailingStoploss || false,
         trailingX: symbolData.trailingX || 20,
         trailingY: symbolData.trailingY || 15,
-        triggerStatus: 'WAITING',
-        pendingSignal: null,
+        triggerStatus: initialStatus,
+        pendingSignal: pendingSignal,
+        orderModificationReason: orderModificationReason,
         lastUpdate: new Date(),
         tradesToday: 0, // Track number of trades taken today
         opportunityActive: false, // Track if an opportunity is being processed
@@ -127,32 +187,7 @@ class MonitoringService {
       state.monitoredSymbols.push(newSymbol);
       await state.save();
       
-      // Fetch HMA value immediately for the new symbol
-      try {
-        const User = require('../models/User');
-        const user = await User.findById(userId);
-        if (user) {
-          const hmaData = await HMAService.fetchAndCalculateHMA(symbolData.symbol, user);
-          if (hmaData.currentHMA || hmaData.hmaValue) {
-            await TradingState.updateOne(
-              { userId, 'monitoredSymbols.id': newSymbol.id },
-              {
-                $set: {
-                  'monitoredSymbols.$.hmaValue': hmaData.currentHMA || hmaData.hmaValue,
-                  'monitoredSymbols.$.lastUpdate': hmaData.lastUpdate || new Date()
-                }
-              }
-            );
-            console.log(`📈 Fetched HMA value for ${symbolData.symbol}: ${hmaData.currentHMA || hmaData.hmaValue}`);
-          }
-        } else {
-          console.error(`User not found for userId: ${userId}`);
-        }
-      } catch (error) {
-        console.error(`Error fetching HMA for ${symbolData.symbol}:`, error);
-      }
-      
-      console.log(`📊 Added ${symbolData.symbol} to monitoring for user ${userId}`);
+      console.log(`📊 Added ${symbolData.symbol} to monitoring for user ${userId} with status: ${initialStatus}`);
       return state;
     } catch (error) {
       console.error('Error adding symbol to monitoring:', error);
@@ -606,29 +641,7 @@ class MonitoringService {
     // Only allow up to maxPerDay trades per day
     if (symbol.tradesToday >= (symbol.maxPerDay || 4)) {
       console.log(`🚫 Max trades per day reached for ${symbol.symbol}`);
-      return result;
-    }
-
-    // Only place a buy order if not already processing an opportunity
-    if (symbol.opportunityActive) {
-      console.log(`⏳ Opportunity already active for ${symbol.symbol}, skipping buy order.`);
-      return result;
-    }
-
-    // Check if there's already a pending order for this symbol
-    if (symbol.orderPlaced && symbol.orderStatus === 'PENDING') {
-      console.log(`⏳ Order already pending for ${symbol.symbol}, skipping buy order.`);
-      return result;
-    }
-
-    // If order is already placed and pending, check if we need to modify it
-    if (symbol.orderPlaced && symbol.orderStatus === 'PENDING' && symbol.orderId) {
-      // Check if HMA has changed significantly
-      if (symbol.lastHmaValue && Math.abs(hma - symbol.lastHmaValue) >= 0.5) {
-        console.log(`🔄 HMA changed for ${symbol.symbol}: ${symbol.lastHmaValue} → ${hma}, modifying order`);
-        await this.modifyPendingOrderForHMAChange(symbol, symbol.lastHmaValue, hma, userId);
-      }
-      return result;
+      // Don't return here; allow state machine to update status
     }
 
     // If order was rejected, keep it in monitoring with REJECTED status (no re-entry)
@@ -638,84 +651,154 @@ class MonitoringService {
       return result;
     }
 
-    // ADDITIONAL RACE CONDITION PROTECTION: Check database state atomically
-    const TradingState = require('../models/TradingState');
-    const dbSymbol = await TradingState.findOne(
-      { 
-        userId, 
-        'monitoredSymbols.id': symbol.id,
-        'monitoredSymbols.orderPlaced': { $ne: true }, // Only proceed if order not already placed
-        'monitoredSymbols.opportunityActive': { $ne: true } // Only proceed if opportunity not already active
-      }
-    );
+    // --- STATE MACHINE LOGIC FOR EXISTING STATES ONLY ---
+    // This method only handles state transitions, NOT initial categorization
+    // Initial categorization (LTP > HMA vs LTP <= HMA) happens only in addSymbolToMonitoring()
     
-    if (!dbSymbol) {
-      console.log(`⏳ Order already placed or opportunity active for ${symbol.symbol} (database check) - skipping`);
+    const TradingState = require('../models/TradingState');
+
+    // Only process if symbol already has a pendingSignal (was categorized during addSymbolToMonitoring)
+    if (!symbol.pendingSignal) {
+      console.log(`📊 ${symbol.symbol}: No pending signal - skipping state machine processing`);
       return result;
     }
 
-    // Set opportunityActive immediately to prevent race conditions
-    await TradingState.updateOne(
-      { userId, 'monitoredSymbols.id': symbol.id },
-      {
-        $set: {
-          'monitoredSymbols.$.opportunityActive': true,
-          'monitoredSymbols.$.lastOpportunityTime': now
+    // Handle REVERSAL state transitions
+    if (symbol.pendingSignal.direction === 'REVERSAL') {
+      if (symbol.pendingSignal.state === 'WAITING') {
+        // We're already waiting for reversal - check if LTP has crossed below HMA
+        if (ltp <= hma) {
+          // Reversal detected! Start 15-minute confirmation timer
+          symbol.pendingSignal.state = 'CONFIRMING';
+          symbol.pendingSignal.reversalDetected = true;
+          symbol.pendingSignal.confirmationStartTime = now;
+          symbol.pendingSignal.confirmationEndTime = new Date(now.getTime() + 15 * 60 * 1000); // 15 minutes
+          // Update status to CONFIRMING_REVERSAL
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'CONFIRMING_REVERSAL',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'Reversal detected - 15-minute confirmation timer started'
+              }
+            }
+          );
+          console.log(`⏰ ${symbol.symbol}: 15-minute confirmation timer started, ends at ${symbol.pendingSignal.confirmationEndTime}`);
+        }
+      } else if (symbol.pendingSignal.state === 'CONFIRMING') {
+        // We're in confirmation phase - check if timer has expired or if LTP went back above HMA
+        if (ltp > hma) {
+          // LTP went back above HMA during confirmation - cancel timer and go back to waiting
+          symbol.pendingSignal.state = 'WAITING';
+          symbol.pendingSignal.reversalDetected = false;
+          symbol.pendingSignal.confirmationStartTime = null;
+          symbol.pendingSignal.confirmationEndTime = null;
+          // Update status back to WAITING_FOR_REVERSAL
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'Confirmation canceled - LTP back above HMA'
+              }
+            }
+          );
+          console.log(`🔄 ${symbol.symbol}: Back to waiting for reversal`);
+        } else if (now >= symbol.pendingSignal.confirmationEndTime) {
+          // 15-minute timer expired and LTP is still below HMA - move to "Waiting for Entry" state
+          symbol.pendingSignal.direction = 'ENTRY';
+          symbol.pendingSignal.state = 'WAITING';
+          symbol.pendingSignal.reversalConfirmed = true;
+          symbol.pendingSignal.entryReadyAt = now;
+          // Update status to WAITING_FOR_ENTRY
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'Reversal confirmed - waiting for bullish crossover'
+              }
+            }
+          );
+          console.log(`🎯 ${symbol.symbol}: Ready for entry - waiting for LTP to cross above HMA`);
+        } else {
+          // Still in confirmation phase - show remaining time
+          const remainingTime = Math.max(0, symbol.pendingSignal.confirmationEndTime - now);
+          const remainingMinutes = Math.floor(remainingTime / (60 * 1000));
+          const remainingSeconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+          console.log(`⏰ ${symbol.symbol}: Confirming reversal - ${remainingMinutes}m ${remainingSeconds}s remaining`);
         }
       }
-    );
+    }
     
-    console.log(`🔒 Set opportunityActive=true for ${symbol.symbol} to prevent duplicate orders`);
-
-    // NEW STRATEGY: Wait for LTP to cross above HMA on 5-minute candle close
-    // 1. Monitor for LTP > HMA crossover
-    // 2. When crossover happens at MM:59 (5-min candle close), place market order
-    // 3. Show WAITING status until crossover is confirmed
-    
-    const currentMinute = now.getMinutes();
-    const currentSecond = now.getSeconds();
-    
-    // Check if we're at the end of a 5-minute candle (MM:59)
-    const isCandleClose = currentSecond >= 59;
-    const isFiveMinuteBoundary = currentMinute % 5 === 4; // 4, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59
-    
-    console.log(`🔍 [DEBUG] ${symbol.symbol}: LTP=${ltp}, HMA=${hma}, Minute=${currentMinute}, Second=${currentSecond}, CandleClose=${isCandleClose}, FiveMinBoundary=${isFiveMinuteBoundary}`);
-    
-    // Check for crossover condition
-    if (ltp > hma) {
-      // LTP is above HMA - potential crossover
-      console.log(`📈 ${symbol.symbol}: LTP (${ltp}) > HMA (${hma}) - Potential crossover detected`);
-      
-      // Check if we have a pending signal for this opportunity
-      if (!symbol.pendingSignal) {
-        // Start monitoring for crossover confirmation
-        symbol.pendingSignal = {
-          direction: 'BUY',
-          triggeredAt: now,
-          hmaAtTrigger: hma,
-          ltpAtTrigger: ltp,
-          crossoverDetected: true,
-          waitingForCandleClose: true
-        };
-        
-        // Update status to CONFIRMING
-        await TradingState.updateOne(
-          { userId, 'monitoredSymbols.id': symbol.id },
-          {
-            $set: {
-              'monitoredSymbols.$.triggerStatus': 'CONFIRMING',
-              'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
-              'monitoredSymbols.$.orderModificationReason': 'LTP above HMA - waiting for 5-min candle close confirmation'
+    // Handle ENTRY state transitions
+    if (symbol.pendingSignal.direction === 'ENTRY') {
+      if (symbol.pendingSignal.state === 'WAITING') {
+        // We're in "Waiting for Entry" state - check for bullish crossover
+        if (ltp > hma) {
+          // Bullish crossover detected! Start 5-minute candle confirmation
+          console.log(`🚀 ${symbol.symbol}: Bullish crossover detected! LTP (${ltp}) > HMA (${hma}) - Starting 5-minute candle confirmation`);
+          
+          symbol.pendingSignal.state = 'CONFIRMING';
+          symbol.pendingSignal.crossoverDetected = true;
+          symbol.pendingSignal.crossoverTime = now;
+          
+          // Calculate the end of current 5-minute candle (MM:59)
+          const currentMinute = now.getMinutes();
+          const currentSecond = now.getSeconds();
+          
+          // Find the next 5-minute boundary (MM:59)
+          const nextFiveMinBoundary = Math.ceil(currentMinute / 5) * 5 - 1; // 4, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59
+          const minutesUntilBoundary = nextFiveMinBoundary - currentMinute;
+          const secondsUntilBoundary = 59 - currentSecond;
+          
+          const totalSecondsUntilBoundary = minutesUntilBoundary * 60 + secondsUntilBoundary;
+          symbol.pendingSignal.confirmationEndTime = new Date(now.getTime() + totalSecondsUntilBoundary * 1000);
+          
+          // Update status to CONFIRMING_ENTRY
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'CONFIRMING_ENTRY',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'Bullish crossover detected - waiting for 5-minute candle close confirmation'
+              }
             }
-          }
-        );
-        
-        console.log(`⏳ ${symbol.symbol}: Started monitoring for 5-minute candle close confirmation`);
-      } else if (symbol.pendingSignal.crossoverDetected && symbol.pendingSignal.waitingForCandleClose) {
-        // We're already waiting for candle close confirmation
-        if (isCandleClose && isFiveMinuteBoundary) {
-          // It's MM:59 - 5-minute candle is closing, confirm the crossover
-          console.log(`⏰ ${symbol.symbol}: 5-minute candle closing at MM:59 - confirming crossover and placing market order`);
+          );
+          
+          console.log(`⏰ ${symbol.symbol}: 5-minute candle confirmation started, ends at ${symbol.pendingSignal.confirmationEndTime}`);
+        }
+      } else if (symbol.pendingSignal.state === 'CONFIRMING') {
+        // We're in confirmation phase - check if LTP went back below HMA or if timer expired
+        if (ltp <= hma) {
+          // LTP went back below HMA during confirmation - cancel confirmation and go back to waiting
+          console.log(`❌ ${symbol.symbol}: LTP (${ltp}) went back below HMA (${hma}) during confirmation - canceling entry`);
+          
+          symbol.pendingSignal.state = 'WAITING';
+          symbol.pendingSignal.crossoverDetected = false;
+          symbol.pendingSignal.crossoverTime = null;
+          symbol.pendingSignal.confirmationEndTime = null;
+          
+          // Update status back to WAITING_FOR_ENTRY
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'Entry confirmation canceled - LTP back below HMA'
+              }
+            }
+          );
+          
+          console.log(`🔄 ${symbol.symbol}: Back to waiting for entry`);
+        } else if (now >= symbol.pendingSignal.confirmationEndTime) {
+          // 5-minute candle confirmation completed and LTP is still above HMA - execute market order
+          console.log(`✅ ${symbol.symbol}: 5-minute candle confirmation completed! LTP still above HMA - executing market order`);
           
           try {
             // Place market order immediately
@@ -735,7 +818,8 @@ class MonitoringService {
                     'monitoredSymbols.$.lastHmaValue': hma,
                     'monitoredSymbols.$.opportunityActive': true,
                     'monitoredSymbols.$.lastOpportunityTime': now,
-                    'monitoredSymbols.$.orderModificationReason': 'Market order placed at 5-min candle close crossover'
+                    'monitoredSymbols.$.orderModificationReason': 'Market order placed at bullish crossover confirmation',
+                    'monitoredSymbols.$.pendingSignal': null // Clear pending signal
                   }
                 }
               );
@@ -746,7 +830,7 @@ class MonitoringService {
                 { $push: { activePositions: position } }
               );
               
-              console.log(`✅ Market order placed for ${symbol.symbol} at crossover confirmation`);
+              console.log(`✅ Market order placed for ${symbol.symbol} at bullish crossover confirmation`);
               console.log(`📊 Added ${symbol.symbol} to active positions while keeping in monitoring`);
               
               // Place SL-M order after 5 seconds
@@ -756,28 +840,9 @@ class MonitoringService {
                   const slOrderResult = await this.placeSLMOrder(position, userId);
                   
                   if (slOrderResult.success) {
-                    // Update active position with SL order details
-                    await TradingState.updateOne(
-                      { userId, 'activePositions.buyOrderId': position.buyOrderId },
-                      {
-                        $set: {
-                          'activePositions.$.slOrderId': slOrderResult.slOrderId,
-                          'activePositions.$.slStopPrice': slOrderResult.stopLossPrice,
-                          'activePositions.$.slTriggerPrice': slOrderResult.triggerPrice,
-                          'activePositions.$.slOrderDetails': {
-                            orderId: slOrderResult.slOrderId,
-                            stopLossPrice: slOrderResult.stopLossPrice,
-                            triggerPrice: slOrderResult.triggerPrice,
-                            placedAt: new Date(),
-                            modifications: []
-                          }
-                        }
-                      }
-                    );
-                    
-                    console.log(`✅ SL-M order placed for ${symbol.symbol}:`, slOrderResult);
+                    console.log(`✅ SL-M order placed for ${symbol.symbol} - Order ID: ${slOrderResult.sellOrderId}`);
                   } else {
-                    console.error(`❌ Failed to place SL-M order for ${symbol.symbol}:`, slOrderResult.error);
+                    console.error(`❌ Failed to place SL-M order for ${symbol.symbol}: ${slOrderResult.error}`);
                   }
                 } catch (error) {
                   console.error(`❌ Error placing SL-M order for ${symbol.symbol}:`, error);
@@ -787,73 +852,278 @@ class MonitoringService {
               result.executed = true;
               result.position = position;
             } else {
-              // Still waiting for candle close
-              const remainingSeconds = 60 - currentSecond;
+              console.error(`❌ Failed to execute market order for ${symbol.symbol}`);
+              
+              // Reset to waiting for entry if order placement failed
+              symbol.pendingSignal.state = 'WAITING';
+              symbol.pendingSignal.crossoverDetected = false;
+              symbol.pendingSignal.crossoverTime = null;
+              symbol.pendingSignal.confirmationEndTime = null;
+              
               await TradingState.updateOne(
                 { userId, 'monitoredSymbols.id': symbol.id },
                 {
                   $set: {
-                    'monitoredSymbols.$.orderModificationReason': `Waiting for 5-min candle close: ${remainingSeconds}s remaining`
+                    'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+                    'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                    'monitoredSymbols.$.orderModificationReason': 'Market order placement failed - retrying on next crossover'
                   }
                 }
               );
-              
-              console.log(`⏳ ${symbol.symbol}: Waiting for 5-min candle close, ${remainingSeconds}s remaining`);
             }
           } catch (error) {
-            console.error(`❌ Failed to place market order for ${symbol.symbol}:`, error);
+            console.error(`❌ Error executing market order for ${symbol.symbol}:`, error);
+            
+            // Reset to waiting for entry if order placement failed
+            symbol.pendingSignal.state = 'WAITING';
+            symbol.pendingSignal.crossoverDetected = false;
+            symbol.pendingSignal.crossoverTime = null;
+            symbol.pendingSignal.confirmationEndTime = null;
             
             await TradingState.updateOne(
               { userId, 'monitoredSymbols.id': symbol.id },
               {
                 $set: {
-                  'monitoredSymbols.$.triggerStatus': 'ORDER_REJECTED',
-                  'monitoredSymbols.$.orderStatus': 'REJECTED',
-                  'monitoredSymbols.$.orderPlacedAt': now,
-                  'monitoredSymbols.$.orderModificationReason': `Market order failed: ${error.message}`,
-                  'monitoredSymbols.$.opportunityActive': false
+                  'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+                  'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                  'monitoredSymbols.$.orderModificationReason': 'Market order placement failed - retrying on next crossover'
                 }
               }
             );
-            
-            result.executed = false;
           }
         } else {
-          // Still waiting for candle close
-          const remainingSeconds = 60 - currentSecond;
+          // Still in confirmation phase - show remaining time
+          const remainingTime = Math.max(0, symbol.pendingSignal.confirmationEndTime - now);
+          const remainingMinutes = Math.floor(remainingTime / 60);
+          const remainingSeconds = remainingTime % 60;
+          
+          console.log(`⏰ ${symbol.symbol}: Confirming entry - ${remainingMinutes}m ${remainingSeconds}s remaining`);
+        }
+      }
+    }
+
+    // --- ONLY BLOCK ORDER PLACEMENT BELOW ---
+    // Only place a buy order if not already processing an opportunity
+    if (symbol.tradesToday >= (symbol.maxPerDay || 4)) {
+      return result;
+    }
+    if (symbol.opportunityActive) {
+      return result;
+    }
+    if (symbol.orderPlaced && symbol.orderStatus === 'PENDING') {
+      return result;
+    }
+    if (symbol.orderPlaced && symbol.orderStatus === 'PENDING' && symbol.orderId) {
+      // Check if HMA has changed significantly
+      if (symbol.lastHmaValue && Math.abs(hma - symbol.lastHmaValue) >= 0.5) {
+        console.log(`🔄 HMA changed for ${symbol.symbol}: ${symbol.lastHmaValue} → ${hma}, modifying order`);
+        await this.modifyPendingOrderForHMAChange(symbol, symbol.lastHmaValue, hma, userId);
+      }
+      return result;
+    }
+
+    // ADDITIONAL RACE CONDITION PROTECTION: Check database state atomically
+    const dbSymbol = await TradingState.findOne(
+      { 
+        userId, 
+        'monitoredSymbols.id': symbol.id,
+        'monitoredSymbols.orderPlaced': { $ne: true }, // Only proceed if order not already placed
+        'monitoredSymbols.opportunityActive': { $ne: true } // Only proceed if opportunity not already active
+      }
+    );
+    if (!dbSymbol) {
+      console.log(`⏳ Order already placed or opportunity active for ${symbol.symbol} (database check) - skipping`);
+      return result;
+    }
+
+    // Set opportunityActive immediately to prevent race conditions
+    await TradingState.updateOne(
+      { userId, 'monitoredSymbols.id': symbol.id },
+      {
+        $set: {
+          'monitoredSymbols.$.opportunityActive': true,
+          'monitoredSymbols.$.lastOpportunityTime': now
+        }
+      }
+    );
+    
+    console.log(`🔒 Set opportunityActive=true for ${symbol.symbol} to prevent duplicate orders`);
+
+    // --- LEGACY ORDER PLACEMENT LOGIC (for backward compatibility) ---
+    // This section handles the old order placement logic that doesn't use the three-state system
+    // It will only run if the symbol doesn't have a pendingSignal (old monitoring style)
+    
+    if (!symbol.pendingSignal) {
+      console.log(`📊 ${symbol.symbol}: No pending signal - using legacy order placement logic`);
+      
+      // Calculate the end of current 5-minute candle (MM:59)
+      const currentMinute = now.getMinutes();
+      const currentSecond = now.getSeconds();
+      
+      console.log(`🔍 [DEBUG] ${symbol.symbol}: LTP=${ltp}, HMA=${hma}, Minute=${currentMinute}, Second=${currentSecond}`);
+      
+      // Check current state and LTP vs HMA relationship
+      if (ltp > hma) {
+        // LTP is above HMA - "Waiting for Reversal" state
+        console.log(`📈 ${symbol.symbol}: LTP (${ltp}) > HMA (${hma}) - In "Waiting for Reversal" state`);
+        
+        // Check if we have a pending reversal signal
+        if (!symbol.pendingSignal) {
+          // Start monitoring for reversal (crossover down)
+          symbol.pendingSignal = {
+            direction: 'REVERSAL',
+            triggeredAt: now,
+            hmaAtTrigger: hma,
+            ltpAtTrigger: ltp,
+            state: 'WAITING',
+            reversalDetected: false,
+            confirmationTimer: null
+          };
+          
+          // Update status to WAITING_FOR_REVERSAL
           await TradingState.updateOne(
             { userId, 'monitoredSymbols.id': symbol.id },
             {
               $set: {
-                'monitoredSymbols.$.orderModificationReason': `Waiting for 5-min candle close: ${remainingSeconds}s remaining`
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'LTP above HMA - waiting for reversal crossover'
               }
             }
           );
           
-          console.log(`⏳ ${symbol.symbol}: Waiting for 5-min candle close, ${remainingSeconds}s remaining`);
+          console.log(`⏳ ${symbol.symbol}: Started monitoring for reversal (LTP to cross below HMA)`);
+        }
+      } else {
+        // LTP is below or equal to HMA
+        if (symbol.pendingSignal && symbol.pendingSignal.direction === 'ENTRY' && symbol.pendingSignal.state === 'WAITING') {
+          // We're in "Waiting for Entry" state - check for bullish crossover
+          console.log(`📊 ${symbol.symbol}: LTP (${ltp}) <= HMA (${hma}) - In "Waiting for Entry" state`);
+          
+          // Check if we're at the end of a 5-minute candle (MM:59) for crossover confirmation
+          const isCandleClose = currentSecond >= 59;
+          const isFiveMinuteBoundary = currentMinute % 5 === 4; // 4, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59
+          
+          if (ltp > hma && isCandleClose && isFiveMinuteBoundary) {
+            // Bullish crossover confirmed at 5-minute candle close - execute trade
+            console.log(`🚀 ${symbol.symbol}: Bullish crossover confirmed at 5-minute candle close - executing market order`);
+            
+            try {
+              // Place market order immediately
+              const position = await this.executeMarketOrder(symbol, now, userId);
+              
+              if (position) {
+                // Update symbol status to ORDER_PLACED
+                await TradingState.updateOne(
+                  { userId, 'monitoredSymbols.id': symbol.id },
+                  {
+                    $set: {
+                      'monitoredSymbols.$.triggerStatus': 'ORDER_PLACED',
+                      'monitoredSymbols.$.orderPlaced': true,
+                      'monitoredSymbols.$.orderPlacedAt': now,
+                      'monitoredSymbols.$.orderId': position.buyOrderId,
+                      'monitoredSymbols.$.orderStatus': 'PENDING',
+                      'monitoredSymbols.$.lastHmaValue': hma,
+                      'monitoredSymbols.$.opportunityActive': true,
+                      'monitoredSymbols.$.lastOpportunityTime': now,
+                      'monitoredSymbols.$.orderModificationReason': 'Market order placed at bullish crossover confirmation',
+                      'monitoredSymbols.$.pendingSignal': null // Clear pending signal
+                    }
+                  }
+                );
+                
+                // Add to active positions immediately
+                await TradingState.updateOne(
+                  { userId },
+                  { $push: { activePositions: position } }
+                );
+                
+                console.log(`✅ Market order placed for ${symbol.symbol} at bullish crossover confirmation`);
+                console.log(`📊 Added ${symbol.symbol} to active positions while keeping in monitoring`);
+                
+                // Place SL-M order after 5 seconds
+                setTimeout(async () => {
+                  try {
+                    console.log(`🛡️ Placing SL-M order for ${symbol.symbol} after 5-second delay`);
+                    const slOrderResult = await this.placeSLMOrder(position, userId);
+                    
+                    if (slOrderResult.success) {
+                      // Update active position with SL order details
+                      await TradingState.updateOne(
+                        { userId, 'activePositions.buyOrderId': position.buyOrderId },
+                        {
+                          $set: {
+                            'activePositions.$.slOrderId': slOrderResult.slOrderId,
+                            'activePositions.$.slStopPrice': slOrderResult.stopLossPrice,
+                            'activePositions.$.slTriggerPrice': slOrderResult.triggerPrice,
+                            'activePositions.$.slOrderDetails': {
+                              orderId: slOrderResult.slOrderId,
+                              stopLossPrice: slOrderResult.stopLossPrice,
+                              triggerPrice: slOrderResult.triggerPrice,
+                              placedAt: new Date(),
+                              modifications: []
+                            }
+                          }
+                        }
+                      );
+                      
+                      console.log(`✅ SL-M order placed for ${symbol.symbol}:`, slOrderResult);
+                    } else {
+                      console.error(`❌ Failed to place SL-M order for ${symbol.symbol}:`, slOrderResult.error);
+                    }
+                  } catch (error) {
+                    console.error(`❌ Error placing SL-M order for ${symbol.symbol}:`, error);
+                  }
+                }, 5000);
+                
+                result.executed = true;
+                result.position = position;
+              } else {
+                console.error(`❌ Failed to execute market order for ${symbol.symbol}`);
+              }
+            } catch (error) {
+              console.error(`❌ Error executing market order for ${symbol.symbol}:`, error);
+            }
+          } else if (ltp > hma) {
+            // Potential bullish crossover but not at candle close
+            console.log(`📈 ${symbol.symbol}: Potential bullish crossover (LTP > HMA) but waiting for 5-minute candle close`);
+          } else {
+            // Still waiting for bullish crossover
+            console.log(`⏳ ${symbol.symbol}: Still waiting for bullish crossover - LTP (${ltp}) <= HMA (${hma})`);
+          }
+        } else if (!symbol.pendingSignal) {
+          // No pending signal and LTP <= HMA - this means we should be in "Waiting for Entry" state
+          // since LTP is already below HMA, we're waiting for bullish crossover
+          console.log(`📊 ${symbol.symbol}: LTP (${ltp}) <= HMA (${hma}) - No pending signal, moving to entry state`);
+          
+          // Start monitoring for entry (waiting for LTP to cross above HMA)
+          symbol.pendingSignal = {
+            direction: 'ENTRY',
+            triggeredAt: now,
+            hmaAtTrigger: hma,
+            ltpAtTrigger: ltp,
+            state: 'WAITING',
+            reversalConfirmed: true, // Since LTP is already below HMA, reversal is confirmed
+            entryReadyAt: now
+          };
+          
+          // Update status to WAITING_FOR_ENTRY
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+                'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.orderModificationReason': 'LTP below HMA - ready for bullish crossover entry'
+              }
+            }
+          );
+          
+          console.log(`🎯 ${symbol.symbol}: Ready for entry - waiting for LTP to cross above HMA`);
         }
       }
-    } else {
-      // LTP is below or equal to HMA - no crossover
-      if (symbol.pendingSignal && symbol.pendingSignal.crossoverDetected) {
-        // Reset pending signal if LTP goes back below HMA
-        symbol.pendingSignal = null;
-        
-        await TradingState.updateOne(
-          { userId, 'monitoredSymbols.id': symbol.id },
-          {
-            $set: {
-              'monitoredSymbols.$.triggerStatus': 'WAITING',
-              'monitoredSymbols.$.pendingSignal': null,
-              'monitoredSymbols.$.orderModificationReason': 'LTP below HMA - waiting for crossover'
-            }
-          }
-        );
-        
-        console.log(`📉 ${symbol.symbol}: LTP went back below HMA, resetting crossover signal`);
-      }
     }
-    
+
     return result;
   }
 
@@ -1164,6 +1434,195 @@ class MonitoringService {
   }
 
   /**
+   * Place SELL SL-L (Stop Limit) order for stop loss protection
+   * @param {Object} symbol - Symbol configuration
+   * @param {string} buyOrderId - BUY order ID
+   * @param {number} buyPrice - BUY order fill price
+   * @param {string} userId - User ID
+   * @returns {Promise<Object>} Order result
+   */
+  static async placeSellSLLOrder(symbol, buyOrderId, buyPrice, userId) {
+    try {
+      // Get the correct lot size based on the index
+      const getLotSize = (symbolString) => {
+        // Extract index name from symbol string (e.g., "NSE:NIFTY2571725150PE" -> "NIFTY")
+        const symbolUpper = symbolString?.toUpperCase() || '';
+        
+        if (symbolUpper.includes('NIFTY') && !symbolUpper.includes('BANKNIFTY')) {
+          return 75; // Minimum lot size for NIFTY
+        } else if (symbolUpper.includes('BANKNIFTY')) {
+          return 35; // Minimum lot size for BANKNIFTY
+        } else if (symbolUpper.includes('SENSEX')) {
+          return 20; // Minimum lot size for SENSEX
+        } else {
+          // Default to NIFTY lot size
+          console.log(`⚠️ Unknown index type for symbol ${symbolString}, defaulting to NIFTY lot size (75)`);
+          return 75;
+        }
+      };
+      
+      // Round prices to nearest tick size (0.0500)
+      const roundToTickSize = (price, tickSize = 0.05) => {
+        return Math.round(price / tickSize) * tickSize;
+      };
+      
+      const lotSize = getLotSize(symbol.symbol);
+      // Ensure lots is a whole number and calculate quantity
+      const lots = Math.floor(symbol.lots || 1); // Ensure lots is a whole number
+      const quantity = lots * lotSize;
+      const stopLossPoints = parseFloat(symbol.stopLossPoints || 0);
+      const stopLossPrice = buyPrice - stopLossPoints;
+      const roundedStopLossPrice = roundToTickSize(stopLossPrice);
+      
+      // For SELL SL-L: limitPrice should be the stop loss price, stopPrice (trigger) should be 0.5 higher
+      const limitPrice = roundedStopLossPrice; // Limit price = stop loss price
+      const triggerPrice = roundedStopLossPrice + 0.5; // Trigger 0.5 points ABOVE limit price for SELL
+      
+      // Create alphanumeric order tag (max 30 chars, no special characters)
+      const orderTag = `VICTORYSELL${Date.now().toString().slice(-8)}`;
+      
+      const sellOrderData = {
+        symbol: symbol.symbol,
+        qty: quantity,
+        type: 4, // Stop Limit Order (SL-L)
+        side: -1, // Sell
+        productType: symbol.productType || 'INTRADAY',
+        limitPrice: limitPrice, // Stop loss price as limit
+        stopPrice: triggerPrice, // Trigger price 0.5 higher
+        disclosedQty: 0,
+        validity: 'DAY',
+        offlineOrder: false,
+        stopLoss: 0,
+        takeProfit: 0,
+        orderTag: orderTag // Alphanumeric only, max 30 chars
+      };
+      
+      console.log(`📋 [SELL SL-L ORDER] Placing SELL SL-L order:`, sellOrderData);
+      
+      // Use live trade service to place SELL SL-L order
+      const tradeResult = await TradeService.placeLiveTrade({
+        symbol: symbol.symbol,
+        quantity: quantity,
+        price: limitPrice,
+        action: 'SELL',
+        orderType: 'SL_LIMIT', // SELL SL-L order type
+        productType: symbol.productType || 'INTRADAY',
+        userId,
+        offlineOrder: false,
+        orderData: sellOrderData
+      });
+      
+      // Check if order was rejected during placement
+      if (!tradeResult || !tradeResult.success) {
+        throw new Error(`SELL SL-L order placement failed: ${tradeResult?.message || 'Unknown error'}`);
+      }
+      
+      console.log(`✅ [SELL SL-L ORDER] SELL SL-L order placed for ${symbol.symbol} at ${limitPrice}`);
+      
+      // Note: Trade logging will be handled by Fyers WebSocket when order status updates are received
+      
+      return {
+        success: true,
+        sellOrderId: tradeResult?.orderId,
+        stopLossPrice: limitPrice,
+        triggerPrice: triggerPrice
+      };
+      
+    } catch (error) {
+      console.error(`❌ SELL SL-L order placement failed for ${symbol.symbol}:`, error);
+      
+      // Note: Trade logging will be handled by Fyers WebSocket when order status updates are received
+      
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
+   * Place market sell order for immediate exit
+   * @param {Object} position - Active position object
+   * @param {string} userId - User ID
+   * @returns {Promise<Object>} Order result
+   */
+  static async placeMarketSellOrder(position, userId) {
+    try {
+      // Get the correct lot size based on the index
+      const getLotSize = (symbolString) => {
+        const symbolUpper = symbolString?.toUpperCase() || '';
+        
+        if (symbolUpper.includes('NIFTY') && !symbolUpper.includes('BANKNIFTY')) {
+          return 75;
+        } else if (symbolUpper.includes('BANKNIFTY')) {
+          return 35;
+        } else if (symbolUpper.includes('SENSEX')) {
+          return 20;
+        } else {
+          return 75; // Default
+        }
+      };
+      
+      const lotSize = getLotSize(position.symbol);
+      const quantity = Math.floor(position.lots || 1) * lotSize;
+      
+      // Create alphanumeric order tag (max 30 chars, no special characters)
+      const orderTag = `VICTORYEXIT${Date.now().toString().slice(-8)}`;
+      
+      const marketSellOrderData = {
+        symbol: position.symbol,
+        qty: quantity,
+        type: 2, // Market Order
+        side: -1, // Sell
+        productType: position.productType || 'INTRADAY',
+        limitPrice: 0, // Market order - no limit price
+        stopPrice: 0, // Market order - no stop price
+        disclosedQty: 0,
+        validity: 'DAY',
+        offlineOrder: false,
+        stopLoss: 0,
+        takeProfit: 0,
+        orderTag: orderTag
+      };
+      
+      console.log(`📋 [MARKET SELL ORDER] Placing market sell order:`, marketSellOrderData);
+      
+      // Use live trade service to place market sell order
+      const tradeResult = await TradeService.placeLiveTrade({
+        symbol: position.symbol,
+        quantity: quantity,
+        price: 0, // Market order
+        action: 'SELL',
+        orderType: 'MARKET',
+        productType: position.productType || 'INTRADAY',
+        userId,
+        offlineOrder: false,
+        orderData: marketSellOrderData
+      });
+      
+      // Check if order was rejected during placement
+      if (!tradeResult || !tradeResult.success) {
+        throw new Error(`Market sell order placement failed: ${tradeResult?.message || 'Unknown error'}`);
+      }
+      
+      console.log(`✅ [MARKET SELL ORDER] Market sell order placed for ${position.symbol}`);
+      
+      return {
+        success: true,
+        orderId: tradeResult?.orderId
+      };
+      
+    } catch (error) {
+      console.error(`❌ Market sell order placement failed for ${position.symbol}:`, error);
+      
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  /**
    * Update active positions (simplified - WebSocket handles order status)
    * @param {string} userId - User ID
    * @returns {Promise<Object>} Update results
@@ -1212,43 +1671,51 @@ class MonitoringService {
           position.status = 'Target Hit';
           closed++;
               
-              // Target hit - modify SL-M order to market order for immediate exit
+              // Target hit - cancel SL-L order and place market sell order for immediate exit
               if (position.slOrderId) {
-                console.log(`🎯 Target hit for ${position.symbol} - modifying SL-M order to market order for profit exit`);
+                console.log(`🎯 Target hit for ${position.symbol} - canceling SL-L order and placing market sell order for profit exit`);
                 position.orderStatus = 'TARGET_EXIT_PENDING';
                 
                 try {
-                  // Import and use the orderWebSocketService to modify SL-M to market order
-                  const { OrderWebSocketService } = require('./orderWebSocketService');
-                  const orderWebSocketService = new OrderWebSocketService();
+                  // Cancel the SL-L order first
+                  const cancelResult = await this.cancelOrder(position.slOrderId, userId);
                   
-                  const modifyResult = await orderWebSocketService.modifySLToMarketOrder(position.slOrderId, userId);
-                  
-                  if (modifyResult.success) {
-                    console.log(`✅ Successfully modified SL-M to market order for ${position.symbol} - Target exit initiated`);
-                    position.orderStatus = 'TARGET_EXIT_EXECUTED';
+                  if (cancelResult.success) {
+                    console.log(`✅ Successfully canceled SL-L order for ${position.symbol}`);
                     
-                    // Create trade log for target exit
-                    await this.createTradeLogWithRemarks(
-                      position.slOrderId,
-                      'TARGET_HIT',
-                      `Target hit at ${ltp} - SL-M order modified to market order for profit exit`,
-                      userId,
-                      position.symbol
-                    );
+                    // Place market sell order for immediate exit
+                    const marketSellResult = await this.placeMarketSellOrder(position, userId);
+                    
+                    if (marketSellResult.success) {
+                      console.log(`✅ Successfully placed market sell order for ${position.symbol} - Target exit initiated`);
+                      position.orderStatus = 'TARGET_EXIT_EXECUTED';
+                      position.exitOrderId = marketSellResult.orderId;
+                      
+                      // Create trade log for target exit
+                      await this.createTradeLogWithRemarks(
+                        marketSellResult.orderId,
+                        'TARGET_HIT',
+                        `Target hit at ${ltp} - SL-L order canceled and market sell order placed for profit exit`,
+                        userId,
+                        position.symbol
+                      );
+                    } else {
+                      console.error(`❌ Failed to place market sell order for ${position.symbol}`);
+                      position.orderStatus = 'TARGET_EXIT_FAILED';
+                    }
                   } else {
-                    console.error(`❌ Failed to modify SL-M to market order for ${position.symbol}`);
+                    console.error(`❌ Failed to cancel SL-L order for ${position.symbol}`);
                     position.orderStatus = 'TARGET_EXIT_FAILED';
                   }
                 } catch (error) {
-                  console.error(`❌ Error modifying SL-M to market order for ${position.symbol}:`, error);
+                  console.error(`❌ Error handling target exit for ${position.symbol}:`, error);
                   position.orderStatus = 'TARGET_EXIT_FAILED';
                   
                   // Create trade log for failed target exit
                   await this.createTradeLogWithRemarks(
                     position.slOrderId,
                     'TARGET_EXIT_FAILED',
-                    `Failed to modify SL-M to market order: ${error.message}`,
+                    `Failed to handle target exit: ${error.message}`,
                     userId,
                     position.symbol
                   );
@@ -1286,7 +1753,7 @@ class MonitoringService {
           const reEntrySymbol = {
             ...origSymbol,
             reEntryCount,
-            triggerStatus: 'WAITING',
+            triggerStatus: 'WAITING_FOR_REVERSAL', // Use new enum value instead of 'WAITING'
             pendingSignal: null,
             lastUpdate: new Date(),
             orderPlaced: false, // Reset order placement flag
@@ -1750,7 +2217,7 @@ class MonitoringService {
               productType: symbol.productType || 'INTRADAY',
               buyOrderId: orderId, // Store the BUY order ID
               sellOrderId: null, // Will be set when SELL order is placed
-              slOrder: null,
+              slOrderDetails: null,
               reEntryCount: symbol.reEntryCount || 0,
               pnl: 0,
               pnlPercentage: 0,
@@ -1769,28 +2236,45 @@ class MonitoringService {
             
             console.log(`✅ ${symbol.symbol} moved to active positions with invested amount: ₹${position.invested}`);
             
-            // Place SELL SL-L order immediately for stop loss protection
-            console.log(`🛡️ Placing SELL SL-L order for ${symbol.symbol} at stop loss price`);
-            sellOrderResult = await this.placeSellSLLOrder(symbol, orderId, fillPrice, userId);
+            // Place SELL SL-L order after 5 seconds for stop loss protection
+            console.log(`🛡️ Scheduling SELL SL-L order for ${symbol.symbol} in 5 seconds`);
             
-            if (sellOrderResult.success) {
-              // Update the active position with SELL order details
-              await TradingState.updateOne(
-                { userId, 'activePositions.buyOrderId': orderId },
-                {
-                  $set: {
-                    'activePositions.$.sellOrderId': sellOrderResult.sellOrderId,
-                    'activePositions.$.slStopPrice': sellOrderResult.stopLossPrice,
-                    'activePositions.$.slTriggerPrice': sellOrderResult.triggerPrice
-                  }
+            // Schedule SL-L order placement after 5 seconds
+            setTimeout(async () => {
+              try {
+                console.log(`🛡️ Placing SELL SL-L order for ${symbol.symbol} at stop loss price`);
+                const slOrderResult = await this.placeSellSLLOrder(symbol, orderId, fillPrice, userId);
+                
+                if (slOrderResult.success) {
+                  // Update the active position with SELL order details
+                  await TradingState.updateOne(
+                    { userId, 'activePositions.buyOrderId': orderId },
+                    {
+                      $set: {
+                        'activePositions.$.sellOrderId': slOrderResult.sellOrderId,
+                        'activePositions.$.slStopPrice': slOrderResult.stopLossPrice,
+                        'activePositions.$.slTriggerPrice': slOrderResult.triggerPrice,
+                        'activePositions.$.slOrderDetails': {
+                          orderId: slOrderResult.sellOrderId,
+                          stopPrice: slOrderResult.stopLossPrice,
+                          triggerPrice: slOrderResult.triggerPrice,
+                          placedAt: new Date()
+                        }
+                      }
+                    }
+                  );
+                  
+                  console.log(`✅ SELL SL-L order placed for ${symbol.symbol} - Order ID: ${slOrderResult.sellOrderId}`);
+                  console.log(`📊 Stop Loss Price: ${slOrderResult.stopLossPrice}, Trigger Price: ${slOrderResult.triggerPrice}`);
+                } else {
+                  console.log(`❌ SELL SL-L order placement failed for ${symbol.symbol}: ${slOrderResult.error}`);
                 }
-              );
-              
-              console.log(`✅ SELL SL-L order placed for ${symbol.symbol} - Order ID: ${sellOrderResult.sellOrderId}`);
-              console.log(`📊 Stop Loss Price: ${sellOrderResult.stopLossPrice}, Trigger Price: ${sellOrderResult.triggerPrice}`);
-            } else {
-              console.log(`❌ SELL SL-L order placement failed for ${symbol.symbol}: ${sellOrderResult.error}`);
-            }
+              } catch (error) {
+                console.error(`❌ Error placing SELL SL-L order for ${symbol.symbol}:`, error);
+              }
+            }, 5000); // 5 seconds delay
+            
+            // SL-L order will be placed after 5 seconds via setTimeout above
             
             // Remove from monitored symbols since it's now an active position
             await TradingState.updateOne(
@@ -1805,28 +2289,91 @@ class MonitoringService {
             console.log(`✅ SELL order filled for ${symbol.symbol} (stop loss hit), closing position`);
             
             // Find and update the active position
-            await TradingState.updateOne(
+            const positionUpdate = await TradingState.updateOne(
               { userId, 'activePositions.sellOrderId': orderId },
               {
                 $set: {
                   'activePositions.$.status': 'CLOSED',
-                  'activePositions.$.exitPrice': symbol.hmaValue || symbol.lastHmaValue,
-                  'activePositions.$.exitTimestamp': new Date()
+                  'activePositions.$.exitPrice': fillPriceFromFyers || symbol.hmaValue || symbol.lastHmaValue,
+                  'activePositions.$.exitTimestamp': new Date(),
+                  'activePositions.$.exitOrderId': orderId
                 }
               }
             );
+            
+            if (positionUpdate.modifiedCount > 0) {
+              // Get the closed position to determine re-entry status
+              const state = await TradingState.findOne({ userId });
+              const closedPosition = state.activePositions.find(p => p.sellOrderId === orderId);
+              
+              if (closedPosition) {
+                // Check if LTP is above or below HMA for re-entry decision
+                const User = require('../models/User');
+                const user = await User.findById(userId);
+                const liveQuote = await this.getLiveQuote(closedPosition.symbol, userId);
+                const hmaData = await HMAService.fetchAndCalculateHMA(closedPosition.symbol, user);
+                
+                if (liveQuote && hmaData) {
+                  const ltp = liveQuote.ltp;
+                  const hmaValue = hmaData.currentHMA || hmaData.hmaValue;
+                  
+                  let reEntryStatus = 'WAITING_FOR_REVERSAL';
+                  if (ltp <= hmaValue) {
+                    reEntryStatus = 'WAITING_FOR_ENTRY';
+                  }
+                  
+                  // Add symbol back to monitoring with appropriate status
+                  const symbolData = {
+                    symbol: closedPosition.symbol,
+                    type: closedPosition.type,
+                    lots: closedPosition.lots,
+                    targetPoints: closedPosition.target - closedPosition.boughtPrice,
+                    stopLossPoints: closedPosition.boughtPrice - closedPosition.stopLoss,
+                    productType: closedPosition.productType,
+                    index: closedPosition.index
+                  };
+                  
+                  await this.addSymbolToMonitoring(userId, symbolData);
+                  
+                  // Update the symbol status
+                  await TradingState.updateOne(
+                    { userId, 'monitoredSymbols.symbol': closedPosition.symbol },
+                    {
+                      $set: {
+                        'monitoredSymbols.$.triggerStatus': reEntryStatus,
+                        'monitoredSymbols.$.orderModificationReason': `Position closed at ${closedPosition.exitPrice} - LTP ${ltp > hmaValue ? 'above' : 'below'} HMA - ${reEntryStatus}`
+                      }
+                    }
+                  );
+                  
+                  console.log(`🔄 ${closedPosition.symbol} added back to monitoring with status: ${reEntryStatus}`);
+                }
+              }
+            }
             
             newStatus = 'CLOSED';
           }
           break;
           
         case 'REJECTED':
-          // Show ORDER_REJECTED status first, then allow re-entry
+          // Show ORDER_REJECTED status and prevent further attempts
           newStatus = 'ORDER_REJECTED';
-          console.log(`❌ Order rejected for ${symbol.symbol}, showing rejection status`);
+          console.log(`❌ Order rejected for ${symbol.symbol}, setting to REJECTED with no retries`);
           
-          // After a delay, allow re-entry (this will be handled by the monitoring cycle)
-          // The symbol stays in monitoring with ORDER_REJECTED status
+          // Update symbol status to REJECTED and prevent further order attempts
+          await TradingState.updateOne(
+            { userId, 'monitoredSymbols.id': symbol.id },
+            {
+              $set: {
+                'monitoredSymbols.$.triggerStatus': 'ORDER_REJECTED',
+                'monitoredSymbols.$.orderStatus': 'REJECTED',
+                'monitoredSymbols.$.orderModificationReason': 'Order rejected - no further attempts will be made',
+                'monitoredSymbols.$.pendingSignal': null // Clear pending signal
+              }
+            }
+          );
+          
+          // The symbol stays in monitoring with ORDER_REJECTED status - no retries
           break;
           
         case 'CANCELLED':
@@ -1838,7 +2385,7 @@ class MonitoringService {
             { userId, 'monitoredSymbols.id': symbol.id },
             {
               $set: {
-                'monitoredSymbols.$.triggerStatus': 'WAITING',
+                'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL', // Use new enum value instead of 'WAITING'
                 'monitoredSymbols.$.orderStatus': 'CANCELLED',
                 'monitoredSymbols.$.opportunityActive': false,
                 'monitoredSymbols.$.orderModificationReason': 'Order cancelled by user - ready for immediate retry'
@@ -1874,35 +2421,35 @@ class MonitoringService {
         console.log(`🗑️ ${symbol.symbol} removed from monitoring`);
       }
       
-      // After a BUY order is filled and position is closed (SL/target), increment tradesToday and reset opportunityActive
-      // This should be done when a position is closed (status is 'CLOSED')
-      if (status === 'CLOSED' || status === 'Target Hit' || status === 'Stop Loss Hit') {
-        await TradingState.updateOne(
-          { userId, 'monitoredSymbols.id': symbol.id },
-          {
-            $inc: { 'monitoredSymbols.$.tradesToday': 1 },
-            $set: { 
-              'monitoredSymbols.$.opportunityActive': false,
-              'monitoredSymbols.$.triggerStatus': 'WAITING_REENTRY',
-              'monitoredSymbols.$.orderModificationReason': `Trade closed (${status}) - waiting 5s for re-entry`
-            }
-          }
-        );
-        
-        // Set a timeout to reset to WAITING after 5 seconds
-        setTimeout(async () => {
+              // After a BUY order is filled and position is closed (SL/target), increment tradesToday and reset opportunityActive
+        // This should be done when a position is closed (status is 'CLOSED')
+        if (status === 'CLOSED' || status === 'Target Hit' || status === 'Stop Loss Hit') {
           await TradingState.updateOne(
             { userId, 'monitoredSymbols.id': symbol.id },
             {
-              $set: {
-                'monitoredSymbols.$.triggerStatus': 'WAITING',
-                'monitoredSymbols.$.orderModificationReason': 'Ready for next opportunity'
+              $inc: { 'monitoredSymbols.$.tradesToday': 1 },
+              $set: { 
+                'monitoredSymbols.$.opportunityActive': false,
+                'monitoredSymbols.$.triggerStatus': 'WAITING_REENTRY',
+                'monitoredSymbols.$.orderModificationReason': `Trade closed (${status}) - waiting 5s for re-entry`
               }
             }
           );
-          console.log(`🔄 ${symbol.symbol} reset to WAITING after trade exit`);
-        }, 5000);
-      }
+          
+          // Set a timeout to reset to WAITING_FOR_REVERSAL after 5 seconds
+          setTimeout(async () => {
+            await TradingState.updateOne(
+              { userId, 'monitoredSymbols.id': symbol.id },
+              {
+                $set: {
+                  'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL', // Use new enum value instead of 'WAITING'
+                  'monitoredSymbols.$.orderModificationReason': 'Ready for next opportunity'
+                }
+              }
+            );
+            console.log(`🔄 ${symbol.symbol} reset to WAITING_FOR_REVERSAL after trade exit`);
+          }, 5000);
+        }
       
       return { 
         success: true, 
@@ -2168,6 +2715,14 @@ class MonitoringService {
       const position = await this.executeLimitOrder(symbol, hmaValue, now, userId);
 
       if (position) {
+        // Add position to activePositions array
+        await TradingState.updateOne(
+          { userId },
+          {
+            $push: { activePositions: position }
+          }
+        );
+
         // Update symbol status to ORDER_PLACED
         await TradingState.updateOne(
           { userId, 'monitoredSymbols.id': symbolId },
@@ -2184,7 +2739,10 @@ class MonitoringService {
           }
         );
 
-        console.log(`✅ Manual limit order placed for ${symbol.symbol} at ${hmaValue}`);
+        // Ensure WebSocket is connected for order status updates
+        await this.manageWebSocketConnection(userId);
+
+        console.log(`✅ Manual limit order placed for ${symbol.symbol} at ${hmaValue} and added to active positions`);
         
         return {
           success: true,
@@ -2267,7 +2825,7 @@ class MonitoringService {
           $set: {
             'monitoredSymbols.$.opportunityActive': false,
             'monitoredSymbols.$.orderStatus': 'WAITING',
-            'monitoredSymbols.$.triggerStatus': 'WAITING',
+            'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL', // Use new enum value instead of 'WAITING'
             'monitoredSymbols.$.orderPlaced': false,
             'monitoredSymbols.$.orderPlacedAt': null,
             'monitoredSymbols.$.orderId': null,
@@ -2333,8 +2891,13 @@ class MonitoringService {
         orderTag: `VICTORYMARKET${Date.now().toString().slice(-8)}`
       };
       
+      console.log(`🔍 [DEBUG] Market order data:`, orderData);
+      
       // Place market order
-      const TradeService = require('./tradeService');
+      console.log('🔍 [DEBUG] TradeService type:', typeof TradeService);
+      console.log('🔍 [DEBUG] TradeService.placeLiveTrade type:', typeof TradeService.placeLiveTrade);
+      console.log('🔍 [DEBUG] TradeService keys:', Object.keys(TradeService));
+      
       const result = await TradeService.placeLiveTrade({
         symbol: symbol.symbol,
         quantity: quantity,
@@ -2372,7 +2935,7 @@ class MonitoringService {
           productType: symbol.productType || 'INTRADAY',
           buyOrderId: result.orderId,
           sellOrderId: null,
-          slOrder: null,
+          slOrderDetails: null,
           reEntryCount: symbol.reEntryCount || 0,
           pnl: 0,
           pnlPercentage: 0,
@@ -2386,10 +2949,36 @@ class MonitoringService {
         return position;
       } else {
         console.error(`❌ Market order failed for ${symbol.symbol}:`, result.message);
+        
+        // Handle specific Fyers rejection reasons
+        if (result.message && result.message.includes('blocked one day ahead of expiry')) {
+          console.log(`⚠️ ${symbol.symbol}: Options contract blocked due to expiry proximity`);
+          // Remove from monitoring since this symbol can't be traded
+          await this.removeSymbolFromMonitoring(userId, symbol.id);
+          return null;
+        } else if (result.message && result.message.includes('Freeze qty including square off order')) {
+          console.log(`⚠️ ${symbol.symbol}: Freeze quantity limit exceeded - position size too large`);
+          // Keep in monitoring but mark as temporarily blocked
+          return null;
+        }
+        
         return null;
       }
     } catch (error) {
       console.error(`❌ Error executing market order for ${symbol.symbol}:`, error);
+      
+      // Handle specific Fyers rejection reasons in error message
+      if (error.message && error.message.includes('blocked one day ahead of expiry')) {
+        console.log(`⚠️ ${symbol.symbol}: Options contract blocked due to expiry proximity`);
+        // Remove from monitoring since this symbol can't be traded
+        await this.removeSymbolFromMonitoring(userId, symbol.id);
+        return null;
+      } else if (error.message && error.message.includes('Freeze qty including square off order')) {
+        console.log(`⚠️ ${symbol.symbol}: Freeze quantity limit exceeded - position size too large`);
+        // Keep in monitoring but mark as temporarily blocked
+        return null;
+      }
+      
       return null;
     }
   }
@@ -2439,7 +3028,10 @@ class MonitoringService {
       };
       
       // Place SL-M order
-      const TradeService = require('./tradeService');
+      console.log('🔍 [DEBUG] TradeService type (SL-M):', typeof TradeService);
+      console.log('🔍 [DEBUG] TradeService.placeLiveTrade type (SL-M):', typeof TradeService.placeLiveTrade);
+      console.log('🔍 [DEBUG] TradeService keys (SL-M):', Object.keys(TradeService));
+      
       const result = await TradeService.placeLiveTrade({
         symbol: position.symbol,
         quantity: quantity,
@@ -2480,6 +3072,53 @@ class MonitoringService {
         error: error.message,
         message: 'Error placing SL-M order'
       };
+    }
+  }
+
+  /**
+   * Check if a symbol is tradeable (not blocked by exchange)
+   * @param {string} symbol - Symbol to check
+   * @param {string} userId - User ID
+   * @returns {Promise<boolean>} Whether symbol is tradeable
+   */
+  static async isSymbolTradeable(symbol, userId) {
+    try {
+      // Get current date and check if symbol is near expiry
+      const now = new Date();
+      const symbolUpper = symbol.toUpperCase();
+      
+      // Check for expiry date in symbol name (e.g., 25JUL, 17JUL)
+      const expiryMatch = symbolUpper.match(/(\d{2})(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)/);
+      if (expiryMatch) {
+        const day = parseInt(expiryMatch[1]);
+        const month = expiryMatch[2];
+        const currentDay = now.getDate();
+        const currentMonth = now.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+        
+        // If same month and within 1 day of expiry, block
+        if (month === currentMonth && Math.abs(day - currentDay) <= 1) {
+          console.log(`⚠️ ${symbol}: Blocked - within 1 day of expiry (${day}${month})`);
+          return false;
+        }
+      }
+      
+      // Check for specific blocked symbols
+      const blockedSymbols = [
+        'CRUDEOIL.*17JUL', // CRUDEOIL 17th July contracts
+        'NATURALGAS.*17JUL' // NATURALGAS 17th July contracts
+      ];
+      
+      for (const blockedPattern of blockedSymbols) {
+        if (new RegExp(blockedPattern).test(symbolUpper)) {
+          console.log(`⚠️ ${symbol}: Blocked - matches pattern ${blockedPattern}`);
+          return false;
+        }
+      }
+      
+      return true;
+    } catch (error) {
+      console.error(`Error checking if symbol ${symbol} is tradeable:`, error);
+      return true; // Default to tradeable if check fails
     }
   }
 }

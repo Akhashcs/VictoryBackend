@@ -89,24 +89,35 @@ class OrderWebSocketService {
         orderId: order.id,
         symbol: order.symbol,
         status: order.status,
+        statusType: typeof order.status,
         filledQty: order.filledQty,
         tradedPrice: order.tradedPrice,
-        type: order.type // 1=Limit, 2=Market, 3=SL-M, 4=SL-L
+        type: order.type, // 1=Limit, 2=Market, 3=SL-M, 4=SL-L
+        message: order.message
       });
 
       // Map Fyers status codes to our status
       // Fyers Status Codes:
       // 1 = Cancelled, 2 = Traded/Filled, 3 = For future use, 4 = Transit, 5 = Rejected, 6 = Pending
+      // Additional status codes from WebSocket documentation:
+      // 7 = Expired, 20 = New Ack, 21 = Modify Ack, 22 = Cancel Ack, 23 = Reject, 24 = Cancel Reject
       const statusMap = {
         1: 'CANCELLED',
         2: 'FILLED',
         3: 'UNKNOWN', // For future use
         4: 'TRANSIT',
         5: 'REJECTED',
-        6: 'PENDING'
+        6: 'PENDING',
+        7: 'EXPIRED',
+        20: 'PENDING', // New Ack - order accepted
+        21: 'PENDING', // Modify Ack - order modified
+        22: 'CANCELLED', // Cancel Ack - order cancelled
+        23: 'REJECTED', // Reject - order rejected
+        24: 'REJECTED' // Cancel Reject - cancel request rejected
       };
 
       const orderStatus = statusMap[order.status] || 'UNKNOWN';
+      console.log(`🔍 Status mapping: Fyers status ${order.status} -> Our status: ${orderStatus}`);
 
       // Check if this is a SL-M order (type 3)
       const isSLOrder = order.type === 3;
@@ -270,10 +281,11 @@ class OrderWebSocketService {
         // Update position with SL order details
         position.slOrderId = slResult.orderId;
         position.slStopPrice = slResult.stopPrice;
-        position.slOrder = {
+        position.slOrderDetails = {
           orderId: slResult.orderId,
           stopPrice: slResult.stopPrice,
-          status: 'ACTIVE'
+          status: 'ACTIVE',
+          placedAt: new Date()
         };
 
         await state.save();
@@ -331,7 +343,12 @@ class OrderWebSocketService {
 
       // Find the position with this order ID
       const position = state.activePositions.find(p => p.orderId === orderId);
-      if (!position) return;
+      if (!position) {
+        console.log(`⚠️ No position found for order ID: ${orderId}`);
+        return;
+      }
+      
+      console.log(`🔍 Updating order status for ${position.symbol}: ${status} (previous: ${position.orderStatus})`);
 
       // Update position status based on order status
       if (status === 'FILLED') {
@@ -351,6 +368,7 @@ class OrderWebSocketService {
         position.status = 'Closed';
         position.orderStatus = status;
         console.log(`❌ Order ${orderId} ${status.toLowerCase()} for ${position.symbol}`);
+        console.log(`🔍 REJECTED order details:`, details);
         
         // Reset order placement flag in monitored symbols to allow retry
         const monitoredSymbol = state.monitoredSymbols.find(s => s.symbol === position.symbol && s.type === position.type);

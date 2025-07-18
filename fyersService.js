@@ -95,6 +95,52 @@ function getFyersAppId() {
 }
 
 /**
+ * Validate if Fyers access token is still valid
+ */
+async function validateAccessToken(accessToken) {
+  try {
+    // Extract appId from the token format (appId:token)
+    const [appId, token] = accessToken.split(':');
+    
+    if (!appId || !token) {
+      throw new Error('Invalid access token format - expected appId:token');
+    }
+    
+    // Initialize Fyers API client
+    const FyersAPI = require("fyers-api-v3").fyersModel;
+    const fyers = new FyersAPI();
+    fyers.setAppId(appId);
+    fyers.setAccessToken(token);
+    
+    // Try to get profile to validate token
+    const response = await fyers.get_profile();
+    
+    // If we get here, token is valid
+    return {
+      valid: true,
+      profile: response
+    };
+  } catch (error) {
+    console.error('Fyers token validation error:', error.response?.data || error.message);
+    
+    // Check if it's a token expiration error
+    const errorMessage = error.response?.data?.message || error.message || '';
+    const isTokenExpired = 
+      errorMessage.includes('token expired') ||
+      errorMessage.includes('invalid token') ||
+      errorMessage.includes('unauthorized') ||
+      errorMessage.includes('access denied') ||
+      error.response?.status === 401;
+    
+    return {
+      valid: false,
+      expired: isTokenExpired,
+      error: errorMessage
+    };
+  }
+}
+
+/**
  * Get Fyers funds using API v3
  */
 async function getFunds(accessToken) {
@@ -156,5 +202,6 @@ module.exports = {
   getFyersAppId,
   getFunds,
   getMarketDepth,
-  generateAppIdHash
+  generateAppIdHash,
+  validateAccessToken
 }; 

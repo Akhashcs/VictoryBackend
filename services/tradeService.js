@@ -71,6 +71,20 @@ class TradeService {
       
       if (orderData) {
         // Use provided order data (for offline orders)
+        console.log(`🔍 [DEBUG] Using provided orderData:`, orderData);
+        
+        // Validate and fix order data for market orders
+        if (orderType === 'MARKET') {
+          if (orderData.type !== 2) {
+            console.warn(`⚠️ [DEBUG] Market order has wrong type: ${orderData.type}, fixing to type: 2`);
+            orderData.type = 2;
+          }
+          if (orderData.limitPrice !== 0) {
+            console.warn(`⚠️ [DEBUG] Market order has non-zero limitPrice: ${orderData.limitPrice}, fixing to 0`);
+            orderData.limitPrice = 0;
+          }
+        }
+        
         fyersOrderData = orderData;
       } else {
         // Create order data based on parameters
@@ -130,6 +144,12 @@ class TradeService {
       };
       
       console.log(`📋 [TRADE SERVICE] Placing order with Fyers:`, fyersOrderData);
+      console.log(`🔍 [DEBUG] Final order data validation:`, {
+        type: fyersOrderData.type,
+        limitPrice: fyersOrderData.limitPrice,
+        orderType: orderType,
+        isMarketOrder: orderType === 'MARKET'
+      });
       
       // Place order with Fyers
       const fyersOrder = await this.fyersPlaceOrder(fyersOrderData, accessToken);
@@ -213,7 +233,8 @@ class TradeService {
       fyers.setAccessToken(token);
       
       // Use the Fyers API library to place order
-      const response = await fyers.place_order(orderData);
+      console.log(`🔍 [DEBUG] Calling Fyers API with fyersOrderData:`, fyersOrderData);
+      const response = await fyers.place_order(fyersOrderData);
       
       console.log(`📡 [FYERS API] Response:`, response);
       

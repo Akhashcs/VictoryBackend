@@ -26,6 +26,93 @@ router.get('/maintenance-status', async (req, res) => {
 });
 
 /**
+ * @route   POST /api/monitoring/debug-fix
+ * @desc    Temporary debug endpoint to fix monitoring state
+ * @access  Public (temporary)
+ */
+router.post('/debug-fix', async (req, res) => {
+  try {
+    console.log('🔧 Debug fix endpoint called');
+    
+    // Find all trading states
+    const states = await TradingState.find({});
+    console.log(`📊 Found ${states.length} trading states`);
+
+    if (states.length === 0) {
+      return res.json({ success: false, message: 'No trading states found' });
+    }
+
+    let fixedCount = 0;
+    let symbolUpdates = 0;
+
+    for (const state of states) {
+      console.log(`Processing user ${state.userId}`);
+      
+      // Enable monitoring if not already enabled
+      if (!state.tradeExecutionState?.isMonitoring) {
+        await TradingState.updateOne(
+          { userId: state.userId },
+          { 
+            $set: { 
+              'tradeExecutionState.isMonitoring': true,
+              'tradeExecutionState.lastMonitoringUpdate': new Date()
+            }
+          }
+        );
+        fixedCount++;
+        console.log(`✅ Enabled monitoring for user ${state.userId}`);
+      }
+      
+      // Update symbol statuses
+      if (state.monitoredSymbols && state.monitoredSymbols.length > 0) {
+        for (const symbol of state.monitoredSymbols) {
+          if (!symbol.triggerStatus || symbol.triggerStatus === 'WAITING') {
+            // Determine initial status based on LTP vs HMA
+            let newStatus = 'WAITING_FOR_REVERSAL'; // Default
+            
+            if (symbol.currentLTP && symbol.hmaValue) {
+              if (symbol.currentLTP <= symbol.hmaValue) {
+                newStatus = 'WAITING_FOR_ENTRY';
+              } else {
+                newStatus = 'WAITING_FOR_REVERSAL';
+              }
+            }
+            
+            await TradingState.updateOne(
+              { userId: state.userId, 'monitoredSymbols.id': symbol.id },
+              {
+                $set: {
+                  'monitoredSymbols.$.triggerStatus': newStatus,
+                  'monitoredSymbols.$.lastUpdate': new Date()
+                }
+              }
+            );
+            symbolUpdates++;
+            console.log(`✅ Updated ${symbol.symbol} status to ${newStatus}`);
+          }
+        }
+      }
+    }
+
+    console.log(`✅ Debug fix completed: ${fixedCount} users fixed, ${symbolUpdates} symbols updated`);
+    
+    return res.json({
+      success: true,
+      message: `Debug fix completed: ${fixedCount} users fixed, ${symbolUpdates} symbols updated`,
+      data: { fixedCount, symbolUpdates }
+    });
+
+  } catch (error) {
+    console.error('❌ Error in debug fix:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error in debug fix',
+      error: error.message
+    });
+  }
+});
+
+/**
  * @route   POST /api/monitoring/start
  * @desc    Start monitoring for the user
  * @access  Private
@@ -463,6 +550,305 @@ router.post('/reset-symbol-opportunity', auth, async (req, res) => {
   } catch (error) {
     console.error('Error resetting symbol opportunity:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+/**
+ * @route   POST /api/monitoring/force-schema-update
+ * @desc    Force update all monitoredSymbols' triggerStatus to valid enum values
+ * @access  Public (TEMPORARY - REMOVE AFTER USE)
+ */
+router.post('/force-schema-update', async (req, res) => {
+  try {
+    const TradingState = require('../models/TradingState');
+    const VALID_STATUSES = [
+      'WAITING', 'ORDER_PLACED', 'ORDER_MODIFIED', 'ORDER_REJECTED',
+      'WAITING_REENTRY', 'TRIGGERED', 'CONFIRMED', 'EXECUTED', 'CANCELLED',
+      'WAITING_FOR_REVERSAL', 'WAITING_FOR_ENTRY', 'ACTIVE_POSITION', 'CONFIRMING_REVERSAL'
+    ];
+    const states = await TradingState.find({});
+    let updatedCount = 0;
+    for (const state of states) {
+      let changed = false;
+      if (Array.isArray(state.monitoredSymbols)) {
+        for (const symbol of state.monitoredSymbols) {
+          if (!VALID_STATUSES.includes(symbol.triggerStatus)) {
+            symbol.triggerStatus = 'WAITING_FOR_REVERSAL';
+            changed = true;
+          }
+        }
+      }
+      if (changed) {
+        await state.save();
+        updatedCount++;
+      }
+    }
+    return res.json({ success: true, updatedCount, message: 'Schema force-update complete.' });
+  } catch (error) {
+    console.error('Error in force-schema-update:', error);
+    return res.status(500).json({ success: false, message: 'Error in force-schema-update', error: error.message });
+  }
+});
+
+/**
+ * @route   POST /api/monitoring/debug-fix
+ * @desc    Temporary debug endpoint to fix monitoring state
+ * @access  Public (temporary)
+ */
+router.post('/debug-fix', async (req, res) => {
+  try {
+    console.log('🔧 Debug fix endpoint called');
+    
+    // Find all trading states
+    const states = await TradingState.find({});
+    console.log(`📊 Found ${states.length} trading states`);
+
+    if (states.length === 0) {
+      return res.json({ success: false, message: 'No trading states found' });
+    }
+
+    let fixedCount = 0;
+    let symbolUpdates = 0;
+
+    for (const state of states) {
+      console.log(`Processing user ${state.userId}`);
+      
+      // Enable monitoring if not already enabled
+      if (!state.tradeExecutionState?.isMonitoring) {
+        await TradingState.updateOne(
+          { userId: state.userId },
+          { 
+            $set: { 
+              'tradeExecutionState.isMonitoring': true,
+              'tradeExecutionState.lastMonitoringUpdate': new Date()
+            }
+          }
+        );
+        fixedCount++;
+        console.log(`✅ Enabled monitoring for user ${state.userId}`);
+      }
+      
+      // Update symbol statuses
+      if (state.monitoredSymbols && state.monitoredSymbols.length > 0) {
+        for (const symbol of state.monitoredSymbols) {
+          if (!symbol.triggerStatus || symbol.triggerStatus === 'WAITING') {
+            // Determine initial status based on LTP vs HMA
+            let newStatus = 'WAITING_FOR_REVERSAL'; // Default
+            
+            if (symbol.currentLTP && symbol.hmaValue) {
+              if (symbol.currentLTP <= symbol.hmaValue) {
+                newStatus = 'WAITING_FOR_ENTRY';
+              } else {
+                newStatus = 'WAITING_FOR_REVERSAL';
+              }
+            }
+            
+            await TradingState.updateOne(
+              { userId: state.userId, 'monitoredSymbols.id': symbol.id },
+              {
+                $set: {
+                  'monitoredSymbols.$.triggerStatus': newStatus,
+                  'monitoredSymbols.$.lastUpdate': new Date()
+                }
+              }
+            );
+            symbolUpdates++;
+            console.log(`✅ Updated ${symbol.symbol} status to ${newStatus}`);
+          }
+        }
+      }
+    }
+
+    console.log(`✅ Debug fix completed: ${fixedCount} users fixed, ${symbolUpdates} symbols updated`);
+    
+    return res.json({
+      success: true,
+      message: `Monitoring fixed: ${fixedCount} users, ${symbolUpdates} symbols updated`,
+      data: { usersFixed: fixedCount, symbolsUpdated: symbolUpdates }
+    });
+
+  } catch (error) {
+    console.error('❌ Error in debug fix:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error in debug fix' 
+    });
+  }
+});
+
+/**
+ * @route   POST /api/monitoring/move-strike-to-entry
+ * @desc    Manually move a strike from CONFIRMING_REVERSAL to WAITING_FOR_ENTRY
+ * @access  Public (TEMPORARY - REMOVE AFTER USE)
+ */
+router.post('/move-strike-to-entry', async (req, res) => {
+  try {
+    const { symbolId } = req.body;
+    const TradingState = require('../models/TradingState');
+    
+    console.log(`🚀 Manual move strike to entry requested for symbol ID: ${symbolId}`);
+    
+    // Find the trading state containing this symbol
+    const state = await TradingState.findOne({
+      'monitoredSymbols.id': symbolId
+    });
+    
+    if (!state) {
+      return res.status(404).json({
+        success: false,
+        message: 'Symbol not found in monitoring'
+      });
+    }
+    
+    // Find the specific symbol
+    const symbol = state.monitoredSymbols.find(s => s.id === symbolId);
+    
+    if (!symbol) {
+      return res.status(404).json({
+        success: false,
+        message: 'Symbol not found'
+      });
+    }
+    
+    if (symbol.triggerStatus !== 'CONFIRMING_REVERSAL') {
+      return res.status(400).json({
+        success: false,
+        message: 'Symbol is not in CONFIRMING_REVERSAL status'
+      });
+    }
+    
+    // Update the symbol to WAITING_FOR_ENTRY status
+    const now = new Date();
+    
+    // Update the pending signal to indicate manual override
+    const updatedPendingSignal = {
+      ...symbol.pendingSignal,
+      direction: 'ENTRY',
+      state: 'WAITING',
+      reversalConfirmed: true,
+      entryReadyAt: now,
+      manualOverride: true,
+      manualOverrideAt: now
+    };
+    
+    await TradingState.updateOne(
+      { _id: state._id, 'monitoredSymbols.id': symbolId },
+      {
+        $set: {
+          'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
+          'monitoredSymbols.$.pendingSignal': updatedPendingSignal,
+          'monitoredSymbols.$.orderModificationReason': 'Manual override - moved to Waiting for Entry'
+        }
+      }
+    );
+    
+    console.log(`✅ Successfully moved ${symbol.symbol} from CONFIRMING_REVERSAL to WAITING_FOR_ENTRY via manual override`);
+    
+    return res.json({
+      success: true,
+      message: `Successfully moved ${symbol.symbol} to Waiting for Entry`,
+      symbol: symbol.symbol,
+      newStatus: 'WAITING_FOR_ENTRY'
+    });
+  } catch (error) {
+    console.error('❌ Error in move strike to entry:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error moving strike to entry'
+    });
+  }
+});
+
+/**
+ * @route   POST /api/monitoring/recover-orders
+ * @desc    Manually recover order statuses from Fyers API
+ * @access  Private
+ */
+router.post('/recover-orders', auth, async (req, res) => {
+  try {
+    console.log('🔄 Manual order recovery requested by user:', req.user.id);
+    
+    const { FyersWebSocketService } = require('../services/fyersWebSocketService');
+    
+    // Start order recovery
+    await FyersWebSocketService.recoverOrderStatuses();
+    
+    // Get updated status
+    const status = await MonitoringService.getMonitoringStatus(req.user.id);
+    
+    return res.json({
+      success: true,
+      message: 'Order recovery completed successfully',
+      data: status
+    });
+  } catch (error) {
+    console.error('Error recovering orders:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error recovering orders' 
+    });
+  }
+});
+
+/**
+ * @route   POST /api/monitoring/recover-orders-debug
+ * @desc    Debug endpoint to recover order statuses without auth (TEMPORARY)
+ * @access  Public (TEMPORARY)
+ */
+router.post('/recover-orders-debug', async (req, res) => {
+  try {
+    console.log('🔄 Debug order recovery requested (no auth)');
+    
+    const { FyersWebSocketService } = require('../services/fyersWebSocketService');
+    
+    // Start order recovery
+    await FyersWebSocketService.recoverOrderStatuses();
+    
+    return res.json({
+      success: true,
+      message: 'Order recovery completed successfully (debug mode)'
+    });
+  } catch (error) {
+    console.error('Error recovering orders (debug):', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error recovering orders',
+      error: error.message
+    });
+  }
+});
+
+/**
+ * @route   DELETE /api/monitoring/orders/:orderId
+ * @desc    Cancel an order on Fyers
+ * @access  Private
+ */
+router.delete('/orders/:orderId', auth, async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    
+    console.log(`❌ Cancel order requested for order ID: ${orderId} by user: ${req.user.id}`);
+    
+    const success = await MonitoringService.cancelOrder(orderId, req.user.id);
+    
+    if (success) {
+      return res.json({
+        success: true,
+        message: `Order ${orderId} cancelled successfully`
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: `Failed to cancel order ${orderId}`
+      });
+    }
+  } catch (error) {
+    console.error('Error cancelling order:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error cancelling order',
+      error: error.message
+    });
   }
 });
 

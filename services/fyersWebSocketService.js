@@ -122,7 +122,7 @@ class FyersWebSocketService {
       
       this.fyersOrderSocket = new FyersOrderSocket(formattedToken);
 
-      this.fyersOrderSocket.on('connect', () => {
+      this.fyersOrderSocket.on('connect', async () => {
         LoggerService.success('FyersWebSocketService', 'Fyers order WebSocket connected successfully');
         this.isConnected = true;
         this.reconnectAttempts = 0;
@@ -137,6 +137,14 @@ class FyersWebSocketService {
           LoggerService.info('FyersWebSocketService', 'Subscribed to order, trade, and position updates');
         } catch (subscribeError) {
           LoggerService.error('FyersWebSocketService', 'Error subscribing to updates:', subscribeError);
+        }
+        
+        // Recover order statuses after reconnection
+        try {
+          LoggerService.info('FyersWebSocketService', 'Starting order status recovery after reconnection...');
+          await FyersWebSocketService.recoverOrderStatuses();
+        } catch (recoveryError) {
+          LoggerService.error('FyersWebSocketService', 'Error during order status recovery:', recoveryError);
         }
       });
 
@@ -600,7 +608,7 @@ class FyersWebSocketService {
             productType: fyersPosition.productType || 'INTRADAY',
             buyOrderId: null,
             sellOrderId: null,
-            slOrder: null,
+            slOrderDetails: null,
             reEntryCount: 0,
             pnl: fyersPosition.unrealized_profit || 0,
             pnlPercentage: fyersPosition.unrealized_profit ? 
@@ -735,9 +743,253 @@ class FyersWebSocketService {
   async periodicStatusCheck() {
     LoggerService.info('FyersWebSocketService', 'Periodic status check deprecated - WebSocket management handled by monitoring service');
   }
+
+  /**
+   * Recover order statuses for all pending orders when WebSocket reconnects
+   * This handles cases where WebSocket disconnects and loses order status updates
+   */
+  static async recoverOrderStatuses() {
+    try {
+      console.log('🔄 Starting order status recovery after WebSocket reconnection...');
+      
+      const TradingState = require('../models/TradingState');
+      const MonitoringService = require('./monitoringService');
+      
+      // Find all trading states with pending orders
+      const states = await TradingState.find({
+        $or: [
+          { 'monitoredSymbols.orderId': { $exists: true, $ne: null } },
+          { 'activePositions.buyOrderId': { $exists: true, $ne: null } }
+        ]
+      });
+      
+      console.log(`📊 Found ${states.length} trading states with orders to recover`);
+      
+      let recoveredCount = 0;
+      let errorCount = 0;
+      
+      for (const state of states) {
+        try {
+          console.log(`🔍 Recovering orders for user ${state.userId}`);
+          
+          // Get user for API access
+          const User = require('../models/User');
+          const user = await User.findById(state.userId);
+          
+          if (!user || !user.fyers || !user.fyers.accessToken) {
+            console.log(`⚠️  User ${state.userId} has no valid Fyers token, skipping`);
+            continue;
+          }
+          
+          // Recover monitored symbols with orders
+          if (state.monitoredSymbols) {
+            for (const symbol of state.monitoredSymbols) {
+              if (symbol.orderId && symbol.orderStatus === 'PENDING') {
+                try {
+                  console.log(`🔄 Recovering order ${symbol.orderId} for ${symbol.symbol}`);
+                  
+                  // Get order status from Fyers API
+                  const orderStatus = await this.getOrderStatusFromFyers(symbol.orderId, user.fyers.accessToken);
+                  
+                  if (orderStatus) {
+                    console.log(`✅ Order ${symbol.orderId} status: ${orderStatus}`);
+                    
+                    // Update order status in database
+                    await MonitoringService.handleOrderStatusUpdate(
+                      symbol.orderId, 
+                      orderStatus, 
+                      state.userId,
+                      'Recovered from WebSocket reconnection'
+                    );
+                    
+                    recoveredCount++;
+                  } else {
+                    console.log(`⚠️  Could not get status for order ${symbol.orderId}`);
+                    errorCount++;
+                  }
+                  
+                  // Add delay to avoid rate limiting
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                  
+                } catch (error) {
+                  console.error(`❌ Error recovering order ${symbol.orderId}:`, error.message);
+                  errorCount++;
+                }
+              }
+            }
+          }
+          
+          // Recover active positions with orders
+          if (state.activePositions) {
+            for (const position of state.activePositions) {
+              if (position.buyOrderId && position.orderStatus === 'PENDING') {
+                try {
+                  console.log(`🔄 Recovering buy order ${position.buyOrderId} for ${position.symbol}`);
+                  
+                  // Get order status from Fyers API
+                  const orderStatus = await this.getOrderStatusFromFyers(position.buyOrderId, user.fyers.accessToken);
+                  
+                  if (orderStatus) {
+                    console.log(`✅ Buy order ${position.buyOrderId} status: ${orderStatus}`);
+                    
+                    // Update order status in database
+                    await MonitoringService.handleOrderStatusUpdate(
+                      position.buyOrderId, 
+                      orderStatus, 
+                      state.userId,
+                      'Recovered from WebSocket reconnection'
+                    );
+                    
+                    recoveredCount++;
+                  } else {
+                    console.log(`⚠️  Could not get status for buy order ${position.buyOrderId}`);
+                    errorCount++;
+                  }
+                  
+                  // Add delay to avoid rate limiting
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                  
+                } catch (error) {
+                  console.error(`❌ Error recovering buy order ${position.buyOrderId}:`, error.message);
+                  errorCount++;
+                }
+              }
+              
+              // Also recover SL orders if they exist
+              if (position.slOrderId && position.status === 'Active') {
+                try {
+                  console.log(`🔄 Recovering SL order ${position.slOrderId} for ${position.symbol}`);
+                  
+                  // Get order status from Fyers API
+                  const orderStatus = await this.getOrderStatusFromFyers(position.slOrderId, user.fyers.accessToken);
+                  
+                  if (orderStatus) {
+                    console.log(`✅ SL order ${position.slOrderId} status: ${orderStatus}`);
+                    
+                    // Update SL order status in database
+                    await this.updateSLOOrderStatus(position.slOrderId, orderStatus, state.userId);
+                    
+                    recoveredCount++;
+                  } else {
+                    console.log(`⚠️  Could not get status for SL order ${position.slOrderId}`);
+                    errorCount++;
+                  }
+                  
+                  // Add delay to avoid rate limiting
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                  
+                } catch (error) {
+                  console.error(`❌ Error recovering SL order ${position.slOrderId}:`, error.message);
+                  errorCount++;
+                }
+              }
+            }
+          }
+          
+        } catch (error) {
+          console.error(`❌ Error recovering orders for user ${state.userId}:`, error.message);
+          errorCount++;
+        }
+      }
+      
+      console.log(`✅ Order status recovery completed: ${recoveredCount} recovered, ${errorCount} errors`);
+      
+    } catch (error) {
+      console.error('❌ Error in order status recovery:', error);
+    }
+  }
+
+  /**
+   * Get order status from Fyers API
+   * @param {string} orderId - Fyers order ID
+   * @param {string} accessToken - Fyers access token
+   * @returns {Promise<string|null>} Order status or null if not found
+   */
+  static async getOrderStatusFromFyers(orderId, accessToken) {
+    try {
+      const axios = require('axios');
+      
+      // Get order history from Fyers API
+      const response = await axios.get(`https://api-t1.fyers.in/api/v3/orders-history`, {
+        headers: {
+          'Authorization': accessToken
+        },
+        params: {
+          orderId: orderId
+        }
+      });
+      
+      if (response.data && response.data.orderHistory) {
+        const order = response.data.orderHistory.find(o => o.id === orderId);
+        if (order) {
+          // Map Fyers status to our status
+          const statusMapping = {
+            '1': 'PENDING',    // New
+            '2': 'FILLED',     // Filled
+            '3': 'CANCELLED',  // Cancelled
+            '4': 'REJECTED',   // Rejected
+            '5': 'PENDING',    // Pending
+            '6': 'CANCELLED',  // Cancelled
+            '20': 'PENDING',   // New Ack
+            '21': 'PENDING',   // Modify Ack
+            '22': 'CANCELLED', // Cancel Ack
+            '23': 'REJECTED',  // Reject
+            '24': 'REJECTED'   // Cancel Reject
+          };
+          
+          return statusMapping[order.status] || 'PENDING';
+        }
+      }
+      
+      return null;
+      
+    } catch (error) {
+      console.error(`Error getting order status from Fyers for ${orderId}:`, error.message);
+      return null;
+    }
+  }
+
+  /**
+   * Update SL order status in database
+   * @param {string} slOrderId - SL order ID
+   * @param {string} status - Order status
+   * @param {string} userId - User ID
+   */
+  static async updateSLOOrderStatus(slOrderId, status, userId) {
+    try {
+      const TradingState = require('../models/TradingState');
+      
+      // Find position with this SL order ID
+      const state = await TradingState.findOne({
+        userId,
+        'activePositions.slOrderId': slOrderId
+      });
+      
+      if (state) {
+        // Update the SL order status
+        await TradingState.updateOne(
+          { 
+            userId,
+            'activePositions.slOrderId': slOrderId 
+          },
+          {
+            $set: {
+              'activePositions.$.slOrderStatus': status,
+              'activePositions.$.lastUpdate': new Date()
+            }
+          }
+        );
+        
+        console.log(`✅ Updated SL order ${slOrderId} status to ${status}`);
+      }
+      
+    } catch (error) {
+      console.error(`Error updating SL order status for ${slOrderId}:`, error);
+    }
+  }
 }
 
 // Create a singleton instance
 const fyersWebSocketService = FyersWebSocketService.getInstance();
 
-module.exports = { fyersWebSocketService }; 
+module.exports = { fyersWebSocketService, FyersWebSocketService }; 

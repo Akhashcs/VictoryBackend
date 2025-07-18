@@ -54,8 +54,8 @@ const TradingStateSchema = new mongoose.Schema({
     currentLTP: { type: Number },
     triggerStatus: {
       type: String,
-      enum: ['WAITING', 'ORDER_PLACED', 'ORDER_MODIFIED', 'ORDER_REJECTED', 'WAITING_REENTRY', 'TRIGGERED', 'CONFIRMED', 'EXECUTED', 'CANCELLED'],
-      default: 'WAITING'
+      enum: ['WAITING', 'ORDER_PLACED', 'ORDER_MODIFIED', 'ORDER_REJECTED', 'WAITING_REENTRY', 'TRIGGERED', 'CONFIRMED', 'EXECUTED', 'CANCELLED', 'WAITING_FOR_REVERSAL', 'WAITING_FOR_ENTRY', 'ACTIVE_POSITION', 'CONFIRMING_REVERSAL', 'CONFIRMING_ENTRY'],
+      default: 'WAITING_FOR_REVERSAL'
     },
     // Order tracking fields
     orderPlaced: { type: Boolean, default: false },
@@ -81,7 +81,18 @@ const TradingStateSchema = new mongoose.Schema({
       direction: { type: String },
       triggeredAt: { type: Date },
       hmaAtTrigger: { type: Number },
-      waitStartTime: { type: Date }
+      ltpAtTrigger: { type: Number },
+      state: { type: String },
+      waitStartTime: { type: Date },
+      // Reversal confirmation fields
+      reversalDetected: { type: Boolean },
+      confirmationStartTime: { type: Date },
+      confirmationEndTime: { type: Date },
+      reversalConfirmed: { type: Boolean },
+      entryReadyAt: { type: Date },
+      // Entry confirmation fields
+      crossoverDetected: { type: Boolean },
+      crossoverTime: { type: Date }
     }
   }],
   // Active positions - Fixed schema with proper type definitions
@@ -112,14 +123,14 @@ const TradingStateSchema = new mongoose.Schema({
     // Order tracking
     buyOrderId: { type: String }, // BUY order ID from Fyers
     sellOrderId: { type: String }, // SELL order ID from Fyers
-    slOrder: { type: Object }, // SL-M order details
     reEntryCount: { type: Number, default: 0 },
     pnl: { type: Number },
     pnlPercentage: { type: Number },
     hmaValue: { type: Number }, // Current HMA value for monitoring
-    slOrderId: { type: String }, // SL-M order ID from Fyers
+    slOrderId: { type: String }, // SL-L order ID from Fyers
     slStopPrice: { type: Number }, // Current SL stop price
     slTriggerPrice: { type: Number }, // Current SL trigger price
+    slOrderDetails: { type: Object }, // SL-L order details for modal display
     // Financial tracking
     invested: { type: Number }, // Qty * bought price
     // Exit tracking

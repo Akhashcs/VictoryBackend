@@ -1,5 +1,5 @@
 const express = require('express');
-const { generateAuthUrl, validateAuthCode, getProfile, getFyersAppId } = require('../fyersService');
+const { generateAuthUrl, validateAuthCode, getProfile, getFyersAppId, validateAccessToken } = require('../fyersService');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -127,8 +127,41 @@ router.get('/status', auth, async (req, res) => {
   try {
     const User = require('../models/User');
     const user = await User.findById(req.user._id);
-    if (user && user.fyers && user.fyers.connected) {
-      res.json({ connected: true, profileName: user.fyers.profile?.data?.name || null });
+    if (user && user.fyers && user.fyers.connected && user.fyers.accessToken) {
+      // Validate the token to check if it's still valid
+      try {
+        const appId = getFyersAppId();
+        const accessToken = `${appId}:${user.fyers.accessToken}`;
+        const validation = await validateAccessToken(accessToken);
+        
+        if (validation.valid) {
+          res.json({ 
+            connected: true, 
+            profileName: user.fyers.profile?.data?.name || null,
+            tokenValid: true
+          });
+        } else {
+          // Token is expired or invalid, mark as disconnected
+          console.log(`[Fyers] Token expired for user ${user._id}:`, validation.error);
+          
+          // Update user's Fyers status to disconnected
+          user.fyers.connected = false;
+          await user.save();
+          
+          res.json({ 
+            connected: false, 
+            tokenExpired: true,
+            message: 'Fyers token has expired. Please reconnect.'
+          });
+        }
+      } catch (validationError) {
+        console.error('[Fyers] Error validating token:', validationError);
+        res.json({ 
+          connected: false, 
+          tokenExpired: true,
+          message: 'Unable to validate Fyers token. Please reconnect.'
+        });
+      }
     } else {
       res.json({ connected: false });
     }
@@ -246,6 +279,52 @@ router.post('/restart-websocket', auth, async (req, res) => {
   } catch (error) {
     console.error('Error restarting Fyers WebSocket:', error);
     res.status(500).json({ error: error.message || 'Failed to restart Fyers WebSocket' });
+  }
+});
+
+// GET /api/fyers/validate-token (public route to check token validity)
+router.get('/validate-token', auth, async (req, res) => {
+  try {
+    const User = require('../models/User');
+    const user = await User.findById(req.user._id);
+    
+    if (!user || !user.fyers || !user.fyers.accessToken) {
+      return res.json({ 
+        valid: false, 
+        connected: false,
+        message: 'No Fyers token found'
+      });
+    }
+    
+    const appId = getFyersAppId();
+    const accessToken = `${appId}:${user.fyers.accessToken}`;
+    const validation = await validateAccessToken(accessToken);
+    
+    if (validation.valid) {
+      res.json({ 
+        valid: true, 
+        connected: true,
+        profileName: user.fyers.profile?.data?.name || null
+      });
+    } else {
+      // Update user's Fyers status to disconnected
+      user.fyers.connected = false;
+      await user.save();
+      
+      res.json({ 
+        valid: false, 
+        connected: false,
+        expired: validation.expired,
+        message: validation.error || 'Token validation failed'
+      });
+    }
+  } catch (error) {
+    console.error('Error validating Fyers token:', error);
+    res.status(500).json({ 
+      valid: false, 
+      connected: false,
+      error: error.message || 'Failed to validate token'
+    });
   }
 });
 

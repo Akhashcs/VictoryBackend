@@ -181,6 +181,16 @@ MarketService.startMarketDataPolling();
 // Start monitoring scheduler
 MonitoringScheduler.start();
 
+// Temporary manual fix for monitoring state
+setTimeout(async () => {
+  try {
+    const { manualFix } = require('./manual-fix');
+    await manualFix();
+  } catch (error) {
+    console.error('Error in manual fix:', error);
+  }
+}, 5000); // Run after 5 seconds
+
 // WebSocket will be managed by monitoring service - no automatic periodic checks
 
 // Start server
