@@ -645,6 +645,12 @@ class MonitoringService {
     // Check if order was already placed for this symbol (prevent multiple orders)
     console.log(`🔍 [DEBUG] ${symbol.symbol} orderPlaced flag: ${symbol.orderPlaced}, orderStatus: ${symbol.orderStatus}`);
     
+    // CRITICAL SAFETY CHECK: Don't process if order is already placed and pending/filled
+    if (symbol.orderPlaced && (symbol.orderStatus === 'PENDING' || symbol.orderStatus === 'FILLED')) {
+      console.log(`🚫 Order already placed for ${symbol.symbol} with status ${symbol.orderStatus} - skipping processing`);
+      return result;
+    }
+    
     // Only allow up to maxPerDay trades per day
     if (symbol.tradesToday >= (symbol.maxPerDay || 4)) {
       console.log(`🚫 Max trades per day reached for ${symbol.symbol}`);
@@ -2190,11 +2196,21 @@ class MonitoringService {
       
       switch (status) {
         case 'FILLED':
-          // Check if this is a BUY order (by checking orderTag or orderType)
+          // Check if this is a BUY order (by checking orderType or orderId)
           const isBuyOrder = symbol.orderType === 'BUY_SL_LIMIT' || 
+                           symbol.orderType === 'MARKET' ||
                            (symbol.orderId && symbol.orderId === orderId);
           
           if (isBuyOrder) {
+            // Safety check: Don't create duplicate positions
+            const existingPosition = state.activePositions?.find(pos => pos.buyOrderId === orderId);
+            if (existingPosition) {
+              console.log(`⚠️ Position already exists for ${symbol.symbol} with order ID ${orderId} - skipping duplicate creation`);
+              shouldRemove = true;
+              shouldMoveToPositions = true;
+              break;
+            }
+            
             console.log(`✅ BUY order filled for ${symbol.symbol}, creating active position and placing SELL SL-L order`);
             // Use the real fill price from Fyers if provided
             const fillPrice = fillPriceFromFyers || symbol.hmaValue || symbol.lastHmaValue;
@@ -2254,6 +2270,10 @@ class MonitoringService {
             );
             
             console.log(`✅ ${symbol.symbol} moved to active positions with invested amount: ₹${position.invested}`);
+            
+            // CRITICAL FIX: Remove symbol from monitoring after BUY order is filled
+            shouldRemove = true;
+            shouldMoveToPositions = true;
             
             // Place SELL SL-L order after 5 seconds for stop loss protection
             console.log(`🛡️ Scheduling SELL SL-L order for ${symbol.symbol} in 5 seconds`);
