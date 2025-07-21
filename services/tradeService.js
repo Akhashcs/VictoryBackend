@@ -150,6 +150,8 @@ class TradeService {
         orderType: orderType,
         isMarketOrder: orderType === 'MARKET'
       });
+      console.log(`🔍 [DEBUG] Access token format: ${accessToken ? 'Valid' : 'Invalid'}`);
+      console.log(`🔍 [DEBUG] User ID: ${userId}`);
       
       // Place order with Fyers
       const fyersOrder = await this.fyersPlaceOrder(fyersOrderData, accessToken);
@@ -233,8 +235,8 @@ class TradeService {
       fyers.setAccessToken(token);
       
       // Use the Fyers API library to place order
-      console.log(`🔍 [DEBUG] Calling Fyers API with fyersOrderData:`, fyersOrderData);
-      const response = await fyers.place_order(fyersOrderData);
+      console.log(`🔍 [DEBUG] Calling Fyers API with orderData:`, orderData);
+      const response = await fyers.place_order(orderData);
       
       console.log(`📡 [FYERS API] Response:`, response);
       

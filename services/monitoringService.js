@@ -708,6 +708,7 @@ class MonitoringService {
               $set: {
                 'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_REVERSAL',
                 'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.opportunityActive': false, // Reset opportunity flag when confirmation is canceled
                 'monitoredSymbols.$.orderModificationReason': 'Confirmation canceled - LTP back above HMA'
               }
             }
@@ -797,6 +798,7 @@ class MonitoringService {
               $set: {
                 'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
                 'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                'monitoredSymbols.$.opportunityActive': false, // Reset opportunity flag when confirmation is canceled
                 'monitoredSymbols.$.orderModificationReason': 'Entry confirmation canceled - LTP back below HMA'
               }
             }
@@ -806,6 +808,8 @@ class MonitoringService {
         } else if (now >= symbol.pendingSignal.confirmationEndTime) {
           // 5-minute candle confirmation completed and LTP is still above HMA - execute market order
           console.log(`✅ ${symbol.symbol}: 5-minute candle confirmation completed! LTP still above HMA - executing market order`);
+          console.log(`🔍 [DEBUG] ${symbol.symbol}: Current time: ${now}, Confirmation end time: ${symbol.pendingSignal.confirmationEndTime}`);
+          console.log(`🔍 [DEBUG] ${symbol.symbol}: LTP: ${ltp}, HMA: ${hma}, LTP > HMA: ${ltp > hma}`);
           
           try {
             // Place market order immediately
@@ -823,7 +827,7 @@ class MonitoringService {
                     'monitoredSymbols.$.orderId': position.buyOrderId,
                     'monitoredSymbols.$.orderStatus': 'PENDING',
                     'monitoredSymbols.$.lastHmaValue': hma,
-                    'monitoredSymbols.$.opportunityActive': true,
+                    'monitoredSymbols.$.opportunityActive': false, // Reset to false since order is placed
                     'monitoredSymbols.$.lastOpportunityTime': now,
                     'monitoredSymbols.$.orderModificationReason': 'Market order placed at bullish crossover confirmation',
                     'monitoredSymbols.$.pendingSignal': null // Clear pending signal
@@ -873,6 +877,7 @@ class MonitoringService {
                   $set: {
                     'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
                     'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                    'monitoredSymbols.$.opportunityActive': false, // Reset opportunity flag on failure
                     'monitoredSymbols.$.orderModificationReason': 'Market order placement failed - retrying on next crossover'
                   }
                 }
@@ -893,6 +898,7 @@ class MonitoringService {
                 $set: {
                   'monitoredSymbols.$.triggerStatus': 'WAITING_FOR_ENTRY',
                   'monitoredSymbols.$.pendingSignal': symbol.pendingSignal,
+                  'monitoredSymbols.$.opportunityActive': false, // Reset opportunity flag on failure
                   'monitoredSymbols.$.orderModificationReason': 'Market order placement failed - retrying on next crossover'
                 }
               }
@@ -914,9 +920,6 @@ class MonitoringService {
     if (symbol.tradesToday >= (symbol.maxPerDay || 4)) {
       return result;
     }
-    if (symbol.opportunityActive) {
-      return result;
-    }
     if (symbol.orderPlaced && symbol.orderStatus === 'PENDING') {
       return result;
     }
@@ -929,32 +932,41 @@ class MonitoringService {
       return result;
     }
 
-    // ADDITIONAL RACE CONDITION PROTECTION: Check database state atomically
-    const dbSymbol = await TradingState.findOne(
-      { 
-        userId, 
-        'monitoredSymbols.id': symbol.id,
-        'monitoredSymbols.orderPlaced': { $ne: true }, // Only proceed if order not already placed
-        'monitoredSymbols.opportunityActive': { $ne: true } // Only proceed if opportunity not already active
+    // For symbols with pendingSignal (new state machine), don't use opportunityActive check
+    // as it interferes with the confirmation timer logic
+    if (!symbol.pendingSignal) {
+      // Only apply opportunityActive check for legacy symbols without pendingSignal
+      if (symbol.opportunityActive) {
+        return result;
       }
-    );
-    if (!dbSymbol) {
-      console.log(`⏳ Order already placed or opportunity active for ${symbol.symbol} (database check) - skipping`);
-      return result;
-    }
 
-    // Set opportunityActive immediately to prevent race conditions
-    await TradingState.updateOne(
-      { userId, 'monitoredSymbols.id': symbol.id },
-      {
-        $set: {
-          'monitoredSymbols.$.opportunityActive': true,
-          'monitoredSymbols.$.lastOpportunityTime': now
+      // ADDITIONAL RACE CONDITION PROTECTION: Check database state atomically
+      const dbSymbol = await TradingState.findOne(
+        { 
+          userId, 
+          'monitoredSymbols.id': symbol.id,
+          'monitoredSymbols.orderPlaced': { $ne: true }, // Only proceed if order not already placed
+          'monitoredSymbols.opportunityActive': { $ne: true } // Only proceed if opportunity not already active
         }
+      );
+      if (!dbSymbol) {
+        console.log(`⏳ Order already placed or opportunity active for ${symbol.symbol} (database check) - skipping`);
+        return result;
       }
-    );
-    
-    console.log(`🔒 Set opportunityActive=true for ${symbol.symbol} to prevent duplicate orders`);
+
+      // Set opportunityActive immediately to prevent race conditions
+      await TradingState.updateOne(
+        { userId, 'monitoredSymbols.id': symbol.id },
+        {
+          $set: {
+            'monitoredSymbols.$.opportunityActive': true,
+            'monitoredSymbols.$.lastOpportunityTime': now
+          }
+        }
+      );
+      
+      console.log(`🔒 Set opportunityActive=true for ${symbol.symbol} to prevent duplicate orders`);
+    }
 
     // --- LEGACY ORDER PLACEMENT LOGIC (for backward compatibility) ---
     // This section handles the old order placement logic that doesn't use the three-state system
@@ -1031,7 +1043,7 @@ class MonitoringService {
                       'monitoredSymbols.$.orderId': position.buyOrderId,
                       'monitoredSymbols.$.orderStatus': 'PENDING',
                       'monitoredSymbols.$.lastHmaValue': hma,
-                      'monitoredSymbols.$.opportunityActive': true,
+                      'monitoredSymbols.$.opportunityActive': false, // Reset to false since order is placed
                       'monitoredSymbols.$.lastOpportunityTime': now,
                       'monitoredSymbols.$.orderModificationReason': 'Market order placed at bullish crossover confirmation',
                       'monitoredSymbols.$.pendingSignal': null // Clear pending signal
@@ -2857,6 +2869,14 @@ class MonitoringService {
    */
   static async executeMarketOrder(symbol, now, userId) {
     try {
+      console.log(`🚀 [EXECUTE MARKET ORDER] Starting market order execution for ${symbol.symbol}`);
+      console.log(`🔍 [DEBUG] Symbol data:`, {
+        symbol: symbol.symbol,
+        lots: symbol.lots,
+        productType: symbol.productType,
+        hmaValue: symbol.hmaValue
+      });
+      
       // Get lot size based on symbol
       const getLotSize = (symbolString) => {
         const symbolUpper = symbolString?.toUpperCase() || '';
