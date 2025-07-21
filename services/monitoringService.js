@@ -341,7 +341,6 @@ class MonitoringService {
    * @param {number} oldHmaValue - Previous HMA value
    * @param {number} newHmaValue - New HMA value
    * @param {string} userId - User ID
-   * @returns {Promise<boolean>} Success status
    */
   static async modifyPendingOrderForHMAChange(symbol, oldHmaValue, newHmaValue, userId) {
     try {
@@ -372,24 +371,41 @@ class MonitoringService {
       const position = await this.executeLimitOrder(symbol, newLimitPrice, new Date(), userId);
       
       if (position) {
-        // Update symbol status
+        // Create modification record
+        const modificationRecord = {
+          timestamp: new Date(),
+          oldOrderId: symbol.orderId,
+          newOrderId: position.buyOrderId,
+          oldHmaValue: oldHmaValue,
+          newHmaValue: newHmaValue,
+          oldLimitPrice: oldHmaValue,
+          newLimitPrice: newHmaValue,
+          reason: `HMA changed from ${oldHmaValue.toFixed(2)} to ${newHmaValue.toFixed(2)}`,
+          modificationType: 'BUY_ORDER_HMA_UPDATE'
+        };
+
+        // Update symbol status with modification history
         const TradingState = require('../models/TradingState');
         await TradingState.updateOne(
           { userId, 'monitoredSymbols.id': symbol.id },
           {
             $set: {
               'monitoredSymbols.$.triggerStatus': 'ORDER_MODIFIED',
-              'monitoredSymbols.$.orderId': position.orderId,
+              'monitoredSymbols.$.orderId': position.buyOrderId,
               'monitoredSymbols.$.orderStatus': 'PENDING',
               'monitoredSymbols.$.lastOrderModification': new Date(),
               'monitoredSymbols.$.orderModificationCount': (symbol.orderModificationCount || 0) + 1,
               'monitoredSymbols.$.lastHmaValue': oldHmaValue,
-              'monitoredSymbols.$.orderModificationReason': `BUY SL-L modified: HMA changed from ${oldHmaValue} to ${newHmaValue}`
+              'monitoredSymbols.$.orderModificationReason': `BUY SL-L modified: HMA changed from ${oldHmaValue.toFixed(2)} to ${newHmaValue.toFixed(2)}`
+            },
+            $push: {
+              'monitoredSymbols.$.orderModifications': modificationRecord
             }
           }
         );
 
         console.log(`✅ BUY SL-L order modified for ${symbol.symbol} at new HMA: ${newHmaValue}`);
+        console.log(`📝 Modification recorded: ${modificationRecord.reason}`);
         return true;
       } else {
         // Order modification failed
@@ -1997,7 +2013,10 @@ class MonitoringService {
       
       // Separate active positions from pending orders
       const activePositions = state.activePositions.filter(p => p.status === 'Active');
-      const pendingOrders = state.activePositions.filter(p => p.status === 'Pending');
+      // Get pending orders from monitoredSymbols (orders that are placed but not filled)
+      const pendingOrders = state.monitoredSymbols.filter(s => 
+        s.orderPlaced && s.orderStatus === 'PENDING' && s.orderId
+      );
       
       return {
         isMonitoring: state.tradeExecutionState.isMonitoring,
@@ -2077,7 +2096,9 @@ class MonitoringService {
       
       // Check if there are any pending or active positions
       const hasActivePositions = state.activePositions && state.activePositions.length > 0;
-      const hasPendingOrders = state.activePositions && state.activePositions.some(p => p.status === 'Pending');
+      const hasPendingOrders = state.monitoredSymbols && state.monitoredSymbols.some(s => 
+        s.orderPlaced && s.orderStatus === 'PENDING' && s.orderId
+      );
       const hasMonitoredSymbols = state.monitoredSymbols && state.monitoredSymbols.length > 0;
       
       // Keep WebSocket active if there are pending orders, active positions, or monitored symbols
@@ -2754,15 +2775,7 @@ class MonitoringService {
       const position = await this.executeLimitOrder(symbol, hmaValue, now, userId);
 
       if (position) {
-        // Add position to activePositions array
-        await TradingState.updateOne(
-          { userId },
-          {
-            $push: { activePositions: position }
-          }
-        );
-
-        // Update symbol status to ORDER_PLACED
+        // Update symbol status to ORDER_PLACED (keep in monitoredSymbols for pending orders)
         await TradingState.updateOne(
           { userId, 'monitoredSymbols.id': symbolId },
           {

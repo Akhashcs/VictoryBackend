@@ -527,6 +527,80 @@ router.post('/place-limit-order', auth, async (req, res) => {
 });
 
 /**
+ * @route   GET /api/monitoring/order-modifications/:symbolId
+ * @desc    Get order modification history for a specific symbol
+ * @access  Private
+ */
+router.get('/order-modifications/:symbolId', auth, async (req, res) => {
+  try {
+    const { symbolId } = req.params;
+    const userId = req.user.id;
+
+    if (!symbolId) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Symbol ID is required' 
+      });
+    }
+
+    const TradingState = require('../models/TradingState');
+    const state = await TradingState.findOne({ userId });
+    
+    if (!state) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Trading state not found' 
+      });
+    }
+
+    // Find the symbol in monitored symbols
+    const symbol = state.monitoredSymbols.find(s => s.id === symbolId);
+    if (!symbol) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Symbol not found in monitored symbols' 
+      });
+    }
+
+    // Get modification history
+    const modifications = symbol.orderModifications || [];
+    
+    // Format modifications for frontend
+    const formattedModifications = modifications.map(mod => ({
+      timestamp: mod.timestamp,
+      oldOrderId: mod.oldOrderId,
+      newOrderId: mod.newOrderId,
+      oldHmaValue: mod.oldHmaValue,
+      newHmaValue: mod.newHmaValue,
+      oldLimitPrice: mod.oldLimitPrice,
+      newLimitPrice: mod.newLimitPrice,
+      reason: mod.reason,
+      modificationType: mod.modificationType,
+      hmaChange: mod.newHmaValue - mod.oldHmaValue,
+      priceChange: mod.newLimitPrice - mod.oldLimitPrice
+    }));
+
+    return res.json({
+      success: true,
+      data: {
+        symbol: symbol.symbol,
+        currentOrderId: symbol.orderId,
+        currentStatus: symbol.triggerStatus,
+        modificationCount: symbol.orderModificationCount || 0,
+        lastModification: symbol.lastOrderModification,
+        modifications: formattedModifications
+      }
+    });
+  } catch (error) {
+    console.error('Error getting order modifications:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Server error getting order modifications' 
+    });
+  }
+});
+
+/**
  * @route   POST /api/monitoring/reset-symbol-opportunity
  * @desc    Reset opportunity state for a specific symbol
  * @access  Private

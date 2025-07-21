@@ -77,6 +77,17 @@ const TradingStateSchema = new mongoose.Schema({
     // Order modification tracking
     lastHmaValue: { type: Number }, // Previous HMA value for comparison
     orderModificationReason: { type: String }, // Reason for order modification
+    orderModifications: [{ // Array of order modifications
+      timestamp: { type: Date },
+      oldOrderId: { type: String },
+      newOrderId: { type: String },
+      oldHmaValue: { type: Number },
+      newHmaValue: { type: Number },
+      oldLimitPrice: { type: Number },
+      newLimitPrice: { type: Number },
+      reason: { type: String },
+      modificationType: { type: String } // 'BUY_ORDER_HMA_UPDATE', 'SELL_ORDER_SL_UPDATE', etc.
+    }],
     pendingSignal: {
       direction: { type: String },
       triggeredAt: { type: Date },
